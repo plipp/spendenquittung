@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE BookList [
+
+        <!ELEMENT Author (#PCDATA)>
+        <!ELEMENT Title (#PCDATA)>
+        <!ELEMENT ISBN (#PCDATA)>
+        <!ELEMENT Price (#PCDATA)>
+        <!ELEMENT ShippingPrice (#PCDATA)>
+        <!ELEMENT Infotext (#PCDATA)>
+        <!ELEMENT Country (#PCDATA)>
+        <!ELEMENT ArticleId (#PCDATA)>
+        <!ELEMENT DetailLinkUrl (#PCDATA)>
+        <!ELEMENT Year (#PCDATA)>
+        <!ELEMENT Edition (#PCDATA)>
+        <!ELEMENT Publisher (#PCDATA)>
+        <!ELEMENT PicURL (#PCDATA)>
+        <!ELEMENT New (#PCDATA)>
+        <!ELEMENT Offerer (#PCDATA)>
+        <!ELEMENT OffererId (#PCDATA)>
+        <!ELEMENT RatePositive (#PCDATA)>
+        <!ELEMENT Condition (#PCDATA)>
+        <!ELEMENT SellerType (#PCDATA)>
+        <!ELEMENT Book (Author?, Title, ISBN?, Price, ShippingPrice?, Infotext?, Country, ArticleId, DetailLinkUrl, Year?, Edition?, Publisher?, PicURL?, New, Offerer, OffererId?, RatePositive?)>
+        <!ELEMENT BookList (Book+)>
+        <!ATTLIST BookList RecordCount CDATA #REQUIRED>
+        ]
+        >
+<BookList RecordCount="37">
+    <Book>
+        <Author>Canavan, Trudi</Author>
+        <Title>Die Gilde der Schwarzen Magier - Die Rebellin</Title>
+        <Edition>Taschenbuch</Edition>
+        <Publisher>cbt</Publisher>
+        <ISBN>9783570303283</ISBN>
+        <Price>1.20</Price>
+        <Country>DE</Country>
+        <ShippingPrice>1.00</ShippingPrice>
+        <PicURL>http://images.booklooker.de/cover/vlb_isbn_thumb/97835/70/30/3283.jpg</PicURL>
+        <New>0</New>
+        <Offerer>haribo sonnenschein</Offerer>
+        <OffererId>5082946</OffererId>
+        <RatePositive>100.0</RatePositive>
+        <ArticleId>A01xC3hT01ZZS</ArticleId>
+        <DetailLinkUrl>http://www.booklooker.de/app/detail.php?id=A01xC3hT01ZZS</DetailLinkUrl>
+    </Book>
+</BookList>

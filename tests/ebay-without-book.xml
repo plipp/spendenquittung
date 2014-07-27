@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<findItemsByProductResponse
+        xmlns="http://www.ebay.com/marketplace/search/v1/services">
+    <ack>Success</ack>
+    <version>1.12.0</version>
+    <timestamp>2014-07-27T16:08:56.793Z</timestamp>
+    <searchResult count="0">
+    </searchResult>
+    <paginationOutput>
+        <pageNumber>1</pageNumber>
+        <entriesPerPage>1</entriesPerPage>
+        <totalPages>29</totalPages>
+        <totalEntries>29</totalEntries>
+    </paginationOutput>
+    <itemSearchURL>http://www.ebay.de/ctg/50778340?LH_BIN=1&amp;_ddo=1&amp;_incaucbin=0&amp;_ipg=1&amp;_pgn=1&amp;_sop=15</itemSearchURL>
+</findItemsByProductResponse>

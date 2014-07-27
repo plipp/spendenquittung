@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE BookList [
+
+        <!ELEMENT Author (#PCDATA)>
+        <!ELEMENT Title (#PCDATA)>
+        <!ELEMENT ISBN (#PCDATA)>
+        <!ELEMENT Price (#PCDATA)>
+        <!ELEMENT ShippingPrice (#PCDATA)>
+        <!ELEMENT Infotext (#PCDATA)>
+        <!ELEMENT Country (#PCDATA)>
+        <!ELEMENT ArticleId (#PCDATA)>
+        <!ELEMENT DetailLinkUrl (#PCDATA)>
+        <!ELEMENT Year (#PCDATA)>
+        <!ELEMENT Edition (#PCDATA)>
+        <!ELEMENT Publisher (#PCDATA)>
+        <!ELEMENT PicURL (#PCDATA)>
+        <!ELEMENT New (#PCDATA)>
+        <!ELEMENT Offerer (#PCDATA)>
+        <!ELEMENT OffererId (#PCDATA)>
+        <!ELEMENT RatePositive (#PCDATA)>
+        <!ELEMENT Condition (#PCDATA)>
+        <!ELEMENT SellerType (#PCDATA)>
+        <!ELEMENT Book (Author?, Title, ISBN?, Price, ShippingPrice?, Infotext?, Country, ArticleId, DetailLinkUrl, Year?, Edition?, Publisher?, PicURL?, New, Offerer, OffererId?, RatePositive?)>
+        <!ELEMENT BookList (Book+)>
+        <!ATTLIST BookList RecordCount CDATA #REQUIRED>
+        ]
+        >
+<BookList RecordCount="0"></BookList>

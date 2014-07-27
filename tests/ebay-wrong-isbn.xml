@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<findItemsByProductResponse
+        xmlns="http://www.ebay.com/marketplace/search/v1/services">
+    <ack>Failure</ack>
+    <errorMessage>
+        <error>
+            <errorId>41</errorId>
+            <domain>Marketplace</domain>
+            <severity>Error</severity>
+            <category>Request</category>
+            <message>Invalid product ID value.</message>
+            <subdomain>Search</subdomain>
+            <parameter>978357033283</parameter>
+        </error>
+    </errorMessage>
+    <version>1.12.0</version>
+    <timestamp>2014-07-27T16:07:15.769Z</timestamp>
+</findItemsByProductResponse>

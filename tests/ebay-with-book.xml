@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<findItemsByProductResponse
+        xmlns="http://www.ebay.com/marketplace/search/v1/services">
+    <ack>Success</ack>
+    <version>1.12.0</version>
+    <timestamp>2014-07-27T16:08:56.793Z</timestamp>
+    <searchResult count="1">
+        <item>
+            <itemId>331255148760</itemId>
+            <title>Die Rebellin. Die Gilde der Schwarzen Magier 01  ~  Trudi Ca ... 9783570303283</title>
+            <globalId>EBAY-DE</globalId>
+            <primaryCategory>
+                <categoryId>171220</categoryId>
+                <categoryName>Erstes Lesen</categoryName>
+            </primaryCategory>
+            <galleryURL>http://thumbs1.ebaystatic.com/m/mG6cpotWpT6qyruiYWlE5Qw/140.jpg</galleryURL>
+            <viewItemURL>http://www.ebay.de/itm/Rebellin-Gilde-Schwarzen-Magier-01-Trudi-Ca-9783570303283-/331255148760?pt=Kinder_Jugendb%C3%BCcher</viewItemURL>
+            <productId type="ReferenceID">50778340</productId>
+            <paymentMethod>CIPInCheckoutEnabled</paymentMethod>
+            <paymentMethod>PayPal</paymentMethod>
+            <paymentMethod>MoneyXferAccepted</paymentMethod>
+            <autoPay>false</autoPay>
+            <postalCode>51469</postalCode>
+            <location>Bergisch Gladbach,Deutschland</location>
+            <country>DE</country>
+            <shippingInfo>
+                <shippingServiceCost currencyId="EUR">0.85</shippingServiceCost>
+                <shippingType>Free</shippingType>
+                <shipToLocations>Worldwide</shipToLocations>
+            </shippingInfo>
+            <sellingStatus>
+                <currentPrice currencyId="EUR">3.01</currentPrice>
+                <convertedCurrentPrice currencyId="EUR">3.01</convertedCurrentPrice>
+                <sellingState>Active</sellingState>
+                <timeLeft>P9DT11H1M15S</timeLeft>
+            </sellingStatus>
+            <listingInfo>
+                <bestOfferEnabled>false</bestOfferEnabled>
+                <buyItNowAvailable>false</buyItNowAvailable>
+                <startTime>2014-07-07T03:05:11.000Z</startTime>
+                <endTime>2014-08-06T03:10:11.000Z</endTime>
+                <listingType>FixedPrice</listingType>
+                <gift>false</gift>
+            </listingInfo>
+            <condition>
+                <conditionId>2750</conditionId>
+                <conditionDisplayName>Neuwertig</conditionDisplayName>
+            </condition>
+            <isMultiVariationListing>false</isMultiVariationListing>
+            <topRatedListing>true</topRatedListing>
+        </item>
+    </searchResult>
+    <paginationOutput>
+        <pageNumber>1</pageNumber>
+        <entriesPerPage>1</entriesPerPage>
+        <totalPages>29</totalPages>
+        <totalEntries>29</totalEntries>
+    </paginationOutput>
+    <itemSearchURL>http://www.ebay.de/ctg/50778340?LH_BIN=1&amp;_ddo=1&amp;_incaucbin=0&amp;_ipg=1&amp;_pgn=1&amp;_sop=15</itemSearchURL>
+</findItemsByProductResponse>
