@@ -35,6 +35,9 @@ class Profits {
 
 class ValueFromPlatformsAction
 {
+    const TITLE_RESULT = 'title';
+    const PROFIT_RESULT = 'profits';
+
     private $_platformRegistry;
     private $_results;
 
@@ -52,7 +55,7 @@ class ValueFromPlatformsAction
         header("Content-Type: application/json");
         echo $this->_parallel_requests ($isbn);
 
-        exit;
+        exit; // !!! REQUIRED !!!
     }
 
     public function on_request_done($content, $url, $ch, $platform_name)
@@ -65,13 +68,18 @@ class ValueFromPlatformsAction
 
         $platform = $this->_platformRegistry->by($platform_name);
         $profits = new Profits($platform, $content);
-        $this->_results[$platform_name] = $profits->as_json();
+
+        $this->_results[self::PROFIT_RESULT][$platform_name] = $profits->profit;
+        $this->_results[self::TITLE_RESULT][$platform_name] = $platform->titleFrom($content);
     }
 
 
     private function _parallel_requests($isbn)
     {
-        $this->_results = array();
+        $this->_results = array(
+            self::TITLE_RESULT=>array(),
+            self::PROFIT_RESULT=>array()
+        );
 
         $platforms = $this->_platformRegistry->all();
         $max_requests = count($platforms);
@@ -85,7 +93,7 @@ class ValueFromPlatformsAction
         $parallel_curl = new ParallelCurl($max_requests, $curl_options);
 
         foreach ($platforms as $platform) {
-            if ($platform->is_active == 1) {
+            if ($platform->is_active) {
                 $search_url = $platform->urlBy($isbn);
                 error_log($search_url);
                 $parallel_curl->startRequest($search_url, array($this,'on_request_done'), $platform->name);
@@ -94,6 +102,28 @@ class ValueFromPlatformsAction
 
         // synchronize requests
         $parallel_curl->finishAllRequests();
-        return json_encode($this->_results);
+        return json_encode(array(
+            "title" => strval($this->bestTitleFrom($this->_results[self::TITLE_RESULT])),
+            "profit" => Converters::toCurrencyString($this->averageFrom($this->_results[self::PROFIT_RESULT])))
+        );
+    }
+
+    static function bestTitleFrom($titleResults) {
+        error_log("Title-Results:" . implode('-', $titleResults));
+        if (isset($titleResults[PlatformRegistry::BOOKLOOKER])) return $titleResults[PlatformRegistry::BOOKLOOKER];
+        foreach ($titleResults as $title) {
+            if ($title) return $title;
+        }
+        return "";
+    }
+
+    static function averageFrom($numbers) {
+        error_log("Numbers:" . implode('-', $numbers));
+        // TODO: What to do really here?
+        $relevant_numbers = array_filter($numbers, function($x){return $x>0;});
+        $number_of_relevant_numbers = count($relevant_numbers);
+
+        if ($number_of_relevant_numbers==0) return 0;
+        else return array_sum($relevant_numbers)/$number_of_relevant_numbers;
     }
 }

@@ -89,7 +89,7 @@ class SpendenQuittungsDB
             'porto_wcl2' => 3.0,
             'porto_wcl3' => 3.0,
             'percent_of_sales' => 50,
-            'is_active' => 1
+            'is_active' => 0
         );
         $this->_wpdb->insert($this->_tableName, $data, $format);
 
@@ -117,7 +117,7 @@ class SpendenQuittungsDB
             'porto_wcl2' => 3.0,
             'porto_wcl3' => 3.0,
             'percent_of_sales' => 0,
-            'is_active' => 1
+            'is_active' => 0
         );
         $this->_wpdb->insert($this->_tableName, $data, $format);
 
@@ -159,7 +159,7 @@ class SpendenQuittungsDB
             'porto_wcl2' => 0,
             'porto_wcl3' => 0,
             'percent_of_sales' => 0,
-            'is_active' => 1
+            'is_active' => 0
         );
         $this->_wpdb->insert($this->_tableName, $data, $format);
     }

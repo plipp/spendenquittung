@@ -12,15 +12,19 @@ require_once(plugin_dir_path(__FILE__) . '../util/converters.php');
 
 class PlatformRegistry
 {
+    const BOOKLOOKER = 'booklooker';
+    const ZVAB = 'zvab';
+    const EBAY = 'ebay';
+
     private $_platforms;
 
     public function __construct($platforms)
     {
         foreach ($platforms as $platform) {
             switch ($platform['name']) {
-                case 'zvab': $this->_platforms[$platform['name']] = new ZVAB($platform); break;
-                case 'booklooker': $this->_platforms[$platform['name']] = new Booklooker($platform); break;
-                case 'ebay': $this->_platforms[$platform['name']] = new Ebay($platform); break;
+                case self::ZVAB: $this->_platforms[$platform['name']] = new ZVAB($platform); break;
+                case self::BOOKLOOKER: $this->_platforms[$platform['name']] = new Booklooker($platform); break;
+                case self::EBAY: $this->_platforms[$platform['name']] = new Ebay($platform); break;
                 default: $this->_platforms[$platform['name']] = new Platform($platform); break;
             }
         }
@@ -86,6 +90,9 @@ class Platform
         return array();
     }
 
+    public function titleFrom($content) {
+        return null;
+    }
 
     public function profitByWeightClasses($price)
     {
@@ -140,20 +147,33 @@ class Booklooker extends Platform {
     }
 
     public function totalPricesFrom($xml) {
-        if (empty($xml)) {
-            error_log("No response xml from: " . $this->name);
-            return array();
-        }
-
-        $booklist = new SimpleXMLElement($xml);
-        if ($booklist['RecordCount']=='0') {
-            error_log("Book not found at: " . $this->name);
+        $booklist = $this->booklistFrom($xml);
+        if (!$booklist) {
             return array();
         }
 
         $price = (float)$booklist->Book->Price + (float)$booklist->Book->ShippingPrice;
 
         return array($price);
+    }
+
+    public function titleFrom($xml) {
+        $booklist = $this->booklistFrom($xml);
+        if (!$booklist) return null;
+        return $booklist->Book->Title;
+    }
+
+    private function booklistFrom($xml) {
+        if (empty($xml)) {
+            error_log("No response xml from: " . $this->name);
+            return null;
+        }
+
+        $booklist = new SimpleXMLElement($xml);
+        if ($booklist['RecordCount']=='0') {
+            error_log("Book not found at: " . $this->name);
+            return null;
+        } else return $booklist;
     }
 }
 
@@ -164,25 +184,38 @@ class Ebay extends Platform {
     }
 
     public function totalPricesFrom($xml) {
+        $booklist = $this->booklistFrom($xml);
+        if (!$booklist) return array();
+
+        $price = (float)$booklist->item->shippingInfo->shippingServiceCost
+            + (float)$booklist->item->sellingStatus->currentPrice;
+
+        return array($price);
+    }
+
+    public function titleFrom($xml) {
+        $booklist = $this->booklistFrom($xml);
+        if (!$booklist) return null;
+
+        return $booklist->item->title;
+    }
+
+    private function booklistFrom($xml) {
         if (empty($xml)) {
             error_log("No response xml from: " . $this->name);
-            return array();
+            return null;
         }
 
         $findItemsByProductResponse = new SimpleXMLElement($xml);
         if ($findItemsByProductResponse->ack != 'Success') {
             error_log("Error searching at: " . $this->name . "(" . $xml . ")");
-            return array();
+            return null;
         }
 
         if ($findItemsByProductResponse->searchResult['count'] == '0') {
             error_log("No book found at: " . $this->name);
-            return array();
+            return null;
         }
-
-        $price = (float)$findItemsByProductResponse->searchResult->item->shippingInfo->shippingServiceCost
-            + (float)$findItemsByProductResponse->searchResult->item->sellingStatus->currentPrice;
-
-        return array($price);
+        return $findItemsByProductResponse->searchResult;
     }
 }
