@@ -104,7 +104,7 @@ class ValueFromPlatformsAction
         $parallel_curl->finishAllRequests();
         return json_encode(array(
             "title" => strval($this->bestTitleFrom($this->_results[self::TITLE_RESULT])),
-            "profit" => Converters::toCurrencyString($this->averageFrom($this->_results[self::PROFIT_RESULT])))
+            "profit" => $this->averageFrom($this->_results[self::PROFIT_RESULT]))
         );
     }
 
