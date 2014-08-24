@@ -11,6 +11,7 @@
 require_once ("classes/spendenQuittungsDB.php");
 require_once ("platforms/valueFromPlatformsAction.php");
 require_once ("platforms/platforms.php");
+require_once ("pdf/pdfPrintAction.php");
 
 global $wpdb;
 $sqdb = new SpendenQuittungsDB($wpdb);
@@ -24,4 +25,8 @@ register_deactivation_hook(__FILE__, array($sqdb, 'uninstall'));
 
 $platformRegistry = new PlatformRegistry($sqdb->getAllPlatforms());
 $valueFromPlatforms = new ValueFromPlatformsAction($platformRegistry);
+$pdfPrint = new PdfPrintAction();
+
+
+// add_shortcode('padb_search', array($padb, 'createSearch'));
 

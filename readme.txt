@@ -29,3 +29,7 @@ APIs.
 = 0.0.1 =
 
 Initial Version
+
+== TODOs ==
+
+- error handling: book not found -> PHP: 404, JS: Alert

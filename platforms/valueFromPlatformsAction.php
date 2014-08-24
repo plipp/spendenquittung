@@ -102,10 +102,13 @@ class ValueFromPlatformsAction
 
         // synchronize requests
         $parallel_curl->finishAllRequests();
-        return json_encode(array(
-            "title" => strval($this->bestTitleFrom($this->_results[self::TITLE_RESULT])),
-            "profit" => Converters::toCurrencyString($this->averageFrom($this->_results[self::PROFIT_RESULT])))
+        $encoded_value = json_encode(array(
+                "isbn" => $isbn,
+                "title" => strval($this->bestTitleFrom($this->_results[self::TITLE_RESULT])),
+                "profit" => Converters::toCurrencyString($this->averageFrom($this->_results[self::PROFIT_RESULT])))
         );
+        error_log("Booksearch Result:" . $encoded_value);
+        return $encoded_value;
     }
 
     static function bestTitleFrom($titleResults) {
@@ -119,7 +122,7 @@ class ValueFromPlatformsAction
 
     static function averageFrom($numbers) {
         error_log("Numbers:" . implode('-', $numbers));
-        // TODO: What to do really here?
+        // TODO: What are the real requirements here?
         $relevant_numbers = array_filter($numbers, function($x){return $x>0;});
         $number_of_relevant_numbers = count($relevant_numbers);
 
