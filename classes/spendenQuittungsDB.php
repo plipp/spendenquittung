@@ -32,14 +32,10 @@ class SpendenQuittungsDB
     {
         $this->_wpdb = $wpdb;
         $this->_tableName = $this->_wpdb->prefix . "sqdb";
-
-        error_log("__construct");
     }
 
     public function install()
     {
-        error_log("install");
-
         $sqdbVersion = 1;
         $installedSqdbVersion = get_option(self::SQDB_DB_VERSION_OPTION, 0);
 
@@ -75,8 +71,6 @@ class SpendenQuittungsDB
 
     public function initDatabaseData()
     {
-        error_log("initDatabaseData");
-
         $format = array('%s', '%s', '%s', '%f', '%f', '%f', '%f', '%f', '%d', '%d');
 
         $data = array(

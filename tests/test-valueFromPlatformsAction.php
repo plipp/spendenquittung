@@ -14,7 +14,7 @@ class ValueFromPlatformsActionTest extends PHPUnit_Framework_TestCase
 {
     function testAverageProfitOfEmptyArray()
     {
-        $this->assertEquals(0, ValueFromPlatformsAction::averageFrom(array(), 0.001));
+        $this->assertEquals(-1, ValueFromPlatformsAction::averageFrom(array(), 0.001));
     }
 
     function testAverageProfitWithAllZeros()
@@ -24,7 +24,12 @@ class ValueFromPlatformsActionTest extends PHPUnit_Framework_TestCase
 
     function testAverageProfitWithZeros()
     {
-        $this->assertEquals(3.5, ValueFromPlatformsAction::averageFrom(array('a' => 0, 'b' => 3, 'c' => 4, 'd' => 0)), 0.001);
+        $this->assertEquals(1.75, ValueFromPlatformsAction::averageFrom(array('a' => 0, 'b' => 3, 'c' => 4, 'd' => 0)), 0.001);
+    }
+
+    function testAverageProfitWithUnavailables()
+    {
+        $this->assertEquals(3.5, ValueFromPlatformsAction::averageFrom(array('a' => -1, 'b' => 3, 'c' => 4, 'd' => -1)), 0.001);
     }
 
     function testAverageProfitWithoutZeros()

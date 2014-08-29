@@ -13,12 +13,11 @@ class PdfPrintAction
     public function as_pdf()
     {
         error_log("PDF-POST:" . json_encode($_POST));
-        require('fpdf17/fpdf.php');
+        require_once('fpdf17/fpdf.php');
+        require_once('bookTablePdf.php');
 
-        $pdf = new FPDF();
-        $pdf->AddPage();
-        $pdf->SetFont('Arial','B',16);
-        $pdf->Cell(40,10,'Hello World!');
+        $pdf = new BookTablePDF(json_decode(base64_decode($_POST['books']), true));
+        $pdf->printTable();
         $pdf->Output();
 
         exit; // !!! REQUIRED !!!

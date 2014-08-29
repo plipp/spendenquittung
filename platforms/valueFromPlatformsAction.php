@@ -3,7 +3,8 @@
 require_once(plugin_dir_path(__FILE__) . '../util/isbn.php');
 require_once(plugin_dir_path(__FILE__) . '../util/parallelcurl.php');
 
-class Profits {
+class Profits
+{
     private $_values;
 
     public function __construct($platform, $content)
@@ -16,7 +17,7 @@ class Profits {
             $this->_values['profit'] = $profit;
             $this->_values['profitsByWeightClasses'] = empty($prices) ? array() : $platform->profitByWeightClasses($profit);
         } else {
-            $this->_values['profit'] = 0;
+            $this->_values['profit'] = -1;
         }
     }
 
@@ -28,7 +29,8 @@ class Profits {
         return null;
     }
 
-    public function as_json() {
+    public function as_json()
+    {
         return json_encode($this->_values);
     }
 }
@@ -52,9 +54,13 @@ class ValueFromPlatformsAction
     {
         $isbn = $_POST['ISBN'];
 
-        header("Content-Type: application/json");
-        echo $this->_parallel_requests ($isbn);
+        $response = $this->_parallel_requests($isbn);
 
+        if ($response) {
+            wp_send_json_success($response);
+        } else {
+            wp_send_json_error("book data couldn't be retrieved: Check your internet connection!");
+        }
         exit; // !!! REQUIRED !!!
     }
 
@@ -77,8 +83,8 @@ class ValueFromPlatformsAction
     private function _parallel_requests($isbn)
     {
         $this->_results = array(
-            self::TITLE_RESULT=>array(),
-            self::PROFIT_RESULT=>array()
+            self::TITLE_RESULT => array(),
+            self::PROFIT_RESULT => array()
         );
 
         $platforms = $this->_platformRegistry->all();
@@ -95,38 +101,48 @@ class ValueFromPlatformsAction
         foreach ($platforms as $platform) {
             if ($platform->is_active) {
                 $search_url = $platform->urlBy($isbn);
-                error_log($search_url);
-                $parallel_curl->startRequest($search_url, array($this,'on_request_done'), $platform->name);
+                // error_log($search_url);
+                $parallel_curl->startRequest($search_url, array($this, 'on_request_done'), $platform->name);
             }
         }
 
         // synchronize requests
         $parallel_curl->finishAllRequests();
-        $encoded_value = json_encode(array(
-                "isbn" => $isbn,
-                "title" => strval($this->bestTitleFrom($this->_results[self::TITLE_RESULT])),
-                "profit" => Converters::toCurrencyString($this->averageFrom($this->_results[self::PROFIT_RESULT])))
-        );
+
+        $title = $this->bestTitleFrom($this->_results[self::TITLE_RESULT]);
+        $profit = $this->averageFrom($this->_results[self::PROFIT_RESULT]);
+
+        $encoded_value = ($title == null || $profit < 0) ? null :
+            json_encode(array(
+                    "isbn" => $isbn,
+                    "title" => strval($title),
+                    "profit" => Converters::toCurrencyString($profit))
+            );
+
         error_log("Booksearch Result:" . $encoded_value);
         return $encoded_value;
     }
 
-    static function bestTitleFrom($titleResults) {
-        error_log("Title-Results:" . implode('-', $titleResults));
+    static function bestTitleFrom($titleResults)
+    {
+        // error_log("Title-Results:" . implode('-', $titleResults));
         if (isset($titleResults[PlatformRegistry::BOOKLOOKER])) return $titleResults[PlatformRegistry::BOOKLOOKER];
         foreach ($titleResults as $title) {
             if ($title) return $title;
         }
-        return "";
+        return null;
     }
 
-    static function averageFrom($numbers) {
-        error_log("Numbers:" . implode('-', $numbers));
+    static function averageFrom($numbers)
+    {
+        // error_log("Numbers:" . implode('-', $numbers));
         // TODO: What are the real requirements here?
-        $relevant_numbers = array_filter($numbers, function($x){return $x>0;});
+        $relevant_numbers = array_filter($numbers, function ($x) {
+            return $x >= 0;
+        });
         $number_of_relevant_numbers = count($relevant_numbers);
 
-        if ($number_of_relevant_numbers==0) return 0;
-        else return array_sum($relevant_numbers)/$number_of_relevant_numbers;
+        if ($number_of_relevant_numbers == 0) return -1;
+        else return array_sum($relevant_numbers) / $number_of_relevant_numbers;
     }
 }
