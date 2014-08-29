@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Spendenquittung</title>
+    <!--&lt;!&ndash; DataTables CSS &ndash;&gt;-->
+    <!--<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css">-->
+
+    <!--&lt;!&ndash; jQuery &ndash;&gt;-->
+    <!--<script type="text/javascript" charset="utf8" src="//code.jquery.com/jquery-1.10.2.min.js"></script>-->
+
+    <!--&lt;!&ndash; DataTables &ndash;&gt;-->
+    <!--<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.js"></script>-->
+
+    <style>
+        input:focus:required:invalid {
+            background: #fffaad 379px -61px;
+        }
+
+        input:required:valid {
+            background-color: #fff;
+            background-position: 379px -61px;
+        }
+
+        .with-tb-padding {
+            margin: 1em 0 1em 0;
+        }
+
+        * {
+            font-size: 12px;
+            font-family: verdana;
+        }
+
+        h1 {
+            font-size: 20px;
+            padding: 0px 20px 20px;
+            margin: 0px;
+            text-align: center;
+        }
+
+        #books input {
+            padding: 4px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+        }
+
+        .button {
+            width: auto;
+            margin: 40px auto 20px auto;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+        }
+
+        #print-button {
+            display: block;
+        }
+
+        #user-data input {
+            padding: 4px;
+            width: 30em;
+        }
+
+        p > label:first-child {
+            display: inline-block;
+            font-weight: 700;
+            margin-bottom: 5px;
+            padding-right: 35px;
+            text-align: right;
+            width: 135px;
+        }
+
+        .container {
+            margin: 0px auto 20px auto;
+            padding: 20px;
+            border-radius: 5px;
+            clear: both;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+            -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+        }
+
+        table.dataTable tfoot th {
+            padding-right: 10px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="container">
+        <div id="books">
+            <div>
+                <div class="with-tb-padding">
+                    <h1>Ihre Spende</h1>
+
+                    <form id="add-isbn">
+                        <label>Gültige ISBN:
+                            <input type="text" id="ISBN" required placeholder="978-3570303283"
+                                   pattern="(\d{3}-)*\d{10}"></label>
+
+                        <input class="button" type="submit" value="Hinzufügen">
+                    </form>
+                </div>
+                <table id="book-table" class="display" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>ISBN</th>
+                        <th>Titel</th>
+                        <th>Preis/€</th>
+                        <th>Löschen</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th colspan="2" style="text-align:right">Summe:</th>
+                        <th style="text-align: right">0.00</th>
+                        <th></th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h1>Ihre Adresse</h1>
+        Bitte geben Sie noch Ihre Adressdaten und Ihre Auslagen für Porto ein (wird bei der Spendenquittung
+        berücksichtigt).
+        Über den "Drucken"-Kopf können Sie das Formular drucken. Legen Sie den Ausdruck Ihrer Büchersendung bei.
+        <p></p>
+        Datenschutzhinweis: Ihre Daten werden ausschließlich zur Abwicklung Ihrer Buchspende verwendet.
+        Die Daten werden weder weiter gegeben noch zu einem anderen Zweck verwendet.
+        Erhalten Sie von uns eine Spendenquittung, so sind wir durch Steuerrecht verpflichtet eine Kopie
+        (die Ihre Adressdaten enthält) zehn Jahre aufzubewaren.
+        <p></p>
+
+        <form action="http://change.me/" method="post" id="user-data">
+            <p>
+                <label for="lastname">Name*</label>
+                <input type="text" name="lastname" id="lastname" placeholder="Mustermann" required/>
+            </p>
+
+            <p>
+                <label for="firstname">Vorname(n)</label>
+                <input type="text" name="firstname" id="firstname" placeholder="Max"/>
+            </p>
+
+            <p>
+                <label for="street">Straße*</label>
+                <input type="text" name="street" id="street" placeholder="Rindermarkt 2" required/>
+            </p>
+
+            <p>
+                <label for="zip">Postleitzahl*</label>
+                <input pattern="[0-9]{5}" name="zip" id="zip" placeholder="80807" required>
+            </p>
+
+            <p>
+                <label for="city">Ort*</label>
+                <input type="text" name="city" id="city" placeholder="München" required/>
+            </p>
+
+            <p>
+                <label for="phone">Telefon</label>
+                <input type="tel" name="phone" id="phone" placeholder="089 1234567">
+            </p>
+
+            <p>
+                <label for="email">Email</label>
+                <input type="text" name="email" id="email" placeholder="max.mustermann@mustermann.de"/>
+            </p>
+
+            <p>
+                <input type="hidden" name="books" id="book-list"/>
+            </p>
+
+            <p>
+                <input type="submit" value="Drucken" id="print-button" class="button">
+            </p>
+        </form>
+    </div>
+</div>
+</body>
+<!--<script type="application/javascript" src="../js/util/base64.js"></script>-->
+<!--<script type="application/javascript" src="../js/quittung/app-config.js"></script>-->
+<!--<script type="application/javascript" src="../js/quittung/app.js"></script>-->
+</html>
