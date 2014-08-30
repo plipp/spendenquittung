@@ -52,7 +52,7 @@ class ValueFromPlatformsAction
 
     public function request_value_from_platforms()
     {
-        $isbn = $_POST['ISBN'];
+        $isbn = sanitize_text_field($_POST['ISBN']);
 
         $response = $this->_parallel_requests($isbn);
 

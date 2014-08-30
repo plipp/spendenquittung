@@ -17,7 +17,8 @@ class Bootstrap {
 
     public function createUserCss() {
         wp_enqueue_style( 'datatables-css', '//cdn.datatables.net/1.10.2/css/jquery.dataTables.css', array(), '1.10.2' );
-
+        wp_register_style('sq-style', plugins_url('spendenQuittung.css', __FILE__));
+        wp_enqueue_style('sq-style');
     }
 
     function addUserScripts () {
@@ -37,14 +38,14 @@ class Bootstrap {
 }
 
 global $wpdb;
-$sqdb = new SpendenQuittungsDB($wpdb);
+$sqdb = new SpendenQuittungsDB();
 
 //add_action('admin_menu', array($sqdb, 'createAdminPluginMenu'));
 //add_action('admin_print_styles', array($sqdb, 'createAdminCss'));
 //add_action('admin_enqueue_scripts', array($sqdb, 'addAdminScripts'));
 
 register_activation_hook(__FILE__, array($sqdb, 'install'));
-register_deactivation_hook(__FILE__, array($sqdb, 'uninstall'));
+register_uninstall_hook(__FILE__, array('SpendenQuittungsDB', 'uninstall'));
 
 $platformRegistry = new PlatformRegistry($sqdb->getAllPlatforms());
 $valueFromPlatforms = new ValueFromPlatformsAction($platformRegistry);
