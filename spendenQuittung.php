@@ -16,23 +16,27 @@ require_once ("pdf/pdfPrintAction.php");
 class Bootstrap {
 
     public function createUserCss() {
-        wp_enqueue_style( 'datatables-css', '//cdn.datatables.net/1.10.2/css/jquery.dataTables.css', array(), '1.10.2' );
-        wp_register_style('sq-style', plugins_url('spendenQuittung.css', __FILE__));
-        wp_enqueue_style('sq-style');
+        if (!is_admin()) {
+            wp_enqueue_style('datatables-css', '//cdn.datatables.net/1.10.2/css/jquery.dataTables.css', array(), '1.10.2');
+            wp_register_style('sq-style', plugins_url('spendenQuittung.css', __FILE__));
+            wp_enqueue_style('sq-style');
+        }
     }
 
     function addUserScripts () {
-        wp_enqueue_script("datatables", "//cdn.datatables.net/1.10.2/js/jquery.dataTables.js", array( 'jquery' ), '1.10.2');
-        wp_enqueue_script( 'sq-app-config', plugin_dir_url( __FILE__ ) . 'js/quittung/app-config.js');
-        wp_enqueue_script( 'sq-app', plugin_dir_url( __FILE__ ) . 'js/quittung/app.js', array( 'jquery', 'sq-app-config' ) );
-        wp_enqueue_script( 'base64', plugin_dir_url( __FILE__ ) . 'js/util/base64.js');
+        if (!is_admin()) {
+            wp_enqueue_script("datatables", "//cdn.datatables.net/1.10.2/js/jquery.dataTables.js", array('jquery'), '1.10.2');
+            wp_enqueue_script('sq-app-config', plugin_dir_url(__FILE__) . 'js/quittung/app-config.js');
+            wp_enqueue_script('sq-app', plugin_dir_url(__FILE__) . 'js/quittung/app.js', array('jquery', 'sq-app-config'));
+            wp_enqueue_script('base64', plugin_dir_url(__FILE__) . 'js/util/base64.js');
 
-        // declare the URL to the file that handles the AJAX request (wp-admin/admin-ajax.php)
-        wp_localize_script( 'sq-app-config', 'ajaxConfig', array( 'ajaxUrl' => admin_url( 'admin-ajax.php' ) ) );
+            // declare the URL to the file that handles the AJAX request (wp-admin/admin-ajax.php)
+            wp_localize_script('sq-app-config', 'ajaxConfig', array('ajaxUrl' => admin_url('admin-ajax.php')));
+        }
     }
 
     public function createQuittungsWidget() {
-        $content = file_get_contents(dirname(dirname(__FILE__)) . "/spendenquittung/templates/quittung.html");
+        $content = is_admin() ? "":file_get_contents(dirname(dirname(__FILE__)) . "/spendenquittung/templates/quittung.html");
         return $content;
     }
 }

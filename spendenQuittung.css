@@ -1,36 +1,36 @@
-input:focus:required:invalid {
+.sq input:focus:required:invalid {
     background: #fffaad 379px -61px;
 }
 
-input:required:valid {
+.sq input:required:valid {
     background-color: #fff;
     background-position: 379px -61px;
 }
 
-.with-tb-padding {
+.sq-with-tb-padding {
     margin: 1em 0 1em 0;
 }
 
-* {
+.sq * {
     font-size: 12px;
-    font-family: verdana;
+    /*font-family: verdana;*/
 }
 
-h1 {
+.sq h1 {
     font-size: 20px;
     padding: 0px 20px 20px;
     margin: 0px;
     text-align: center;
 }
 
-#books input {
+.sq #sq-books input {
     padding: 4px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
 }
 
-.button {
+.sq-button {
     width: auto;
     margin: 40px auto 20px auto;
     -webkit-border-radius: 5px;
@@ -38,16 +38,16 @@ h1 {
     border-radius: 5px;
 }
 
-#print-button {
+.sq #print-button {
     display: block;
 }
 
-#user-data input {
+.sq #user-data input {
     padding: 4px;
     width: 30em;
 }
 
-p > label:first-child {
+.sq p > label:first-child {
     display: inline-block;
     font-weight: 700;
     margin-bottom: 5px;
@@ -56,7 +56,7 @@ p > label:first-child {
     width: 135px;
 }
 
-.container {
+.sq-container {
     margin: 0px auto 20px auto;
     padding: 20px;
     border-radius: 5px;
@@ -68,6 +68,6 @@ p > label:first-child {
     -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
 }
 
-table.dataTable tfoot th {
+.sq table.dataTable tfoot th {
     padding-right: 10px;
 }

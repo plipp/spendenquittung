@@ -1,4 +1,4 @@
-/* global base64:true, appConfig:true */
+/* global base64:true, appConfig:true, window: true */
 // Structure: see https://github.com/tastejs/todomvc/blob/gh-pages/architecture-examples/jquery/js/app.js
 var app = (function ($, appConfig) {
     'use strict';
@@ -24,6 +24,10 @@ var app = (function ($, appConfig) {
 
     var App = {
         init: function () {
+            if ($('#sq-app').size()<1) {
+                return false;
+            }
+
             this.table = $('#book-table').DataTable({
                 "paging": false,
                 "info": false,
@@ -66,9 +70,11 @@ var app = (function ($, appConfig) {
             });
             this.cacheElements();
             this.bindEvents();
+
+            return true;
         },
         cacheElements: function () {
-            this.$app = $('#app');
+            this.$app = $('#sq-app');
             this.$addISBNBtn = this.$app.find('#add-isbn');
             this.$userData = this.$app.find('#user-data');
             this.$isbn = this.$app.find('#ISBN');
@@ -139,7 +145,7 @@ var app = (function ($, appConfig) {
         }
     };
     return {
-        init: function() {App.init();},
+        init: function() {return App.init();},
         dummyBooks: function() {App.dummyBooks();}
     };
 }(jQuery, appConfig));
@@ -147,7 +153,11 @@ var app = (function ($, appConfig) {
 jQuery(function () {
     'use strict';
 
-    app.init();
-    app.dummyBooks();
+    var appExists = app.init();
+    if (appExists) {
+        app.dummyBooks();
+    } else {
+        if (window.console) {window.console.log("Page is not the Spendenquittung (#sq-app)");}
+    }
 
 });

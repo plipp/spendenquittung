@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>Spendenquittung</title>
-</head>
-<body>
-<div id="app">
-    <div class="container">
-        <div id="books">
+<div id="sq-app" class="sq">
+    <div class="sq-container">
+        <div id="sq-books">
             <div>
-                <div class="with-tb-padding">
+                <div class="sq-with-tb-padding">
                     <h1>Ihre Spende</h1>
 
                     <form id="add-isbn">
@@ -17,7 +10,7 @@
                             <input type="text" id="ISBN" required placeholder="978-3570303283"
                                    pattern="(\d{3}-)*\d{10}"></label>
 
-                        <input class="button" type="submit" value="Hinzufügen">
+                        <input class="sq-button" type="submit" value="Hinzufügen">
                     </form>
                 </div>
                 <table id="book-table" class="display" cellspacing="0" width="100%">
@@ -40,17 +33,19 @@
             </div>
         </div>
     </div>
-    <div class="container">
+    <div class="sq-container">
         <h1>Ihre Adresse</h1>
-        Bitte geben Sie noch Ihre Adressdaten und Ihre Auslagen für Porto ein (wird bei der Spendenquittung
-        berücksichtigt).
-        Über den "Drucken"-Kopf können Sie das Formular drucken. Legen Sie den Ausdruck Ihrer Büchersendung bei.
-        <p></p>
-        Datenschutzhinweis: Ihre Daten werden ausschließlich zur Abwicklung Ihrer Buchspende verwendet.
-        Die Daten werden weder weiter gegeben noch zu einem anderen Zweck verwendet.
-        Erhalten Sie von uns eine Spendenquittung, so sind wir durch Steuerrecht verpflichtet eine Kopie
-        (die Ihre Adressdaten enthält) zehn Jahre aufzubewaren.
-        <p></p>
+
+        <p>Bitte geben Sie noch Ihre Adressdaten und Ihre Auslagen für Porto ein (wird bei der Spendenquittung
+            berücksichtigt).
+            Über den "Drucken"-Kopf können Sie das Formular drucken. Legen Sie den Ausdruck Ihrer Büchersendung bei.
+        </p>
+
+        <p>Datenschutzhinweis: Ihre Daten werden ausschließlich zur Abwicklung Ihrer Buchspende verwendet.
+            Die Daten werden weder weiter gegeben noch zu einem anderen Zweck verwendet.
+            Erhalten Sie von uns eine Spendenquittung, so sind wir durch Steuerrecht verpflichtet eine Kopie
+            (die Ihre Adressdaten enthält) zehn Jahre aufzubewaren.
+        </p>
 
         <form action="http://change.me/" method="post" id="user-data">
             <p>
@@ -93,10 +88,8 @@
             </p>
 
             <p>
-                <input type="submit" value="Drucken" id="print-button" class="button">
+                <input type="submit" value="Drucken" id="print-button" class="sq-button">
             </p>
         </form>
     </div>
 </div>
-</body>
-</html>
