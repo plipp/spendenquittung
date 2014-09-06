@@ -1,4 +1,4 @@
 spendenquittung
 ===============
 
-Spendenquittungstool
+see [wordpress plugin readme](readme.txt)

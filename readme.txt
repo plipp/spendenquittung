@@ -34,5 +34,10 @@ page and enter
 Initial Version
 
 == TODOs ==
+- Amazon API...
+- PDF: Formular + Adressblatt
+- Blacklist
 
-- error handling: book not found -> PHP: 404, JS: Alert
+- admin pages
+
+- automated unit-testing
