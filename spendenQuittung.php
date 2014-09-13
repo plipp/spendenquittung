@@ -10,6 +10,7 @@
 
 require_once ("classes/spendenQuittungsDB.php");
 require_once ("platforms/valueFromPlatformsAction.php");
+require_once ("admin/blacklistedBooksAction.php");
 require_once ("platforms/platforms.php");
 require_once ("pdf/pdfPrintAction.php");
 
@@ -34,27 +35,26 @@ class Bootstrap {
 
     public function createAdminPageBlacklist()
     {
-        if (is_admin()) {
-        }
+        include('templates/admin_blacklist.tpl.php');
     }
 
     public function createAdminCss() {
         if (is_admin()) {
             wp_enqueue_style('datatables-css', '//cdn.datatables.net/1.10.2/css/jquery.dataTables.css', array(), '1.10.2');
-//            wp_register_style('sq-style', plugins_url('spendenQuittung.css', __FILE__));
-//            wp_enqueue_style('sq-style');
+            wp_register_style('sq-admin-style', plugins_url('spendenQuittungAdmin.css', __FILE__));
+            wp_enqueue_style('sq-admin-style');
         }
     }
 
     public function addAdminScripts() {
         if (is_admin()) {
             wp_enqueue_script("datatables", "//cdn.datatables.net/1.10.2/js/jquery.dataTables.js", array('jquery'), '1.10.2');
-//            wp_enqueue_script('sq-app-config', plugin_dir_url(__FILE__) . 'js/quittung/app-config.js');
-//            wp_enqueue_script('sq-app', plugin_dir_url(__FILE__) . 'js/quittung/app.js', array('jquery', 'sq-app-config'));
-//            wp_enqueue_script('base64', plugin_dir_url(__FILE__) . 'js/util/base64.js');
-//
-//            // declare the URL to the file that handles the AJAX request (wp-admin/admin-ajax.php)
-//            wp_localize_script('sq-app-config', 'ajaxConfig', array('ajaxUrl' => admin_url('admin-ajax.php')));
+            wp_enqueue_script('sq-admin-blacklist-app-config', plugin_dir_url(__FILE__) . 'js/admin/app-blacklist-config.js');
+            wp_enqueue_script('sq-admin-blacklist-app', plugin_dir_url(__FILE__) . 'js/admin/app-blacklist.js', array('jquery', 'sq-admin-blacklist-app-config'));
+            // wp_enqueue_script('base64', plugin_dir_url(__FILE__) . 'js/util/base64.js');
+
+            // declare the URL to the file that handles the AJAX request (wp-admin/admin-ajax.php)
+            wp_localize_script('sq-admin-blacklist-app-config', 'ajaxConfig', array('ajaxUrl' => admin_url('admin-ajax.php')));
         }
     }
 
@@ -92,7 +92,9 @@ register_activation_hook(__FILE__, array($sqdb, 'install'));
 register_uninstall_hook(__FILE__, array('SpendenQuittungsDB', 'uninstall'));
 
 $platformRegistry = new PlatformRegistry($sqdb->getAllPlatforms());
-$valueFromPlatforms = new ValueFromPlatformsAction($platformRegistry);
+$valueFromPlatformsAction = new ValueFromPlatformsAction($platformRegistry);
+$blacklistAction = new BlacklistedBooksAction($sqdb);
+
 $pdfPrint = new PdfPrintAction();
 
 // Bootstrapping

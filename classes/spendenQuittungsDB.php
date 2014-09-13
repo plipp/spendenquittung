@@ -9,6 +9,7 @@
 class SpendenQuittungsDB
 {
 
+    const SQDB_DB_VERSION = 2;
     const SQDB_DB_VERSION_OPTION = "sqdb_db_version";
 
     const SQ_BOOKLOOKER_API_KEY_OPTION = 'sq_booklooker_api_key';
@@ -31,11 +32,30 @@ class SpendenQuittungsDB
 
     public function install()
     {
-        global $wpdb;
-        $tableName = $wpdb->prefix . "sqdb";
-
-        $sqdbVersion = 1;
+        $sqdbVersion = self::SQDB_DB_VERSION;
         $installedSqdbVersion = get_option(self::SQDB_DB_VERSION_OPTION, 0);
+
+        $this->init_options();
+
+        if ($installedSqdbVersion != $sqdbVersion) {
+            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+            $this->initMarketplaceDatabase();
+            $this->initBlacklistDatabase();
+
+            update_option(self::SQDB_DB_VERSION_OPTION, $sqdbVersion);
+        }
+    }
+
+    public function init_options() {
+        add_option( self::SQ_BOOKLOOKER_API_KEY_OPTION, 'BOOKLOOKER_API_KEY' );
+        add_option( self::SQ_EBAY_API_KEY_OPTION, 'EBAY_API_KEY' );
+    }
+
+    public function initMarketplaceDatabase()
+    {
+        global $wpdb;
+        $tableName = self::marketplaceTableName();
 
         $sql = "CREATE TABLE IF NOT EXISTS " . $tableName . " (
                   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -53,31 +73,18 @@ class SpendenQuittungsDB
                   KEY `name` (`name`)
                 );";
 
-        $this->init_options();
+        dbDelta($sql); # FIXME automatic upgrade does not work
 
-        if ($installedSqdbVersion != $sqdbVersion) {
-            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-            dbDelta($sql); # FIXME automatic upgrade does not work
-            update_option(self::SQDB_DB_VERSION_OPTION, $sqdbVersion);
-
-            // TODO cleanup
-//            $count = $wpdb->get_var("SELECT COUNT(id) FROM $tableName");
-//            if ($count==0) {
-                $this->initDatabaseData(get_option(self::SQ_BOOKLOOKER_API_KEY_OPTION, 'BOOKLOOKER_API_KEY' ),
-                    get_option( self::SQ_EBAY_API_KEY_OPTION, 'EBAY_API_KEY' ));
-//            }
+        if ($this->isEmpty($tableName)) {
+            $this->populateMarketplaceTable(get_option(self::SQ_BOOKLOOKER_API_KEY_OPTION, 'BOOKLOOKER_API_KEY'),
+                get_option(self::SQ_EBAY_API_KEY_OPTION, 'EBAY_API_KEY'));
         }
     }
 
-    public function init_options() {
-        add_option( self::SQ_BOOKLOOKER_API_KEY_OPTION, 'BOOKLOOKER_API_KEY' );
-        add_option( self::SQ_EBAY_API_KEY_OPTION, 'EBAY_API_KEY' );
-    }
-
-    public function initDatabaseData($booklooker_api_key, $ebay_api_key)
+    public function populateMarketplaceTable($booklooker_api_key, $ebay_api_key)
     {
         global $wpdb;
-        $tableName = $wpdb->prefix . "sqdb";
+        $tableName = self::marketplaceTableName();
 
         $format = array('%s', '%s', '%s', '%f', '%f', '%f', '%f', '%f', '%d', '%d');
 
@@ -168,12 +175,53 @@ class SpendenQuittungsDB
         $wpdb->insert($tableName, $data, $format);
     }
 
+    public function initBlacklistDatabase()
+    {
+        global $wpdb;
+        $tableName = self::blacklistTableName();
+
+        $sql = "CREATE TABLE IF NOT EXISTS " . $tableName . " (
+                  `isbn` varchar(15) NOT NULL,
+                  `title` varchar(255) NOT NULL,
+                  `author` varchar(255) NOT NULL,
+                  `comment` text NOT NULL,
+                  PRIMARY KEY  (`isbn`)
+                );";
+
+        dbDelta($sql); # FIXME automatic upgrade does not work
+
+        if ($this->isEmpty($tableName)) {
+            $this->populateBlacklistTable();
+        }
+    }
+
+    public function populateBlacklistTable()
+    {
+        global $wpdb;
+        $tableName = self::blacklistTableName();
+
+        $format = array('%s', '%s', '%s', '%s');
+
+        $data = array('isbn' => '3925924167', 'title' => 'Von der etsch bis an den Belt', 'author' => 'Lindner', 'comment' => 'ab damit in die P-Tonne');
+        $wpdb->insert($tableName, $data, $format);
+        $data = array('isbn' => '9783800414239', 'title' => 'verbotene trauer', 'author' => 'röhl', 'comment' => 'ab damit in die P-Tonne');
+        $wpdb->insert($tableName, $data, $format);
+        $data = array('isbn' => '3932381246', 'title' => 'verschwiegene schuld', 'author' => 'bacque', 'comment' => 'ab damit in die P-Tonne');
+        $wpdb->insert($tableName, $data, $format);
+        $data = array('isbn' => '3921789052', 'title' => 'adolf hitler', 'author' => '', 'comment' => 'ab damit in die P-Tonne');
+        $wpdb->insert($tableName, $data, $format);
+        $data = array('isbn' => '3924309280', 'title' => '8. mai befreiung oder katastrophe', 'author' => 'berlin', 'comment' => 'ab damit in die P-Tonne');
+        $wpdb->insert($tableName, $data, $format);
+        $data = array('isbn' => '389478069x', 'title' => 'Geheimgesellschaften und ihre Macht im 20. Jahrhundert', 'author' => 'helsing', 'comment' => 'ab damit in die P-Tonne');
+        $wpdb->insert($tableName, $data, $format);
+    }
+
     public static function uninstall()
     {
         global $wpdb;
-        $tableName = $wpdb->prefix . "sqdb";
+        $wpdb->query("DROP TABLE IF EXISTS " . self::marketplaceTableName());
+        $wpdb->query("DROP TABLE IF EXISTS " . self::blacklistTableName());
 
-        $wpdb->query("DROP TABLE IF EXISTS " . $tableName);
         delete_option(self::SQDB_DB_VERSION_OPTION);
         delete_option(self::SQ_BOOKLOOKER_API_KEY_OPTION);
         delete_option(self::SQ_EBAY_API_KEY_OPTION);
@@ -181,9 +229,34 @@ class SpendenQuittungsDB
 
     public function getAllPlatforms() {
         global $wpdb;
-        $tableName = $wpdb->prefix . "sqdb";
-
-        return $wpdb->get_results('SELECT * FROM ' . $tableName, ARRAY_A);
+        return $wpdb->get_results('SELECT * FROM ' . self::marketplaceTableName(), ARRAY_A);
     }
+
+    public function getBlacklistedBooks() {
+        global $wpdb;
+        return $wpdb->get_results('SELECT * FROM ' . self::blacklistTableName(), ARRAY_A);
+    }
+
+    private static function marketplaceTableName()
+    {
+        global $wpdb;
+        $tableName = $wpdb->prefix . "sqdb";
+        return $tableName;
+    }
+
+    private static function blacklistTableName()
+    {
+        global $wpdb;
+        $tableName = $wpdb->prefix . "sqdb_blacklist";
+        return $tableName;
+    }
+
+    private static function isEmpty($tableName)
+    {
+        global $wpdb;
+        $count = $wpdb->get_var("SELECT COUNT(*) FROM $tableName");
+        return $count==0;
+    }
+
 }
 

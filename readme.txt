@@ -34,6 +34,7 @@ page and enter
 Initial Version
 
 == TODOs ==
+- Fix: HTML5-ISBN-validation to accept something like '389478069X'
 - Amazon API...
 - PDF: Formular + Adressblatt
 - Blacklist
