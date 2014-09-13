@@ -4,10 +4,10 @@ var appMarketplaceConfig = (function (ajaxConfig) {
 
     return {
         ajaxUrl: ajaxConfig.ajaxUrl,
-        actionForBookDataFromPlatforms: "request_value_from_platforms",
+        actionForBlacklistedBooks: "request_value_from_platforms",
         actionForPdfPrint: "as_pdf",
         urlForBookDataFromPlatforms: function () {
-            return this.ajaxUrl + "?action=" + this.actionForBookDataFromPlatforms;
+            return this.ajaxUrl + "?action=" + this.actionForBlacklistedBooks;
         },
         urlForPdfPrint: function() {
             return this.ajaxUrl  + "?action=" + this.actionForPdfPrint;

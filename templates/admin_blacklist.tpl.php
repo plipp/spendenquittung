@@ -24,6 +24,7 @@
                         <th>Titel</th>
                         <th>AutorIn</th>
                         <th>Kommentar</th>
+                        <th>Löschen</th>
                     </tr>
                     </thead>
                     <tfoot>

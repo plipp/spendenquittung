@@ -17,7 +17,8 @@ var appBlacklist = (function ($, appConfig) {
                 "columns": [
                     { className: "dt-body-left" },
                     { className: "dt-body-left" },
-                    { className: "dt-body-right" },
+                    { className: "dt-body-left" },
+                    { className: "dt-body-left" },
                     { className: "dt-body-center" }
                 ],
                 "language": {
@@ -63,13 +64,37 @@ var appBlacklist = (function ($, appConfig) {
             alert("Titel und Preis des Buches konnten nicht ermittelt werden. " +
                 "Bitte checken Sie noch einmal die ISBN '" + isbn + "' bzw. Ihre Internet-Verbindung.");
         },
+        afterBooksFetched: function (response) {
+            if (response.success && response.data) {
+                var lTable = this.table;
+                var bookDatas = response.data;
+                $.each(bookDatas, function (index, bookData) {
+                    lTable.row.add([
+                        bookData.isbn, bookData.title, bookData.author, bookData.comment, '<button class="delete-row">X</button>'
+                    ]);
+                });
+                lTable.draw();
+            } else {
+                alert("Die schwarze Liste konnten nicht ermittelt werden. " +
+                    "Bitte checken Sie Ihre Internet-Verbindung.");
+            }
+        },
+        fetchBooks: function () {
+            document.body.style.cursor = 'wait';
+            $.ajax({
+                type: "POST",
+                url: config.urlForBlacklistedBooks()
+            }).done(this.afterBooksFetched.bind(this)).always(function () {
+                document.body.style.cursor = 'default';
+            });
+        },
         afterBookAdded: function (response) {
             var $isbn = this.$isbn;
             if (response.success && response.data) {
                 var lTable = this.table;
                 var bookData = JSON.parse(response.data);
                 lTable.row.add([
-                    bookData.isbn, bookData.title, bookData.profit, '<button class="delete-row">X</button>'
+                    bookData.isbn, bookData.title, bookData.author, bookData.comment, '<button class="delete-row">X</button>'
                 ]).draw();
                 $isbn.val("");
             } else {
@@ -80,7 +105,7 @@ var appBlacklist = (function ($, appConfig) {
             document.body.style.cursor = 'wait';
             $.ajax({
                 type: "POST",
-                url: config.urlForBookDataFromPlatforms(),
+                url: config.urlForBlacklistedBooks(),
                 data: { ISBN: isbn }
             }).done(this.afterBookAdded.bind(this)).always(function () {
                 document.body.style.cursor = 'default';
@@ -92,21 +117,34 @@ var appBlacklist = (function ($, appConfig) {
             event.preventDefault();
         },
         onRemoveBook: function (event) {
-            this.table.row($(event.target).parents('tr'))
+            var $row = $(event.target).parents('tr'), isbn=$row.find('td:first').text();
+            document.body.style.cursor = 'wait';
+            $.ajax({
+                type: "POST",
+                url: config.urlForDeletionOfBlacklistBook(),
+                data: { ISBN: isbn }
+            }).done(this.afterBookAdded.bind(this)).always(function () {
+                document.body.style.cursor = 'default';
+            });
+            this.table.row($row)
                 .remove()
                 .draw();
+
             event.preventDefault();
         }
     };
     return {
-        init: function() {return App.init();}
+        init: function() {return App.init();},
+        fetchBooks: function() { return App.fetchBooks();}
     };
 }(jQuery, appBlacklistConfig));
 
 jQuery(function () {
     'use strict';
 
-    if (!appBlacklist.init()) {
+    if (appBlacklist.init()) {
+        appBlacklist.fetchBooks();
+    } else {
         if (window.console) {window.console.log("Page is not the Blacklist (#sq-blacklist-app)");}
     }
 

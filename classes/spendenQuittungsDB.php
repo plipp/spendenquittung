@@ -237,6 +237,11 @@ class SpendenQuittungsDB
         return $wpdb->get_results('SELECT * FROM ' . self::blacklistTableName(), ARRAY_A);
     }
 
+    public function deleteBlacklistedBook($isbn) {
+        global $wpdb;
+        return $wpdb->query('DELETE FROM ' . self::blacklistTableName() . ' WHERE isbn = "' . $isbn . '"');
+    }
+
     private static function marketplaceTableName()
     {
         global $wpdb;

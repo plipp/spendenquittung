@@ -4,9 +4,13 @@ var appBlacklistConfig = (function (ajaxConfig) {
 
     return {
         ajaxUrl: ajaxConfig.ajaxUrl,
-        actionForBookDataFromPlatforms: "request_blacklisted_books",
-        urlForBlacklistDataFromPlatforms: function () {
-            return this.ajaxUrl + "?action=" + this.actionForBookDataFromPlatforms;
+        actionForBlacklistedBooks: "request_blacklisted_books",
+        actionForDeletionOfBlacklistedBook: "delete_blacklisted_book",
+        urlForBlacklistedBooks: function () {
+            return this.ajaxUrl + "?action=" + this.actionForBlacklistedBooks;
+        },
+        urlForDeletionOfBlacklistBook: function () {
+            return this.ajaxUrl + "?action=" + this.actionForDeletionOfBlacklistedBook;
         }
     };
 })(ajaxConfig); // ajaxConfig from: wp_localize_script( 'sq-app-config', 'ajaxConfig', array( 'ajaxUrl' => admin_url( 'admin-ajax.php' ) ) );
