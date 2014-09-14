@@ -42,3 +42,5 @@ Initial Version
 - admin pages
 
 - automated unit-testing
+
+- see TODOs (a.o. in blacklistedBooksAction.php)

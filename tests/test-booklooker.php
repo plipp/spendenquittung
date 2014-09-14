@@ -30,6 +30,15 @@ class BooklookerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($booklooker->titleFrom($xml),'Die Gilde der Schwarzen Magier - Die Rebellin');
     }
 
+    function testParseAutor()
+    {
+        $xml = file_get_contents("tests/booklooker-with-book.xml");
+        $this->assertFalse(empty($xml));
+
+        $booklooker = new BOOKLOOKER(json_decode(self::BOOKLOOKER_AS_JSON, TRUE));
+        $this->assertEquals($booklooker->authorFrom($xml),'Canavan, Trudi');
+    }
+
     function testParseEmptyContent()
     {
         $xml = "";

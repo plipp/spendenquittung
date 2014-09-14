@@ -30,6 +30,19 @@ class EbayTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($ebay->titleFrom($xml),'Die Rebellin. Die Gilde der Schwarzen Magier 01  ~  Trudi Ca ... 9783570303283');
     }
 
+    /**
+     * @expectedException RuntimeException
+     */
+    public
+    function testParseAuthor()
+    {
+        $xml = file_get_contents("tests/ebay-with-book.xml");
+        $this->assertFalse(empty($xml));
+
+        $ebay = new Ebay(json_decode(self::EBAY_AS_JSON, TRUE));
+        $this->assertEquals($ebay->authorFrom($xml)); // unsupported
+    }
+
     function testParseWrongIsbn()
     {
         $xml = file_get_contents("tests/ebay-wrong-isbn.xml");

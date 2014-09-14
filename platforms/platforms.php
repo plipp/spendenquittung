@@ -94,6 +94,10 @@ class Platform
         return null;
     }
 
+    public function authorFrom($content) {
+        throw new RuntimeException("$this->name : authorFrom()-method not supported");
+    }
+
     public function profitByWeightClasses($price)
     {
         $weightClasses = Weight::classes();
@@ -161,6 +165,12 @@ class Booklooker extends Platform {
         $booklist = $this->booklistFrom($xml);
         if (!$booklist) return null;
         return $booklist->Book->Title;
+    }
+
+    public function authorFrom($xml) {
+        $booklist = $this->booklistFrom($xml);
+        if (!$booklist) return null;
+        return $booklist->Book->Author;
     }
 
     private function booklistFrom($xml) {

@@ -93,7 +93,7 @@ register_uninstall_hook(__FILE__, array('SpendenQuittungsDB', 'uninstall'));
 
 $platformRegistry = new PlatformRegistry($sqdb->getAllPlatforms());
 $valueFromPlatformsAction = new ValueFromPlatformsAction($platformRegistry);
-$blacklistAction = new BlacklistedBooksAction($sqdb);
+$blacklistAction = new BlacklistedBooksAction($sqdb, $platformRegistry->by(PlatformRegistry::BOOKLOOKER));
 
 $pdfPrint = new PdfPrintAction();
 

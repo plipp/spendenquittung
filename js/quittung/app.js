@@ -75,14 +75,14 @@ var app = (function ($, appConfig) {
         },
         cacheElements: function () {
             this.$app = $('#sq-app');
-            this.$addISBNBtn = this.$app.find('#add-isbn');
+            this.$addBookBtn = this.$app.find('#add-isbn');
             this.$userData = this.$app.find('#user-data');
             this.$isbn = this.$app.find('#ISBN');
             this.$bookTableBody = this.$app.find('#book-table tbody');
             this.$hiddenBookList = this.$app.find('#book-list');
         },
         bindEvents: function () {
-            this.$addISBNBtn.on('submit', this.onAddBook.bind(this));
+            this.$addBookBtn.on('submit', this.onAddBook.bind(this));
             this.$userData.on('submit', this.beforePrintPdf.bind(this));
             this.$bookTableBody.on('click', 'button.delete-row', this.onRemoveBook.bind(this));
         },

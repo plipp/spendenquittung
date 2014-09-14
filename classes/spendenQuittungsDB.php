@@ -197,23 +197,12 @@ class SpendenQuittungsDB
 
     public function populateBlacklistTable()
     {
-        global $wpdb;
-        $tableName = self::blacklistTableName();
-
-        $format = array('%s', '%s', '%s', '%s');
-
-        $data = array('isbn' => '3925924167', 'title' => 'Von der etsch bis an den Belt', 'author' => 'Lindner', 'comment' => 'ab damit in die P-Tonne');
-        $wpdb->insert($tableName, $data, $format);
-        $data = array('isbn' => '9783800414239', 'title' => 'verbotene trauer', 'author' => 'röhl', 'comment' => 'ab damit in die P-Tonne');
-        $wpdb->insert($tableName, $data, $format);
-        $data = array('isbn' => '3932381246', 'title' => 'verschwiegene schuld', 'author' => 'bacque', 'comment' => 'ab damit in die P-Tonne');
-        $wpdb->insert($tableName, $data, $format);
-        $data = array('isbn' => '3921789052', 'title' => 'adolf hitler', 'author' => '', 'comment' => 'ab damit in die P-Tonne');
-        $wpdb->insert($tableName, $data, $format);
-        $data = array('isbn' => '3924309280', 'title' => '8. mai befreiung oder katastrophe', 'author' => 'berlin', 'comment' => 'ab damit in die P-Tonne');
-        $wpdb->insert($tableName, $data, $format);
-        $data = array('isbn' => '389478069x', 'title' => 'Geheimgesellschaften und ihre Macht im 20. Jahrhundert', 'author' => 'helsing', 'comment' => 'ab damit in die P-Tonne');
-        $wpdb->insert($tableName, $data, $format);
+        $this->_addToBlacklistTable(array('isbn' => '3925924167', 'title' => 'Von der etsch bis an den Belt', 'author' => 'Lindner', 'comment' => 'ab damit in die P-Tonne'));
+        $this->_addToBlacklistTable(array('isbn' => '9783800414239', 'title' => 'verbotene trauer', 'author' => 'röhl', 'comment' => 'ab damit in die P-Tonne'));
+        $this->_addToBlacklistTable(array('isbn' => '3932381246', 'title' => 'verschwiegene schuld', 'author' => 'bacque', 'comment' => 'ab damit in die P-Tonne'));
+        $this->_addToBlacklistTable(array('isbn' => '3921789052', 'title' => 'adolf hitler', 'author' => '', 'comment' => 'ab damit in die P-Tonne'));
+        $this->_addToBlacklistTable(array('isbn' => '3924309280', 'title' => '8. mai befreiung oder katastrophe', 'author' => 'berlin', 'comment' => 'ab damit in die P-Tonne'));
+        $this->_addToBlacklistTable(array('isbn' => '389478069x', 'title' => 'Geheimgesellschaften und ihre Macht im 20. Jahrhundert', 'author' => 'helsing', 'comment' => 'ab damit in die P-Tonne'));
     }
 
     public static function uninstall()
@@ -239,7 +228,23 @@ class SpendenQuittungsDB
 
     public function deleteBlacklistedBook($isbn) {
         global $wpdb;
-        return $wpdb->query('DELETE FROM ' . self::blacklistTableName() . ' WHERE isbn = "' . $isbn . '"');
+        $isbn=esc_sql($isbn);
+
+        error_log("delete_blacklisted_book($isbn):DELETE FROM " . self::blacklistTableName() . " WHERE isbn = '$isbn'");
+        $wpdb->query("DELETE FROM " . self::blacklistTableName() . " WHERE isbn = '$isbn'");
+    }
+
+    public function addBlacklistedBook($entry) {
+        $this->_addToBlacklistTable($entry);
+    }
+
+    private function _addToBlacklistTable($data) {
+        global $wpdb;
+        $tableName = self::blacklistTableName();
+
+        $format = array('%s', '%s', '%s', '%s');
+
+        $wpdb->insert($tableName, $data, $format);
     }
 
     private static function marketplaceTableName()

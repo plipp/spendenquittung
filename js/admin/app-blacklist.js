@@ -52,12 +52,13 @@ var appBlacklist = (function ($, appConfig) {
         },
         cacheElements: function () {
             this.$app = $('#sq-blacklist-app');
-            this.$addISBNBtn = this.$app.find('#add-isbn');
+            this.$addBookBtn = this.$app.find('#add-book');
             this.$isbn = this.$app.find('#ISBN');
+            this.$comment = this.$app.find('#comment');
             this.$bookTableBody = this.$app.find('#book-table tbody');
         },
         bindEvents: function () {
-            this.$addISBNBtn.on('submit', this.onAddBook.bind(this));
+            this.$addBookBtn.on('submit', this.onAddBook.bind(this));
             this.$bookTableBody.on('click', 'button.delete-row', this.onRemoveBook.bind(this));
         },
         bookDataNotAvailable: function (isbn) {
@@ -65,15 +66,17 @@ var appBlacklist = (function ($, appConfig) {
                 "Bitte checken Sie noch einmal die ISBN '" + isbn + "' bzw. Ihre Internet-Verbindung.");
         },
         afterBooksFetched: function (response) {
-            if (response.success && response.data) {
-                var lTable = this.table;
-                var bookDatas = response.data;
-                $.each(bookDatas, function (index, bookData) {
-                    lTable.row.add([
-                        bookData.isbn, bookData.title, bookData.author, bookData.comment, '<button class="delete-row">X</button>'
-                    ]);
-                });
-                lTable.draw();
+            if (response.success) {
+                if (response.data) {
+                    var lTable = this.table;
+                    var bookDatas = response.data;
+                    $.each(bookDatas, function (index, bookData) {
+                        lTable.row.add([
+                            bookData.isbn, bookData.title, bookData.author, bookData.comment, '<button class="delete-row">X</button>'
+                        ]);
+                    });
+                    lTable.draw();
+                }
             } else {
                 alert("Die schwarze Liste konnten nicht ermittelt werden. " +
                     "Bitte checken Sie Ihre Internet-Verbindung.");
@@ -101,30 +104,28 @@ var appBlacklist = (function ($, appConfig) {
                 this.bookDataNotAvailable($isbn.val());
             }
         },
-        addBook: function (isbn) {
+        addBook: function (isbn, comment) {
             document.body.style.cursor = 'wait';
             $.ajax({
                 type: "POST",
-                url: config.urlForBlacklistedBooks(),
-                data: { ISBN: isbn }
+                url: config.urlForAddingBlacklistedBook(),
+                data: { ISBN: isbn, COMMENT: comment }
             }).done(this.afterBookAdded.bind(this)).always(function () {
                 document.body.style.cursor = 'default';
             });
         },
         onAddBook: function (event) {
-            var isbn = this.$isbn.val().trim();
-            this.addBook(isbn);
+            var isbn = this.$isbn.val().trim(),
+                comment = this.$comment.val().trim();
+            this.addBook(isbn, comment);
             event.preventDefault();
         },
         onRemoveBook: function (event) {
             var $row = $(event.target).parents('tr'), isbn=$row.find('td:first').text();
-            document.body.style.cursor = 'wait';
             $.ajax({
                 type: "POST",
                 url: config.urlForDeletionOfBlacklistBook(),
                 data: { ISBN: isbn }
-            }).done(this.afterBookAdded.bind(this)).always(function () {
-                document.body.style.cursor = 'default';
             });
             this.table.row($row)
                 .remove()
