@@ -52,8 +52,13 @@ class ValueFromPlatformsAction
 
     public function request_value_from_platforms()
     {
-        $isbn = sanitize_text_field($_POST['ISBN']);
+        $isbn = Isbn::clean($_POST['ISBN']);
+        if (!Isbn::validate($isbn)) {
+            wp_send_json_error("Invalid ISBN $isbn");
+            exit;
+        }
 
+        // TODO check whether in blacklist...
         $response = $this->_parallel_requests($isbn);
 
         if ($response) {

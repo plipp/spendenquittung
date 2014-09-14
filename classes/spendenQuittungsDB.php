@@ -228,14 +228,16 @@ class SpendenQuittungsDB
 
     public function deleteBlacklistedBook($isbn) {
         global $wpdb;
-        $isbn=esc_sql($isbn);
+
+        // Not when DELETE: Else, we never get rid of other entries than that in isbn13-format!
+        // $isbn=Isbn::to13($isbn);
 
         error_log("delete_blacklisted_book($isbn):DELETE FROM " . self::blacklistTableName() . " WHERE isbn = '$isbn'");
         $wpdb->query("DELETE FROM " . self::blacklistTableName() . " WHERE isbn = '$isbn'");
     }
 
     public function addBlacklistedBook($entry) {
-        $this->_addToBlacklistTable($entry);
+        return $this->_addToBlacklistTable($entry);
     }
 
     private function _addToBlacklistTable($data) {
@@ -244,7 +246,14 @@ class SpendenQuittungsDB
 
         $format = array('%s', '%s', '%s', '%s');
 
-        $wpdb->insert($tableName, $data, $format);
+        $isbn13 = Isbn::to13(strtoupper($data['isbn']));
+        if (!empty($isbn13)) {
+            $data['isbn'] = $isbn13;
+            $wpdb->insert($tableName, $data, $format);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private static function marketplaceTableName()

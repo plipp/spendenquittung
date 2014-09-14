@@ -23,31 +23,39 @@ class BlacklistedBooksAction
 
     public function add_blacklisted_book()
     {
-        if (empty($_POST['ISBN'])) {
-            wp_send_json_error("ISBN missing");
+        $isbn = Isbn::clean($_POST['ISBN']);
+        if (!Isbn::validate($isbn)) {
+            wp_send_json_error("Invalid ISBN $isbn");
             exit;
         }
 
-        $isbn = sanitize_text_field($_POST['ISBN']); // TODO: remove '-' to avoid duplicates
-        $comment = sanitize_text_field($_POST['COMMENT']);
+        $comment = $this->sanitized('COMMENT');
+
 
         $xml = $this->_fetchFrom($this->_booklookerApi->urlBy($isbn)); // TODO error handling
 
         $newEntry =array(
                 "isbn" => $isbn,
-                "title" => $this->_booklookerApi->titleFrom($xml),
-                "author" => $this->_booklookerApi->authorFrom($xml),
+                "title" => strval($this->_booklookerApi->titleFrom($xml)),
+                "author" => strval($this->_booklookerApi->authorFrom($xml)),
                 "comment" => $comment);
 
-        $this->_db->addBlacklistedBook($newEntry);
-
-        wp_send_json_success( json_encode($newEntry)); // TODO author/title???
+        if ($this->_db->addBlacklistedBook($newEntry)) {
+            error_log("Title =" . $newEntry['title']);
+            wp_send_json_success(json_encode($newEntry));
+        } else {
+            wp_send_json_error("Could not add book with isbn $isbn. Please check it!");
+        }
         exit; // !!! REQUIRED !!!
     }
 
     public function delete_blacklisted_book()
     {
-        $isbn = sanitize_text_field($_POST['ISBN']);
+        $isbn = Isbn::clean($_POST['ISBN']);
+        if (!Isbn::validate($isbn)) {
+            wp_send_json_error("Invalid ISBN $isbn");
+            exit;
+        }
 
         $this->_db->deleteBlacklistedBook($isbn);
 
@@ -57,7 +65,8 @@ class BlacklistedBooksAction
 
     public function request_blacklisted_books()
     {
-        // TODO: $this->_db->populateBlacklistTable();
+        // TODO:
+        // $this->_db->populateBlacklistTable();
         $response = $this->_db->getBlacklistedBooks();
 
         wp_send_json_success($response);
@@ -74,6 +83,14 @@ class BlacklistedBooksAction
         $data = curl_exec($ch);
         curl_close($ch);
         return $data;
+    }
+
+    /**
+     * @return string
+     */
+    public function sanitized($param)
+    {
+        return empty($_POST[$param]) ? "" : sanitize_text_field($_POST[$param]);
     }
 
 }
