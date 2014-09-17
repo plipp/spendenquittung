@@ -42,10 +42,14 @@ class ValueFromPlatformsAction
 
     private $_platformRegistry;
     private $_results;
+    private $_blacklistedBookIsbns;
 
-    public function ValueFromPlatformsAction($platformRegistry)
+    public function ValueFromPlatformsAction($platformRegistry, $blacklistedBooks)
     {
         $this->_platformRegistry = $platformRegistry;
+        $this->_blacklistedBookIsbns = array_map(function ($book) {return $book['isbn'];},$blacklistedBooks);
+        error_log("ISBN of blacklisted books: ".implode('+',$this->_blacklistedBookIsbns));
+
         add_action('wp_ajax_request_value_from_platforms', array($this, 'request_value_from_platforms'));
         add_action('wp_ajax_nopriv_request_value_from_platforms', array($this, 'request_value_from_platforms'));
     }
@@ -58,8 +62,16 @@ class ValueFromPlatformsAction
             exit;
         }
 
-        // TODO check whether in blacklist...
-        $response = $this->_parallel_requests($isbn);
+        $isbn13 = Isbn::to13($isbn);
+        if (in_array($isbn13, $this->_blacklistedBookIsbns)) {
+            $response = json_encode(array(
+                    "isbn" => $isbn,
+                    "title" => '?',
+                    "profit" => "0.00")
+            );
+        } else {
+            $response = $this->_parallel_requests($isbn);
+        }
 
         if ($response) {
             wp_send_json_success($response);

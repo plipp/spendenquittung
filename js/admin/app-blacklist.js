@@ -61,10 +61,6 @@ var appBlacklist = (function ($, appConfig) {
             this.$addBookBtn.on('submit', this.onAddBook.bind(this));
             this.$bookTableBody.on('click', 'button.delete-row', this.onRemoveBook.bind(this));
         },
-        bookDataNotAvailable: function (isbn) {
-            alert("Titel und Preis des Buches konnten nicht ermittelt werden. " +
-                "Bitte checken Sie noch einmal die ISBN '" + isbn + "' bzw. Ihre Internet-Verbindung.");
-        },
         afterBooksFetched: function (response) {
             if (response.success) {
                 if (response.data) {
@@ -93,15 +89,17 @@ var appBlacklist = (function ($, appConfig) {
         },
         afterBookAdded: function (response) {
             var $isbn = this.$isbn;
-            if (response.success && response.data) {
-                var lTable = this.table;
-                var bookData = JSON.parse(response.data);
-                lTable.row.add([
-                    bookData.isbn, bookData.title, bookData.author, bookData.comment, '<button class="delete-row">X</button>'
-                ]).draw();
-                $isbn.val("");
+            if (response.success) {
+                if (response.data) {
+                    var lTable = this.table;
+                    var bookData = JSON.parse(response.data);
+                    lTable.row.add([
+                        bookData.isbn, bookData.title, bookData.author, bookData.comment, '<button class="delete-row">X</button>'
+                    ]).draw();
+                    $isbn.val("");
+                }
             } else {
-                this.bookDataNotAvailable($isbn.val());
+                alert ("Das Buch mit der ISBN '" + $isbn.val() + "' konnte nicht hinzugefügt werden. Ist es schon in der Liste?");
             }
         },
         addBook: function (isbn, comment) {
@@ -110,9 +108,10 @@ var appBlacklist = (function ($, appConfig) {
                 type: "POST",
                 url: config.urlForAddingBlacklistedBook(),
                 data: { ISBN: isbn, COMMENT: comment }
-            }).done(this.afterBookAdded.bind(this)).always(function () {
-                document.body.style.cursor = 'default';
-            });
+            }).done(this.afterBookAdded.bind(this)).
+                always(function () {
+                    document.body.style.cursor = 'default';
+                });
         },
         onAddBook: function (event) {
             var isbn = this.$isbn.val().trim(),

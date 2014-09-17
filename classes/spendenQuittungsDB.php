@@ -247,7 +247,7 @@ class SpendenQuittungsDB
         $format = array('%s', '%s', '%s', '%s');
 
         $isbn13 = Isbn::to13(strtoupper($data['isbn']));
-        if (!empty($isbn13)) {
+        if (!empty($isbn13) && !self::exists($tableName,"where isbn='$isbn13'")) {
             $data['isbn'] = $isbn13;
             $wpdb->insert($tableName, $data, $format);
             return true;
@@ -275,6 +275,13 @@ class SpendenQuittungsDB
         global $wpdb;
         $count = $wpdb->get_var("SELECT COUNT(*) FROM $tableName");
         return $count==0;
+    }
+
+    private static function exists($tableName,$whereClause)
+    {
+        global $wpdb;
+        $count = $wpdb->get_var("SELECT COUNT(*) FROM $tableName $whereClause");
+        return $count>0;
     }
 
 }

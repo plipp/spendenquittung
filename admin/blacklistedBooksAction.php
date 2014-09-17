@@ -41,9 +41,9 @@ class BlacklistedBooksAction
                 "comment" => $comment);
 
         if ($this->_db->addBlacklistedBook($newEntry)) {
-            error_log("Title =" . $newEntry['title']);
             wp_send_json_success(json_encode($newEntry));
         } else {
+            error_log("ERROR Title =" . $newEntry['title']);
             wp_send_json_error("Could not add book with isbn $isbn. Please check it!");
         }
         exit; // !!! REQUIRED !!!
