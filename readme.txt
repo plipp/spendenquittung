@@ -37,7 +37,6 @@ Initial Version
 - Fix: HTML5-ISBN-validation to accept something like '389478069X'
 - Amazon API...
 - PDF: Formular + Adressblatt
-- Blacklist
 
 - admin pages
 
