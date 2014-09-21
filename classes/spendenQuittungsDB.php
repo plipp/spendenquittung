@@ -250,7 +250,7 @@ class SpendenQuittungsDB
         if (!empty($isbn13) && !self::exists($tableName,"where isbn='$isbn13'")) {
             $data['isbn'] = $isbn13;
             $wpdb->insert($tableName, $data, $format);
-            return true;
+            return $data;
         } else {
             return false;
         }

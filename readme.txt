@@ -34,12 +34,13 @@ page and enter
 Initial Version
 
 == TODOs ==
-- Fix: HTML5-ISBN-validation to accept something like '389478069X'
-- Amazon API...
 - PDF: Formular + Adressblatt
+- Amazon API...
 
-- admin pages
+- admin pages:
+  - lets edit prices
+  - configure marketplaces
 
 - automated unit-testing
 
-- see TODOs (a.o. in blacklistedBooksAction.php)
+- see TODOs

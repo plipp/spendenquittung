@@ -40,8 +40,9 @@ class BlacklistedBooksAction
                 "author" => strval($this->_booklookerApi->authorFrom($xml)),
                 "comment" => $comment);
 
-        if ($this->_db->addBlacklistedBook($newEntry)) {
-            wp_send_json_success(json_encode($newEntry));
+        $addedBlacklistedBook = $this->_db->addBlacklistedBook($newEntry);
+        if ($addedBlacklistedBook) {
+            wp_send_json_success(json_encode($addedBlacklistedBook));
         } else {
             error_log("ERROR Title =" . $newEntry['title']);
             wp_send_json_error("Could not add book with isbn $isbn. Please check it!");

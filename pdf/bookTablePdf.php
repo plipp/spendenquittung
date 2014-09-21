@@ -51,10 +51,14 @@ class BookTablePDF extends FPDF
         // Data
         foreach($this->_books as $book)
         {
-            $this->Cell(self::$COLUMN_WIDTH['isbn'], self::COLUMN_HEIGHT,$book['isbn'],'LR');
-            $this->Cell(self::$COLUMN_WIDTH['title'], self::COLUMN_HEIGHT,self::shortened($book['title'], self::MAX_TITLE_LENGTH),'LR');
-            $this->Cell(self::$COLUMN_WIDTH['profit'], self::COLUMN_HEIGHT,$book['profit'],'LR',0,'R');
-            $this->Ln();
+            $profit = (float)$book['profit'];
+
+            if ($profit>0) {
+                $this->Cell(self::$COLUMN_WIDTH['isbn'], self::COLUMN_HEIGHT, $book['isbn'], 'LR');
+                $this->Cell(self::$COLUMN_WIDTH['title'], self::COLUMN_HEIGHT, self::shortened($book['title'], self::MAX_TITLE_LENGTH), 'LR');
+                $this->Cell(self::$COLUMN_WIDTH['profit'], self::COLUMN_HEIGHT, $book['profit'], 'LR', 0, 'R');
+                $this->Ln();
+            }
         }
 
         // Closing line
