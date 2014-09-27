@@ -1,7 +1,7 @@
 <?php
 require_once('fpdf17/fpdf.php');
 
-class BookTablePDF extends FPDF
+class BookTablePDF
 {
     const PAGE_HEADER = "Spendenliste";
     const COLUMN_HEIGHT = 6;
@@ -12,41 +12,22 @@ class BookTablePDF extends FPDF
     private static $COLUMN_WIDTH = array('isbn' => 30, 'title' => 140, 'profit' => 20);
 
     private $_books;
+    private $_pdf;
 
-    public function __construct($books)
+    public function __construct($books, $pdf)
     {
-        parent::__construct();
         $this->_books = $books;
+        $this->_pdf = $pdf;
 
-        $this->AddPage();
-        $this->SetFont('Arial','',10);
-        $this->AliasNbPages();
-    }
-
-    // override
-    function Header()
-    {
-        $this->SetFont('Arial','B',15);
-        $this->Cell(80);
-        $this->Cell(30,10,self::PAGE_HEADER,0,0,'C');
-        $this->Ln(15);
-    }
-
-    // override
-    function Footer()
-    {
-        // Position at 1.5 cm from bottom
-        $this->SetY(-15);
-        $this->SetFont('Arial','I',8);
-        $this->Cell(0,10,'Seite '.$this->PageNo().'/{nb}',0,0,'C');
+        $this->_pdf->addPage();
     }
 
     function printTable()
     {
         // Header
         foreach (array_keys(self::$HEADER_TEXT) as $key)
-        $this->Cell(self::$COLUMN_WIDTH[$key], self::HEADER_HEIGHT,self::$HEADER_TEXT[$key],1,0,'C');
-        $this->Ln();
+        $this->_pdf->Cell(self::$COLUMN_WIDTH[$key], self::HEADER_HEIGHT,self::$HEADER_TEXT[$key],1,0,'C');
+        $this->_pdf->Ln();
 
         // Data
         foreach($this->_books as $book)
@@ -54,15 +35,15 @@ class BookTablePDF extends FPDF
             $profit = (float)$book['profit'];
 
             if ($profit>0) {
-                $this->Cell(self::$COLUMN_WIDTH['isbn'], self::COLUMN_HEIGHT, $book['isbn'], 'LR');
-                $this->Cell(self::$COLUMN_WIDTH['title'], self::COLUMN_HEIGHT, self::shortened($book['title'], self::MAX_TITLE_LENGTH), 'LR');
-                $this->Cell(self::$COLUMN_WIDTH['profit'], self::COLUMN_HEIGHT, $book['profit'], 'LR', 0, 'R');
-                $this->Ln();
+                $this->_pdf->Cell(self::$COLUMN_WIDTH['isbn'], self::COLUMN_HEIGHT, $book['isbn'], 'LR');
+                $this->_pdf->Cell(self::$COLUMN_WIDTH['title'], self::COLUMN_HEIGHT, self::shortened($book['title'], self::MAX_TITLE_LENGTH), 'LR');
+                $this->_pdf->Cell(self::$COLUMN_WIDTH['profit'], self::COLUMN_HEIGHT, $book['profit'], 'LR', 0, 'R');
+                $this->_pdf->Ln();
             }
         }
 
         // Closing line
-        $this->Cell(array_sum(self::$COLUMN_WIDTH),0,'','T');
+        $this->_pdf->Cell(array_sum(self::$COLUMN_WIDTH),0,'','T');
     }
 
     private static function shortened ($strValue, $maxLength) {

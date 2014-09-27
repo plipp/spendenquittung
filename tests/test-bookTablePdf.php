@@ -8,12 +8,15 @@ if (!function_exists('plugin_dir_path')) {
 }
 
 require_once("pdf/bookTablePdf.php");
+require_once("pdf/basePdf.php");
 
 class BookTablePdfTest extends PHPUnit_Framework_TestCase
 {
+    private $_basePdf;
 
     function setUp() {
         echo "setUp\n";
+        $this->_basePdf = new BasePdf();
     }
 
     function tearDown() {
@@ -22,10 +25,10 @@ class BookTablePdfTest extends PHPUnit_Framework_TestCase
 
     function testPdfForManyBooksWithLongTitles()
     {
-        $bookTablePdf = new BookTablePDF($this->booksForTesting(100));
+        $bookTablePdf = new BookTablePDF($this->booksForTesting(100) ,$this->_basePdf);
         $bookTablePdf->printTable();
 
-        $actualPdf = $bookTablePdf->Output('', 'S');
+        $actualPdf = $this->_basePdf->Output('', 'S');
         $this->assertFalse(empty($actualPdf));
 
         $expectedPdf = file_get_contents("tests/test-many-books-as-pdf.pdf");
@@ -34,10 +37,10 @@ class BookTablePdfTest extends PHPUnit_Framework_TestCase
 
     function testPdfForFewBooksWithShortTitles()
     {
-        $bookTablePdf = new BookTablePDF($this->booksForTesting(10,20));
+        $bookTablePdf = new BookTablePDF($this->booksForTesting(10,20),$this->_basePdf);
         $bookTablePdf->printTable();
 
-        $actualPdf = $bookTablePdf->Output('', 'S');
+        $actualPdf = $this->_basePdf->Output('', 'S');
         $this->assertFalse(empty($actualPdf));
 
         $expectedPdf = file_get_contents("tests/test-few-books-as-pdf.pdf");
@@ -46,10 +49,10 @@ class BookTablePdfTest extends PHPUnit_Framework_TestCase
 
     function testPdfFor0Books()
     {
-        $bookTablePdf = new BookTablePDF(array());
+        $bookTablePdf = new BookTablePDF(array(), $this->_basePdf);
         $bookTablePdf->printTable();
 
-        $actualPdf = $bookTablePdf->Output('', 'S');
+        $actualPdf = $this->_basePdf->Output('', 'S');
         $this->assertFalse(empty($actualPdf));
 
         $expectedPdf = file_get_contents("tests/test-no-books-as-pdf.pdf");
@@ -60,10 +63,10 @@ class BookTablePdfTest extends PHPUnit_Framework_TestCase
     {
         $outFile = tempnam(sys_get_temp_dir(), 'tBt');
 
-        $bookTablePdf = new BookTablePDF(array());;
+        $bookTablePdf = new BookTablePDF(array(), $this->_basePdf);
         $bookTablePdf->printTable();
 
-        $bookTablePdf->Output($outFile);
+        $this->_basePdf->Output($outFile);
         echo("please cleanup:" . $outFile . "\n");
     }
 

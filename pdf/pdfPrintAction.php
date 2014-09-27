@@ -16,9 +16,9 @@ class PdfPrintAction
         require_once('fpdf17/fpdf.php');
         require_once('bookTablePdf.php');
 
-        $pdf = new BookTablePDF(json_decode(base64_decode($_POST['books']), true));
-        $pdf->printTable();
-        $pdf->Output();
+        $pdfTable = new BookTablePDF(json_decode(base64_decode($_POST['books']), true));
+        $pdfTable->printTable();
+        $pdfTable->Output();
 
         exit; // !!! REQUIRED !!!
     }
