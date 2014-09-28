@@ -17,6 +17,7 @@ class BescheinigungPDF
         $this->_addressData = $addressData;
         $this->_pdf=$pdf;
 
+        $pdf->setPageHeader("Spendenbescheinigung");
         $pdf->AddPage();
     }
 

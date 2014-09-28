@@ -9,6 +9,8 @@ class PdfToolbox extends FPDF
     const PAGE_HEADER = "Spendenliste";
     const BOX_SIZE = 190;
 
+    private $_pageHeader = self::PAGE_HEADER;
+
     public function __construct()
     {
         parent::__construct();
@@ -20,7 +22,7 @@ class PdfToolbox extends FPDF
     {
         $this->SetFont('Arial', 'B', 15);
         $this->Cell(80);
-        $this->Cell(30, 10, self::PAGE_HEADER, 0, 0, 'C');
+        $this->Cell(30, 10, $this->_pageHeader, 0, 0, 'C');
         $this->Ln(15);
     }
 
@@ -39,6 +41,9 @@ class PdfToolbox extends FPDF
         $this->AliasNbPages();
     }
 
+    public function setPageHeader ($header) {
+        $this->_pageHeader = $header;
+    }
     public function topicBox($topic, $content, $lineHeight=4)
     {
         $this->styledText($topic, 'I');

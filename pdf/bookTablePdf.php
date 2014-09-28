@@ -19,6 +19,7 @@ class BookTablePDF
         $this->_books = $books;
         $this->_pdf = $pdf;
 
+        $pdf->setPageHeader("Spendenliste");
         $this->_pdf->AddPage();
     }
 

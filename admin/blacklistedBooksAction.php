@@ -86,9 +86,6 @@ class BlacklistedBooksAction
         return $data;
     }
 
-    /**
-     * @return string
-     */
     public function sanitized($param)
     {
         return empty($_POST[$param]) ? "" : sanitize_text_field($_POST[$param]);

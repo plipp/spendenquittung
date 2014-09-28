@@ -35,7 +35,8 @@ Initial Version
 
 == TODOs ==
 - PDF: Formular + Adressblatt
-  - page-dependant header/footer (text/numbering on/off)
+  - sum of profits
+  - page-dependant header/footer (numbering on/off)
   
 - Amazon API...
 
