@@ -35,6 +35,8 @@ Initial Version
 
 == TODOs ==
 - PDF: Formular + Adressblatt
+  - page-dependant header/footer (text/numbering on/off)
+  
 - Amazon API...
 
 - admin pages:
