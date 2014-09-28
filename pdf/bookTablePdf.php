@@ -19,7 +19,7 @@ class BookTablePDF
         $this->_books = $books;
         $this->_pdf = $pdf;
 
-        $this->_pdf->addPage();
+        $this->_pdf->AddPage();
     }
 
     function printTable()

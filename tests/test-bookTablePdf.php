@@ -8,7 +8,7 @@ if (!function_exists('plugin_dir_path')) {
 }
 
 require_once("pdf/bookTablePdf.php");
-require_once("pdf/basePdf.php");
+require_once("pdf/pdfToolbox.php");
 
 class BookTablePdfTest extends PHPUnit_Framework_TestCase
 {
@@ -16,7 +16,7 @@ class BookTablePdfTest extends PHPUnit_Framework_TestCase
 
     function setUp() {
         echo "setUp\n";
-        $this->_basePdf = new BasePdf();
+        $this->_basePdf = new PdfToolbox();
     }
 
     function tearDown() {
@@ -28,6 +28,7 @@ class BookTablePdfTest extends PHPUnit_Framework_TestCase
         $bookTablePdf = new BookTablePDF($this->booksForTesting(100) ,$this->_basePdf);
         $bookTablePdf->printTable();
 
+//        $this->_basePdf->Output('/tmp/test-many-books-as-pdf.pdf');
         $actualPdf = $this->_basePdf->Output('', 'S');
         $this->assertFalse(empty($actualPdf));
 
@@ -40,6 +41,7 @@ class BookTablePdfTest extends PHPUnit_Framework_TestCase
         $bookTablePdf = new BookTablePDF($this->booksForTesting(10,20),$this->_basePdf);
         $bookTablePdf->printTable();
 
+//        $this->_basePdf->Output('/tmp/test-few-books-as-pdf.pdf');
         $actualPdf = $this->_basePdf->Output('', 'S');
         $this->assertFalse(empty($actualPdf));
 
@@ -52,6 +54,7 @@ class BookTablePdfTest extends PHPUnit_Framework_TestCase
         $bookTablePdf = new BookTablePDF(array(), $this->_basePdf);
         $bookTablePdf->printTable();
 
+//        $this->_basePdf->Output('/tmp/test-no-books-as-pdf.pdf');
         $actualPdf = $this->_basePdf->Output('', 'S');
         $this->assertFalse(empty($actualPdf));
 
