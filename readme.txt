@@ -27,6 +27,10 @@ page and enter
 
 ... You're done!
 
+== Usage ==
+
+Use the shortcode [sq] to integrate the Spendenquittungs from into your pages.
+
 == Changelog ==
 
 = 0.0.1 =
