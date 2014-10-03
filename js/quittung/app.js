@@ -71,7 +71,7 @@ var app = (function ($, appConfig) {
             this.cacheElements();
             this.bindEvents();
 
-            return true;
+            return {statusOk:true};
         },
         cacheElements: function () {
             this.$app = $('#sq-app');
@@ -80,6 +80,7 @@ var app = (function ($, appConfig) {
             this.$isbn = this.$app.find('#ISBN');
             this.$bookTableBody = this.$app.find('#book-table tbody');
             this.$hiddenBookList = this.$app.find('#book-list');
+            this.$hiddenSum = this.$app.find('#sum');
         },
         bindEvents: function () {
             this.$addBookBtn.on('submit', this.onAddBook.bind(this));
@@ -130,9 +131,13 @@ var app = (function ($, appConfig) {
                     return {isbn: value[0], title: value[1], profit: value[2]};
                 }));
             }
+            function totalAmountFrom(table) {
+                return util.toFloat($(table.column(2).footer()).html());
+            }
 
             var booksAsJson = toJson(this.table.rows().data());
             this.$hiddenBookList.val(base64.encode(booksAsJson));
+            this.$hiddenSum.val(totalAmountFrom(this.table));
 
             this.$userData.attr("action", config.urlForPdfPrint());
 
@@ -153,8 +158,7 @@ var app = (function ($, appConfig) {
 jQuery(function () {
     'use strict';
 
-    var appExists = app.init();
-    if (appExists) {
+    if (app.init().statusOk) {
         app.dummyBooks();
     } else {
         if (window.console) {window.console.log("Page is not the Spendenquittung (#sq-app)");}
