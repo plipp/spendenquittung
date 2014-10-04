@@ -132,7 +132,7 @@ var app = (function ($, appConfig) {
                 }));
             }
             function totalAmountFrom(table) {
-                return util.toFloat($(table.column(2).footer()).html());
+                return $(table.column(2).footer()).html();
             }
 
             var booksAsJson = toJson(this.table.rows().data());

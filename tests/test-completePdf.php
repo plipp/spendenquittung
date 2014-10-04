@@ -7,6 +7,7 @@ if (!function_exists('plugin_dir_path')) {
     }
 }
 
+require_once("pdf/deckblattPdf.php");
 require_once("pdf/bescheinigungPdf.php");
 require_once("pdf/bookTablePdf.php");
 require_once("pdf/pdfToolbox.php");
@@ -28,10 +29,14 @@ class CompletePdfTest extends PHPUnit_Framework_TestCase
         $outFile = '/tmp/sample.pdf';// tempnam(sys_get_temp_dir(), 'tBs');
 
         $pdf = new PdfToolbox();
-        $bescheinigungPdf = new BescheinigungPDF($this->addressData(), $pdf);
+
+        $deckblattPdf = new DeckblattPDF($this->addressData(), $pdf);
+        $deckblattPdf->printDeckblatt();
+
+        $bescheinigungPdf = new BescheinigungPDF($this->addressData(), "13,48", $pdf);
         $bescheinigungPdf->printBescheinigung();
 
-        $bookTablePdf = new BookTablePDF($this->booksForTesting(10,20),$pdf);
+        $bookTablePdf = new BookTablePDF($this->booksForTesting(100,200),$pdf);
         $bookTablePdf->printTable();
 
         $pdf->Output($outFile);

@@ -38,15 +38,16 @@ Use the shortcode [sq] to integrate the Spendenquittungs from into your pages.
 Initial Version
 
 == TODOs ==
-- PDF: Formular + Adressblatt
-  - sum of profits
-  - page-dependant header/footer (numbering on/off)
-  
-- Amazon API...
+- APIs
+  - ZVAB reparieren
+  - Amazon API...
 
 - admin pages:
   - lets edit prices
   - configure marketplaces
+
+- PDF: Formular + Adressblatt
+  - Tests nur auf Content
 
 - automated unit-testing
 

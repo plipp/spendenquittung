@@ -27,7 +27,7 @@ class BescheinigungPdfTest extends PHPUnit_Framework_TestCase
         $outFile = '/tmp/sample.pdf';// tempnam(sys_get_temp_dir(), 'tBs');
 
         $pdf = new PdfToolbox();
-        $bescheinigungPdf = new BescheinigungPDF($this->addressData(), $pdf);
+        $bescheinigungPdf = new BescheinigungPDF($this->addressData(), "33,54", $pdf);
         $bescheinigungPdf->printBescheinigung();
 
         $pdf->Output($outFile);

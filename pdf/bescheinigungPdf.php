@@ -11,10 +11,12 @@ class BescheinigungPDF
 {
     private $_pdf;
     private $_addressData;
+    private $_amount;
 
-    public function __construct($addressData, $pdf)
+    public function __construct($addressData, $amount, $pdf)
     {
         $this->_addressData = $addressData;
+        $this->_amount = $amount;
         $this->_pdf=$pdf;
 
         $pdf->setPageHeader("Spendenbescheinigung");
@@ -35,8 +37,8 @@ class BescheinigungPDF
             $this->_addressData['street']."\n\n".
             $this->_addressData['zip']." ".$this->_addressData['city']);
 
-        $this->_pdf->topicBox("Tag der Zuwendung, Wert der Zuwendung:", date("d.m.Y"). ", TODO", 6);
-        $this->_pdf->topicBox("Genaue Bezeichnung der Sachzuwendung mit Alter, Zustand, Kaufpreis usw.:","s. Anhang 'Spendenliste'", 6);
+        $this->_pdf->topicBox("Wert der Zuwendung / Tag der Zuwendung:" , $this->_amount . " EUR / " . date("d.m.Y"), 6);
+        $this->_pdf->topicBox("Titel der gespendeten Bücher mit Preis:","s. Anhang 'Spendenliste'", 6);
 
         $this->_pdf->SetY(-60);
         $this->_pdf->styledText("Es wird bestätigt, dass die Zuwendung nur zur Förderung des Berliner Büchertisches verwendet wird.",'',9);

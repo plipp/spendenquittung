@@ -12,14 +12,20 @@ class PdfPrintAction
 
     public function as_pdf()
     {
-        error_log("PDF-POST:" . json_encode($_POST));
+//        error_log("PDF-POST:" . json_encode($_POST));
         require_once('fpdf17/fpdf.php');
         require_once('bookTablePdf.php');
         require_once('bescheinigungPdf.php');
+        require_once("deckblattPdf.php");
         require_once('pdfToolbox.php');
 
         $pdf = new PdfToolbox();
-        $bescheinigungPdf = new BescheinigungPDF($this->addressData($_POST), $pdf);
+
+        $addressData = $this->addressData($_POST);
+        $deckblattPdf = new DeckblattPDF($addressData, $pdf);
+        $deckblattPdf->printDeckblatt();
+
+        $bescheinigungPdf = new BescheinigungPDF($addressData, $this->amount($_POST), $pdf);
         $bescheinigungPdf->printBescheinigung();
 
         $pdfTable = new BookTablePDF(json_decode(base64_decode($_POST['books']), true), $pdf);
@@ -39,5 +45,9 @@ class PdfPrintAction
         $address["phone"]=sanitize_text_field($postData["phone"]);
         $address["email"]=sanitize_text_field($postData["email"]);
         return $address;
+    }
+
+    private function amount($postData) {
+        return sanitize_text_field($postData["sum"]);
     }
 }
