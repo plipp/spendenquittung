@@ -1,6 +1,6 @@
 <?php
 
-require_once(plugin_dir_path(__FILE__) . '../classes/spendenQuittungsDB.php');
+require_once(plugin_dir_path(__FILE__) . '../db/spendenQuittungsDB.php');
 class BlacklistedBooksAction
 {
     private $_db;

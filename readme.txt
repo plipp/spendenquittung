@@ -39,7 +39,6 @@ Initial Version
 
 == TODOs ==
 - APIs
-  - ZVAB reparieren
   - Amazon API...
 
 - admin pages:

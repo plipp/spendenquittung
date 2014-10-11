@@ -48,7 +48,7 @@ class ValueFromPlatformsAction
     {
         $this->_platformRegistry = $platformRegistry;
         $this->_blacklistedBookIsbns = array_map(function ($book) {return $book['isbn'];},$blacklistedBooks);
-        error_log("ISBN of blacklisted books: ".implode('+',$this->_blacklistedBookIsbns));
+        // error_log("ISBN of blacklisted books: ".implode('+',$this->_blacklistedBookIsbns));
 
         add_action('wp_ajax_request_value_from_platforms', array($this, 'request_value_from_platforms'));
         add_action('wp_ajax_nopriv_request_value_from_platforms', array($this, 'request_value_from_platforms'));
@@ -118,7 +118,7 @@ class ValueFromPlatformsAction
         foreach ($platforms as $platform) {
             if ($platform->is_active) {
                 $search_url = $platform->urlBy($isbn);
-                // error_log($search_url);
+                error_log($search_url);
                 $parallel_curl->startRequest($search_url, array($this, 'on_request_done'), $platform->name);
             }
         }
@@ -136,7 +136,7 @@ class ValueFromPlatformsAction
                     "profit" => Converters::toCurrencyString($profit))
             );
 
-        error_log("Booksearch Result:" . $encoded_value);
+        // error_log("Booksearch Result:" . $encoded_value);
         return $encoded_value;
     }
 

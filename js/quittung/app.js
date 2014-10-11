@@ -71,7 +71,7 @@ var app = (function ($, appConfig) {
             this.cacheElements();
             this.bindEvents();
 
-            return {statusOk:true};
+            return true;
         },
         cacheElements: function () {
             this.$app = $('#sq-app');
@@ -158,7 +158,7 @@ var app = (function ($, appConfig) {
 jQuery(function () {
     'use strict';
 
-    if (app.init().statusOk) {
+    if (app.init()) {
         app.dummyBooks();
     } else {
         if (window.console) {window.console.log("Page is not the Spendenquittung (#sq-app)");}
