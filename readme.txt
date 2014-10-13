@@ -40,14 +40,18 @@ Initial Version
 == TODOs ==
 - APIs
   - Amazon API...
+  - Price-Calculation: ValueFromPlatformsAction::averageFrom
+    - by weight/share
+    - test against assam
 
 - admin pages:
   - lets edit prices
   - configure marketplaces
 
-- PDF: Formular + Adressblatt
-  - Tests nur auf Content
 
 - automated unit-testing
+  - PDF: Formular + Adressblatt
+    - Tests nur auf Content
 
 - see TODOs
+- remove: error_logs

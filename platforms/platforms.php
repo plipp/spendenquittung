@@ -9,12 +9,14 @@
 require_once("costs.php");
 require_once(plugin_dir_path(__FILE__) . '../util/isbn.php');
 require_once(plugin_dir_path(__FILE__) . '../util/converters.php');
+require_once(plugin_dir_path(__FILE__) . '../util/css-selector.inc');
 
 class PlatformRegistry
 {
     const BOOKLOOKER = 'booklooker';
     const ZVAB = 'zvab';
     const EBAY = 'ebay';
+    const BUCHFREUND = 'buchfreund';
 
     private $_platforms;
 
@@ -25,6 +27,7 @@ class PlatformRegistry
                 case self::ZVAB: $this->_platforms[$platform['name']] = new ZVAB($platform); break;
                 case self::BOOKLOOKER: $this->_platforms[$platform['name']] = new Booklooker($platform); break;
                 case self::EBAY: $this->_platforms[$platform['name']] = new Ebay($platform); break;
+                case self::BUCHFREUND: $this->_platforms[$platform['name']] = new Buchfreund($platform); break;
                 default: $this->_platforms[$platform['name']] = new Platform($platform); break;
             }
         }
@@ -142,6 +145,45 @@ class ZVAB extends Platform {
             return array();
         }
         return array_map(array("Converters","toFloat"), $prices[1]);
+    }
+}
+
+class Buchfreund extends Platform {
+    public function __construct($params) {
+        parent::__construct($params);
+    }
+
+    public function totalPricesFrom($content) {
+        $no_result = 'Partnerplattform www.buchhai.de';
+
+        if (empty($content)) {
+            error_log("No response content from:" . $this->name);
+            return array();
+        }
+        if (strpos($content, $no_result)) {
+            error_log("No result found at:" . $this->name);
+            return array();
+        }
+
+        $elements = select_elements('div.resultPrice td.priceBorder', $content);
+
+        if (empty($elements) || count($elements)<2){
+            error_log("No prices found at:" . $this->name . "(parsing error?)");
+            return array();
+        }
+
+        // filter out labels
+        $totalPrices = array();
+        foreach ($elements as $key => $value) if($key & 1) $totalPrices[]=$value;
+
+        $prices = array_map(array("Buchfreund", "toFloat"), $totalPrices);
+        error_log("Buchfreund Preise:" . implode('-',$prices));
+        return $prices;
+
+    }
+
+    private static function toFloat ($element) {
+        return Converters::toFloat(trim(str_replace('EUR','',$element['text'])));
     }
 }
 

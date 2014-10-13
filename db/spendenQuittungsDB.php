@@ -120,7 +120,7 @@ class SpendenQuittungsDB
         $data = array(
             'name' => 'buchfreund',
             'host' => 'www.buchfreund.de',
-            'urlpath' => '/results.php?q=${ISBN13}&sO=7',
+            'urlpath' => '/results.php?q=${ISBN13}&onlyIsbn=1&sO=5',
             'fixcosts' => 0.0,
             'provision' => 0.1,
             'porto_wcl1' => 3.0,

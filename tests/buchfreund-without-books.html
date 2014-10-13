@@ -1,0 +1,129 @@
+
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+ </head>
+<body onload="init();queryNeubuch('patternmatching');">
+<a name="top"></a>
+
+
+<div id="mainnavi">
+    <div id="rightnavi">&nbsp;</div>
+    <div id="leftnavi">
+        <p class="siteHeadline">
+            &quot;patternmatching&quot; Gesucht Bei Buchfreund		</p>
+    </div>
+</div>
+
+<div id="content">
+
+    <div style="float: right">Um Ihr Suchergebnis zu verfeinern, nutzen Sie die <a href="http://www.buchfreund.de/detailsearch.php">Erweiterte Suche</a>!</div>		<div class="breadCrump">Sie sind hier:&nbsp;<a href="http://www.buchfreund.de/" class="breadCrump">Startseite</a> &raquo;
+    gebraucht</div>
+
+
+    <br/>		<div style="float: right; margin-left: 50px;"><form method="get" action="http://www.buchfreund.de/results.php" name="reSort"><input type="hidden" name="q" value="patternmatching" /><input type="hidden" name="used" value="1" /><select name="sO" onchange="document.forms['reSort'].submit()"><option value="0">Sortierreihenfolge ...</option><option value="1">Titel A-Z</option><option value="2">Titel Z-A</option><option value="3">Autor A-Z</option><option value="4">Autor Z-A</option><option value="5">Preis aufsteigend</option><option value="6">Preis absteigend</option><option value="7">Jahr aufsteigend</option><option value="8">Jahr absteigend</option><option value="9">Bestell-Nr. aufsteigend</option><option value="10">Bestell-Nr. absteigend</option><option value="11">Neueste Angebote zuerst</option><option value="12">&Auml;lteste Angebote zuerst</option></select></form></div>
+    <div class="res">
+        <div class="resRnd">
+            <table cellpadding="0" cellspacing="0" border="0">
+                <tr class="resRndOn">
+                    <td width="8" valign="top"><img src="http://www.buchfreund.de/gfx/linksKurve.gif" width="8" height="8" alt="Buch links" /></td>
+                    <td valign="bottom"><img src="http://www.buchfreund.de/gfx/bookUsed.gif" width="23px" height="21px" style="float: left; margin-right: 3px;" alt="gebrauchte und seltene B&uuml;cher" title="gebrauchte und seltene B&uuml;cher" /> <span class="flagBooks">gebraucht (0)</span></td>
+                    <td width="8" valign="top"><img src="http://www.buchfreund.de/gfx/rechtsKurve.gif" width="8" height="8" alt="Buch rechts" /></td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            <table cellpadding="0" cellspacing="0" border="0">
+                <tr class="resRndOff">
+                    <td width="8" valign="top"><img src="http://www.buchfreund.de/gfx/linksKurve.gif" width="8" height="8" alt="Buch links" /></td>
+                    <td valign="bottom"><span class="flagBooks"><img src="http://www.buchfreund.de/gfx/ajax-loader.gif" id="loaderNeubuch" /><span id="neubuchResults"></span></span></td>
+                    <td width="8" valign="top"><img src="http://www.buchfreund.de/gfx/rechtsKurve.gif" width="8" height="8" alt="Buch rechts" /></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div id="usedBooks">
+        <div id="usedBooksNavi">
+            <div style="float: right;">&nbsp;</div>
+            :. Suchergebnisse 			</div>
+
+        <div style="margin-bottom: 10px; padding: 4px;">
+
+            <p>Suchen Sie Ihren gewünschten Titel über unsere Partnerplattform www.buchhai.de mit mehr als 120 Mio Artikeln!</p>					<div style="width: 600px; background-color: #F0AE1C; border: 1px solid #d3d3d3; height: 113px;">
+            <div style="float: left;"><img src="http://www.buchhai.de/gfx/buchhai-logo.jpg"></div>
+            <h2 style="margin: 10px 0pt -3px 125px; padding: 0pt; font-weight: bold;">Buchhai - Preisvergleich f&uuml;r B&uuml;cher</h2>
+            <form action="http://www.buchhai.de/?" target="_blank" method="get" style="border: medium none; padding: 10px;background-color: transparent;">
+                <input style="float: left; width: 300px; margin-left: 5px; margin-top: 5px;" name="search" id="search" value="patternmatching" onfocus="if (this.value.length==0||this.value=='Suchbegriff...'){this.style.color='#000'; this.value=''}" onblur="if (this.value.length==0){this.style.color='#444'; this.value='Suchbegriff...'}" type="text">
+                <input value="Suchen" id="fSearch" name="fSearch" style="padding: 3px 15px;" type="submit">
+            </form>
+        </div>
+
+            <div style="padding-top: 20px;">
+                Durchsuchen Sie unsere Seite doch einmal mit Google<br/>
+                <form action="http://www.buchfreund.de/googleSearch.php" id="cse-search-box">
+                    <div style="float: left; margin-right: 2px;">
+                        <input type="hidden" name="cx" value="partner-pub-1156435232952395:g9o3azr90vi" />
+                        <input type="hidden" name="cof" value="FORID:10" />
+                        <input type="hidden" name="ie" value="ISO-8859-1" />
+                        <input type="text" name="q" size="31" />
+                    </div>
+                    <input type="submit" name="sa" value="Suchen" class="buttonSmall" style="padding: 2px;" />
+                </form>
+                <script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&amp;lang=de"></script>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+<div id="authorTracksides" style="display: none;"></div>
+<div id="latestBoxes">
+    <div style="float: left; width: 390px; margin-right: 10px;">
+        <div style="font-weight: bold;">Meine zuletzt angesehenen antiquarischen und neue B&uuml;cher</div>
+        <div id="latestProductListing"><ul>Noch keine antiquarischen bzw. neuen B&uuml;cher angesehen.</ul></div>	</div>
+
+    <div style="float: left; width: 390px;">
+        <div style="font-weight: bold;">Meine letzten Buch Suchanfragen</div>
+        <div id="latestSearchListing"><ul><li><a href="http://www.buchfreund.de/results.php?q=patternmatching&x=0&y=0">patternmatching (Volltext)</a></li><li><a href="http://www.buchfreund.de/results.php?q=schlangenei&x=0&y=0">schlangenei (Volltext)</a></li><li><a href="http://www.buchfreund.de/results.php?q=3404128079&onlyIsbn=1&sO=5">3404128079 (Volltext)</a></li><li><a href="http://www.buchfreund.de/results.php?q=3404128079&onlyIsbn=1&sO=7">3404128079 (Volltext)</a></li><li><a href="http://www.buchfreund.de/results.php?q=3404128079&onlyIsbn=1">3404128079 (Volltext)</a></li><li><a href="http://www.buchfreund.de/results.php?q=3404128079&x=68&y=9">3404128079 (Volltext)</a></li><li><a href="http://www.buchfreund.de/results.php?q=3404128079&onlyIsbn=1">3404128079 (Volltext)</a></li><li><a href="http://www.buchfreund.de/results.php?used=1&q=die+meisterin&x=0&y=0">die meisterin (Volltext)</a></li><li><a href="http://www.buchfreund.de/results.php?q=3785709188&used=1&sO=5">3785709188 (Volltext)</a></li><li><a href="http://www.buchfreund.de/results.php?q=3785709188">3785709188 (Volltext)</a></li><li><a href="http://www.buchfreund.de/results.php?q=3785709188&x=79&y=10"></a></li></ul></div>	</div>
+    <br style="clear: left;"/>
+</div>
+
+
+<div id="footer2">
+    <div id="copyright2">
+        &copy; 2003 - 2014 by <a href="http://www.whsoft.de">whSoft GmbH</a>
+    </div>
+    <div class="innerFooter">
+        <ul>
+            <li><a href="http://www.buchfreund.de/signOn.html">Antiquariatslogin</a></li>
+            <li><a href="http://www.buchfreund.de/antiquariate/">Antiquariate</a></li>
+            <li><a href="http://www.buchfreund.de/newEntries.html">Neueing&auml;nge</a></li>
+            <li><a href="http://www.buchfreund.de/updateHistory.html">Aktualisierungen</a></li>
+        </ul>
+        <ul>
+            <li><a href="http://www.buchfreund.de/topNewEntries.html">Wertvolles</a></li>
+            <li><a href="http://www.buchfreund.de/sellBooksOnline.html">B&uuml;cher verkaufen</a></li>
+            <li><a href="http://www.buchfreund.de/informations.html">Informationen</a></li>
+            <li><a href="http://www.buchfreund.de/services.html">Produkte</a></li>
+        </ul>
+        <ul>
+            <li><a href="http://www.buchfreund.de/stoebern.html">St&ouml;bern</a></li>
+            <li><a href="http://www.buchfreund.de/themes.php">B&uuml;cher Themenwelten</a></li>
+            <li><a href="http://www.buchfreund.de/keywordIndex.php">Stichwort-Verzeichnis</a></li>
+            <li><a href="http://www.buchfreund.de/buchhaendler/">Buchh&auml;ndler</a></li>
+        </ul>
+        <ul style="min-width: 100px">
+            <li><a href="http://www.buchfreund.de/statistics.html">Statistiken</a></li>
+            <li><a href="http://www.buchfreund.de/imprint.html">Impressum</a></li>
+            <li><a href="http://www.buchfreund.de/conditions.html">AGB</a></li>
+            <li><a href="http://www.buchfreund.de/disclaimer.html">Datenschutz</a></li>
+        </ul>
+    </div>
+
+    <div id="explore" style="clear: left;">Entdecken Sie außerdem: <a href="http://www.antiquariatsportal.de" title="Antiquariatsportal">Antiquariatsportal</a> &middot; <a href="http://achtung-buecher.de" title="Achtung Bücher">Achtung-Bücher.de</a> &middot; <a href="http://www.booklink.de" title="Datenverteilservice">Booklink</a> &middot; <a href="http://www.buchhai.de" titel="Bücher Preisvergleich">Buchhai - Bücher Preisvergleich</a></div>
+</div>
+
+</body>
+</html>
