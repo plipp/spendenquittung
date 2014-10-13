@@ -127,7 +127,7 @@ class SpendenQuittungsDB
             'porto_wcl2' => 3.0,
             'porto_wcl3' => 3.0,
             'percent_of_sales' => 0,
-            'is_active' => 0
+            'is_active' => 1
         );
         $wpdb->insert($tableName, $data, $format);
 
