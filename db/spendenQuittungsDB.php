@@ -212,8 +212,8 @@ class SpendenQuittungsDB
         $wpdb->query("DROP TABLE IF EXISTS " . self::blacklistTableName());
 
         delete_option(self::SQDB_DB_VERSION_OPTION);
-        delete_option(self::SQ_BOOKLOOKER_API_KEY_OPTION);
-        delete_option(self::SQ_EBAY_API_KEY_OPTION);
+//        delete_option(self::SQ_BOOKLOOKER_API_KEY_OPTION);
+//        delete_option(self::SQ_EBAY_API_KEY_OPTION);
     }
 
     public function getAllPlatforms() {

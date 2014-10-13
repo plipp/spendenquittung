@@ -23,7 +23,7 @@ Upload the Spendenquittung plugin to your blog, activate it, then go to the http
 page and enter
   - the next sqdb_db_version version,
   - your API keys for the Ebay- and the Booklooker APIs (sq_ebay_api_key, sq_booklooker_api_key) and
-  - deactivate + activate the Plugin again.
+  - uninstall + activate the Plugin again.
 
 ... You're done!
 
