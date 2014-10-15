@@ -33,6 +33,10 @@ class Profits
     {
         return json_encode($this->_values);
     }
+
+    public static function is_valid($profit) {
+        return $profit>=0;
+    }
 }
 
 class ValueFromPlatformsAction
@@ -44,14 +48,16 @@ class ValueFromPlatformsAction
     private $_results;
     private $_blacklistedBookIsbns;
 
-    public function ValueFromPlatformsAction($platformRegistry, $blacklistedBooks)
+    public function ValueFromPlatformsAction($platformRegistry, $blacklistedBooks, $doRegister=true)
     {
         $this->_platformRegistry = $platformRegistry;
         $this->_blacklistedBookIsbns = array_map(function ($book) {return $book['isbn'];},$blacklistedBooks);
         // error_log("ISBN of blacklisted books: ".implode('+',$this->_blacklistedBookIsbns));
 
-        add_action('wp_ajax_request_value_from_platforms', array($this, 'request_value_from_platforms'));
-        add_action('wp_ajax_nopriv_request_value_from_platforms', array($this, 'request_value_from_platforms'));
+        if ($doRegister) {
+            add_action('wp_ajax_request_value_from_platforms', array($this, 'request_value_from_platforms'));
+            add_action('wp_ajax_nopriv_request_value_from_platforms', array($this, 'request_value_from_platforms'));
+        }
     }
 
     public function request_value_from_platforms()
@@ -116,7 +122,7 @@ class ValueFromPlatformsAction
         $parallel_curl = new ParallelCurl($max_requests, $curl_options);
 
         foreach ($platforms as $platform) {
-            if ($platform->is_active) {
+            if ($platform->is_active && $platform->percent_of_sales>0) {
                 $search_url = $platform->urlBy($isbn);
                 error_log($search_url);
                 $parallel_curl->startRequest($search_url, array($this, 'on_request_done'), $platform->name);
@@ -129,7 +135,7 @@ class ValueFromPlatformsAction
         $title = $this->bestTitleFrom($this->_results[self::TITLE_RESULT]);
         $profit = $this->averageFrom($this->_results[self::PROFIT_RESULT]);
 
-        $encoded_value = ($title == null || $profit < 0) ? null :
+        $encoded_value = ($title == null || !Profits::is_valid($profit)) ? null :
             json_encode(array(
                     "isbn" => $isbn,
                     "title" => strval($title),
@@ -150,16 +156,30 @@ class ValueFromPlatformsAction
         return null;
     }
 
-    static function averageFrom($numbers)
+    function averageFrom($profitByPlatform)
     {
-        // error_log("Numbers:" . implode('-', $numbers));
-        // TODO: What are the real requirements here?
-        $relevant_numbers = array_filter($numbers, function ($x) {
-            return $x >= 0;
+        // percent_of_sales
+        $validProfitsByPlatform = array_filter($profitByPlatform, function ($profit) {
+            return Profits::is_valid($profit);
         });
-        $number_of_relevant_numbers = count($relevant_numbers);
+        if (count($validProfitsByPlatform) == 0) return -1;
 
-        if ($number_of_relevant_numbers == 0) return -1;
-        else return array_sum($relevant_numbers) / $number_of_relevant_numbers;
+        error_log("remaining platforms:" . implode('-', array_keys($validProfitsByPlatform)));
+        $complete_percentage=array_sum(array_map(function($platform) {
+            $registry = $this->_platformRegistry;
+            return $registry->by($platform)->percent_of_sales;
+        },array_keys($validProfitsByPlatform)));
+
+        if ($complete_percentage==0) {
+            return -1;
+        }
+
+        $average = 0.0;
+        foreach ($validProfitsByPlatform as $platform => $profit) {
+            $platform = $this->_platformRegistry->by($platform);
+            $average += $profit * ($platform->percent_of_sales/$complete_percentage);
+        }
+
+        return $average;
     }
 }

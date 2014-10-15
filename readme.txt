@@ -41,7 +41,6 @@ Initial Version
 - APIs
   - Amazon API...
   - Price-Calculation: ValueFromPlatformsAction::averageFrom
-    - by weight/share
     - test against assam
 
 - admin pages:
