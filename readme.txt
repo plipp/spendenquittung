@@ -22,8 +22,8 @@ send back after approval to the donator.
 Upload the Spendenquittung plugin to your blog, activate it, then go to the http://<wordpress>/wp-admin/options.php
 page and enter
   - the next sqdb_db_version version,
-  - your API keys for the Ebay- and the Booklooker APIs (sq_ebay_api_key, sq_booklooker_api_key) and
-  - uninstall + activate the Plugin again.
+  - your API keys/secrets for the Ebay-, Amazon and the Booklooker APIs (sq_ebay_api_key, sq_booklooker_api_key, sq_amazon*) and
+  - deactivate (TODO: uninstall) + activate the Plugin again.
 
 ... You're done!
 
