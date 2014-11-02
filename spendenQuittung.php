@@ -86,7 +86,10 @@ global $wpdb;
 $sqdb = new SpendenQuittungsDB();
 
 register_activation_hook(__FILE__, array($sqdb, 'install'));
-register_uninstall_hook(__FILE__, array('SpendenQuittungsDB', 'uninstall'));
+
+// TODO remove deactivation hook and use uninstall-hook as soon as development is ready
+register_deactivation_hook(__FILE__, array('SpendenQuittungsDB', 'uninstall'));
+//register_uninstall_hook(__FILE__, array('SpendenQuittungsDB', 'uninstall'));
 
 $platformRegistry = new PlatformRegistry($sqdb->getAllPlatforms());
 $valueFromPlatformsAction = new ValueFromPlatformsAction($platformRegistry, $sqdb->getBlacklistedBooks());

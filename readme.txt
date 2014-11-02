@@ -39,7 +39,6 @@ Initial Version
 
 == TODOs ==
 - APIs
-  - Amazon API...
   - Price-Calculation: ValueFromPlatformsAction::averageFrom
     - test against assam
 

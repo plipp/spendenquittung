@@ -35,18 +35,18 @@ class PlatformsTest extends PHPUnit_Framework_TestCase
 
         $amazon = $platforms->by("amazon");
         $this->assertNotNull($amazon);
-        $this->assertEquals('{"id":"1","name":"amazon","host":"www.amazon.de","urlpath":"\/o\/ASIN\/${ISBN10}","fixcosts":"1.50","provision":"0.30","porto_wcl1":"2.10","porto_wcl2":"4.40","porto_wcl3":"6.50","percent_of_sales":"50.00","is_active":"1"}', $amazon->__toString());
+        $this->assertEquals('{"id":"1","name":"amazon","host":"webservices.amazon.de","urlpath":"\/onca\/xml","fixcosts":"1.50","provision":"0.30","porto_wcl1":"2.10","porto_wcl2":"4.40","porto_wcl3":"6.50","percent_of_sales":"50.00","is_active":"1"}', $amazon->__toString());
     }
 
     function testUrlByIsbn()
     {
         $platforms = new PlatformRegistry(json_decode(self::PLATFORMS_AS_JSON, TRUE));
 
-        $amazon = $platforms->by("amazon");
-        $this->assertNull($amazon->urlBy("978-4321"), "null for invalid isbn (shouldn't happen)");
-        $this->assertEquals($amazon->urlBy("978-3570303283"), "http://www.amazon.de/o/ASIN/3570303284");
-        $this->assertEquals($amazon->urlBy("9783570303283"), "http://www.amazon.de/o/ASIN/3570303284");
-        $this->assertEquals($amazon->urlBy("3570303284"), "http://www.amazon.de/o/ASIN/3570303284");
+        $booklooker = $platforms->by("booklooker");
+        $this->assertNull($booklooker->urlBy("978-4321"), "null for invalid isbn (shouldn't happen)");
+        $this->assertEquals("http://www.booklooker.de/interface/search.php?pid=7654321&medium=book&limit=1&sortOrder=pricePlusShipping&isbn=9783570303283", $booklooker->urlBy("978-3570303283"));
+        $this->assertEquals("http://www.booklooker.de/interface/search.php?pid=7654321&medium=book&limit=1&sortOrder=pricePlusShipping&isbn=9783570303283", $booklooker->urlBy("9783570303283"));
+        $this->assertEquals("http://www.booklooker.de/interface/search.php?pid=7654321&medium=book&limit=1&sortOrder=pricePlusShipping&isbn=9783570303283", $booklooker->urlBy("3570303284"));
     }
 
     function testProfitCalculationForAmazon()
@@ -86,8 +86,8 @@ class PlatformsTest extends PHPUnit_Framework_TestCase
    {
       "id":"1",
       "name":"amazon",
-      "host":"www.amazon.de",
-      "urlpath":"\/o\/ASIN\/${ISBN10}",
+      "host":"webservices.amazon.de",
+      "urlpath":"/onca/xml",
       "fixcosts":"1.50",
       "provision":"0.30",
       "porto_wcl1":"2.10",

@@ -176,6 +176,7 @@ class ValueFromPlatformsAction
 
         $average = 0.0;
         foreach ($validProfitsByPlatform as $platform => $profit) {
+            error_log("averageFrom: profit (" .$platform . ") = " . $profit);
             $platform = $this->_platformRegistry->by($platform);
             $average += $profit * ($platform->percent_of_sales/$complete_percentage);
         }

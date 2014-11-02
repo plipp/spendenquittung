@@ -9,12 +9,14 @@
 class SpendenQuittungsDB
 {
 
-    const SQDB_DB_VERSION = 2;
+    const SQDB_DB_VERSION = 1;
     const SQDB_DB_VERSION_OPTION = "sqdb_db_version";
 
     const SQ_BOOKLOOKER_API_KEY_OPTION = 'sq_booklooker_api_key';
 
     const SQ_EBAY_API_KEY_OPTION = 'sq_ebay_api_key';
+
+    const SQ_AMAZON_API_SECRET_KEY_OPTION = "sq_amazon_api_secret";
 
     private $_columnDescription = array(
         'id' => 'Nr.',
@@ -50,6 +52,7 @@ class SpendenQuittungsDB
     public function init_options() {
         add_option( self::SQ_BOOKLOOKER_API_KEY_OPTION, 'BOOKLOOKER_API_KEY' );
         add_option( self::SQ_EBAY_API_KEY_OPTION, 'EBAY_API_KEY' );
+        add_option( self::SQ_AMAZON_API_SECRET_KEY_OPTION, 'AMAZON_API_SECRET' );
     }
 
     public function initMarketplaceDatabase()
@@ -90,15 +93,15 @@ class SpendenQuittungsDB
 
         $data = array(
             'name' => 'amazon',
-            'host' => 'www.amazon.de',
-            'urlpath' => '/o/ASIN/${ISBN10}',
+            'host' => 'webservices.amazon.de',
+            'urlpath' => '/onca/xml',
             'fixcosts' => 1.14,
             'provision' => 0.15,
             'porto_wcl1' => 3.0,
             'porto_wcl2' => 3.0,
             'porto_wcl3' => 3.0,
             'percent_of_sales' => 50,
-            'is_active' => 0
+            'is_active' => 1
         );
         $wpdb->insert($tableName, $data, $format);
 
@@ -214,6 +217,7 @@ class SpendenQuittungsDB
         delete_option(self::SQDB_DB_VERSION_OPTION);
 //        delete_option(self::SQ_BOOKLOOKER_API_KEY_OPTION);
 //        delete_option(self::SQ_EBAY_API_KEY_OPTION);
+//        delete_option(self::SQ_AMAZON_API_SECRET_KEY_OPTION);
     }
 
     public function getAllPlatforms() {

@@ -1,0 +1,37 @@
+<ItemLookupResponse xmlns="http://webservices.amazon.com/AWSECommerceService/2011-08-01">
+    <OperationRequest>
+        <HTTPHeaders>
+            <Header Name="UserAgent" Value="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36"/>
+        </HTTPHeaders>
+        <RequestId>dc88150b-4c08-4131-aea9-550859e392c6</RequestId>
+        <Arguments>
+            <Argument Name="Condition" Value="All"/>
+            <Argument Name="ItemId" Value="3570303285"/>
+            <Argument Name="Operation" Value="ItemLookup"/>
+            <Argument Name="Service" Value="AWSECommerceService"/>
+            <Argument Name="IdType" Value="ISBN"/>
+            <Argument Name="AWSAccessKeyId" Value="AKIAIXLSBMDYE34PWSWA"/>
+            <Argument Name="Timestamp" Value="2014-11-01T18:07:41.000Z"/>
+            <Argument Name="Signature" Value="wxjfjsHMYrQ0HJmNPAl3JlzpfiWxu89cnL53DswX63g="/>
+            <Argument Name="ResponseGroup" Value="ItemAttributes,Offers"/>
+            <Argument Name="AssociateTag" Value="787279780545"/>
+            <Argument Name="SearchIndex" Value="Books"/>
+            <Argument Name="Version" Value="2011-08-01"/>
+        </Arguments>
+        <RequestProcessingTime>0.0241120000000000</RequestProcessingTime>
+    </OperationRequest>
+    <Items>
+        <Request>
+            <IsValid>True</IsValid>
+            <ItemLookupRequest>...</ItemLookupRequest>
+            <Errors>
+                <Error>
+                    <Code>AWS.InvalidParameterValue</Code>
+                    <Message>
+                        3570303285 is not a valid value for ItemId. Please change this value and retry your request.
+                    </Message>
+                </Error>
+            </Errors>
+        </Request>
+    </Items>
+</ItemLookupResponse>

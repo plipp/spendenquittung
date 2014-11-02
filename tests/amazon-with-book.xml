@@ -1,0 +1,233 @@
+<ItemLookupResponse xmlns="http://webservices.amazon.com/AWSECommerceService/2011-08-01">
+    <OperationRequest>
+        <HTTPHeaders>
+            <Header Name="UserAgent" Value="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36"/>
+        </HTTPHeaders>
+        <RequestId>cfae0855-0c09-4248-aedd-d5ddfcc52f7a</RequestId>
+        <Arguments>
+            <Argument Name="Condition" Value="All"/>
+            <Argument Name="ItemId" Value="3570303284"/>
+            <Argument Name="Operation" Value="ItemLookup"/>
+            <Argument Name="Service" Value="AWSECommerceService"/>
+            <Argument Name="IdType" Value="ISBN"/>
+            <Argument Name="AWSAccessKeyId" Value="AKIAIXLSBMDYE34PWSWA"/>
+            <Argument Name="Timestamp" Value="2014-11-01T17:42:21.000Z"/>
+            <Argument Name="Signature" Value="Qyc5pGXumAQeooSs6N9Gq/DIH6t+2dcLWtbxmBmuN4g="/>
+            <Argument Name="ResponseGroup" Value="ItemAttributes,Offers"/>
+            <Argument Name="AssociateTag" Value="787279780545"/>
+            <Argument Name="SearchIndex" Value="Books"/>
+            <Argument Name="Version" Value="2011-08-01"/>
+        </Arguments>
+        <RequestProcessingTime>0.0278740000000000</RequestProcessingTime>
+    </OperationRequest>
+    <Items>
+        <Request>
+            <IsValid>True</IsValid>
+            <ItemLookupRequest>
+                <Condition>All</Condition>
+                <IdType>ISBN</IdType>
+                <ItemId>3570303284</ItemId>
+                <ResponseGroup>ItemAttributes</ResponseGroup>
+                <ResponseGroup>Offers</ResponseGroup>
+                <SearchIndex>Books</SearchIndex>
+                <VariationPage>All</VariationPage>
+            </ItemLookupRequest>
+        </Request>
+        <Item>
+            <ASIN>3570303284</ASIN>
+            <DetailPageURL>
+                http://www.amazon.de/Die-Rebellin-Gilde-Schwarzen-Magier/dp/3570303284%3FSubscriptionId%3DAKIAIXLSBMDYE34PWSWA%26tag%3D787279780545%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D3570303284
+            </DetailPageURL>
+            <ItemLinks>
+                <ItemLink>
+                    <Description>Add To Wishlist</Description>
+                    <URL>
+                        http://www.amazon.de/gp/registry/wishlist/add-item.html%3Fasin.0%3D3570303284%26SubscriptionId%3DAKIAIXLSBMDYE34PWSWA%26tag%3D787279780545%26linkCode%3Dxm2%26camp%3D2025%26creative%3D12738%26creativeASIN%3D3570303284
+                    </URL>
+                </ItemLink>
+                <ItemLink>
+                    <Description>Tell A Friend</Description>
+                    <URL>
+                        http://www.amazon.de/gp/pdp/taf/3570303284%3FSubscriptionId%3DAKIAIXLSBMDYE34PWSWA%26tag%3D787279780545%26linkCode%3Dxm2%26camp%3D2025%26creative%3D12738%26creativeASIN%3D3570303284
+                    </URL>
+                </ItemLink>
+                <ItemLink>
+                    <Description>All Customer Reviews</Description>
+                    <URL>
+                        http://www.amazon.de/review/product/3570303284%3FSubscriptionId%3DAKIAIXLSBMDYE34PWSWA%26tag%3D787279780545%26linkCode%3Dxm2%26camp%3D2025%26creative%3D12738%26creativeASIN%3D3570303284
+                    </URL>
+                </ItemLink>
+                <ItemLink>
+                    <Description>All Offers</Description>
+                    <URL>
+                        http://www.amazon.de/gp/offer-listing/3570303284%3FSubscriptionId%3DAKIAIXLSBMDYE34PWSWA%26tag%3D787279780545%26linkCode%3Dxm2%26camp%3D2025%26creative%3D12738%26creativeASIN%3D3570303284
+                    </URL>
+                </ItemLink>
+            </ItemLinks>
+            <ItemAttributes>
+                <Author>Trudi Canavan</Author>
+                <Binding>Broschiert</Binding>
+                <Creator Role="Übersetzer">Michaela Link</Creator>
+                <EAN>9783570303283</EAN>
+                <EANList>
+                    <EANListElement>9783570303283</EANListElement>
+                </EANList>
+                <ISBN>3570303284</ISBN>
+                <IsEligibleForTradeIn>1</IsEligibleForTradeIn>
+                <Label>cbt</Label>
+                <Languages>
+                    <Language>
+                        <Name>Deutsch</Name>
+                        <Type>Unbekannt</Type>
+                    </Language>
+                    <Language>
+                        <Name>Deutsch</Name>
+                        <Type>Original</Type>
+                    </Language>
+                    <Language>
+                        <Name>Deutsch</Name>
+                        <Type>Published</Type>
+                    </Language>
+                </Languages>
+                <ListPrice>
+                    <Amount>995</Amount>
+                    <CurrencyCode>EUR</CurrencyCode>
+                    <FormattedPrice>EUR 9,95</FormattedPrice>
+                </ListPrice>
+                <Manufacturer>cbt</Manufacturer>
+                <ManufacturerMaximumAge Units="months">1188</ManufacturerMaximumAge>
+                <ManufacturerMinimumAge Units="months">156</ManufacturerMinimumAge>
+                <NumberOfPages>544</NumberOfPages>
+                <PackageDimensions>
+                    <Height Units="hundredths-inches">181</Height>
+                    <Length Units="hundredths-inches">717</Length>
+                    <Weight Units="hundredths-pounds">101</Weight>
+                    <Width Units="hundredths-inches">496</Width>
+                </PackageDimensions>
+                <ProductGroup>Book</ProductGroup>
+                <ProductTypeName>ABIS_BOOK</ProductTypeName>
+                <PublicationDate>2006-04-03</PublicationDate>
+                <Publisher>cbt</Publisher>
+                <Studio>cbt</Studio>
+                <Title>Die Rebellin. Die Gilde der Schwarzen Magier 01</Title>
+                <TradeInValue>
+                    <Amount>10</Amount>
+                    <CurrencyCode>EUR</CurrencyCode>
+                    <FormattedPrice>EUR 0,10</FormattedPrice>
+                </TradeInValue>
+            </ItemAttributes>
+            <OfferSummary>
+                <LowestNewPrice>
+                    <Amount>695</Amount>
+                    <CurrencyCode>EUR</CurrencyCode>
+                    <FormattedPrice>EUR 6,95</FormattedPrice>
+                </LowestNewPrice>
+                <LowestUsedPrice>
+                    <Amount>11</Amount>
+                    <CurrencyCode>EUR</CurrencyCode>
+                    <FormattedPrice>EUR 0,11</FormattedPrice>
+                </LowestUsedPrice>
+                <LowestCollectiblePrice>
+                    <Amount>699</Amount>
+                    <CurrencyCode>EUR</CurrencyCode>
+                    <FormattedPrice>EUR 6,99</FormattedPrice>
+                </LowestCollectiblePrice>
+                <TotalNew>67</TotalNew>
+                <TotalUsed>45</TotalUsed>
+                <TotalCollectible>1</TotalCollectible>
+                <TotalRefurbished>0</TotalRefurbished>
+            </OfferSummary>
+            <Offers>
+                <TotalOffers>3</TotalOffers>
+                <TotalOfferPages>1</TotalOfferPages>
+                <MoreOffersUrl>
+                    http://www.amazon.de/gp/offer-listing/3570303284%3FSubscriptionId%3DAKIAIXLSBMDYE34PWSWA%26tag%3D787279780545%26linkCode%3Dxm2%26camp%3D2025%26creative%3D12738%26creativeASIN%3D3570303284
+                </MoreOffersUrl>
+                <Offer>
+                    <OfferAttributes>
+                        <Condition>New</Condition>
+                    </OfferAttributes>
+                    <OfferListing>
+                        <OfferListingId>
+                            69yiwDwksQB4GBB78GwtBCxBCsl5VqM3nLpkwYaFjrFLy%2F4odzpsMrO4J1VX1yJrzZyKZ2PqI7c9lNndXHJ3Y8dsOlgFIEdJcxqhNP57U%2FDLWq%2F%2FPS9qK1ZJ1lh7NINrU2o4zKTeqN2Plvc5ec6UJIVAwDZ2R05p
+                        </OfferListingId>
+                        <Price>
+                            <Amount>695</Amount>
+                            <CurrencyCode>EUR</CurrencyCode>
+                            <FormattedPrice>EUR 6,95</FormattedPrice>
+                        </Price>
+                        <AmountSaved>
+                            <Amount>300</Amount>
+                            <CurrencyCode>EUR</CurrencyCode>
+                            <FormattedPrice>EUR 3,00</FormattedPrice>
+                        </AmountSaved>
+                        <PercentageSaved>30</PercentageSaved>
+                        <Availability>Versandfertig in 1 - 2 Werktagen</Availability>
+                        <AvailabilityAttributes>
+                            <AvailabilityType>now</AvailabilityType>
+                            <MinimumHours>24</MinimumHours>
+                            <MaximumHours>48</MaximumHours>
+                        </AvailabilityAttributes>
+                        <IsEligibleForSuperSaverShipping>0</IsEligibleForSuperSaverShipping>
+                    </OfferListing>
+                </Offer>
+                <Offer>
+                    <OfferAttributes>
+                        <Condition>Used</Condition>
+                    </OfferAttributes>
+                    <OfferListing>
+                        <OfferListingId>
+                            69yiwDwksQB4GBB78GwtBCxBCsl5VqM3bsX9w6o%2FDc7Fqh2iuTWh5VamBH33sgDi%2BUUTT5wEuMa8Ou7hPUXVuDo34RQCYt4elgeZnHK1Zx4JEKV4Xebqo10N7S275iMjfWbQGUFd63EKu948XJUGJQ%3D%3D
+                        </OfferListingId>
+                        <Price>
+                            <Amount>11</Amount>
+                            <CurrencyCode>EUR</CurrencyCode>
+                            <FormattedPrice>EUR 0,11</FormattedPrice>
+                        </Price>
+                        <AmountSaved>
+                            <Amount>984</Amount>
+                            <CurrencyCode>EUR</CurrencyCode>
+                            <FormattedPrice>EUR 9,84</FormattedPrice>
+                        </AmountSaved>
+                        <PercentageSaved>99</PercentageSaved>
+                        <Availability>Versandfertig in 1 - 2 Werktagen</Availability>
+                        <AvailabilityAttributes>
+                            <AvailabilityType>now</AvailabilityType>
+                            <MinimumHours>24</MinimumHours>
+                            <MaximumHours>48</MaximumHours>
+                        </AvailabilityAttributes>
+                        <IsEligibleForSuperSaverShipping>0</IsEligibleForSuperSaverShipping>
+                    </OfferListing>
+                </Offer>
+                <Offer>
+                    <OfferAttributes>
+                        <Condition>Collectible</Condition>
+                    </OfferAttributes>
+                    <OfferListing>
+                        <OfferListingId>
+                            69yiwDwksQB4GBB78GwtBCxBCsl5VqM37qPMicyJwVPFnq56HzXBSwKobHNReEClYAlgWWFri8nc7EBcinwX9oVs28OJcWkTFzIcDMBJq9DJNfYoySrRU1cK4PHC%2F%2BobTYJT9ufIYVsuc6CuxhOSVg%3D%3D
+                        </OfferListingId>
+                        <Price>
+                            <Amount>699</Amount>
+                            <CurrencyCode>EUR</CurrencyCode>
+                            <FormattedPrice>EUR 6,99</FormattedPrice>
+                        </Price>
+                        <AmountSaved>
+                            <Amount>296</Amount>
+                            <CurrencyCode>EUR</CurrencyCode>
+                            <FormattedPrice>EUR 2,96</FormattedPrice>
+                        </AmountSaved>
+                        <PercentageSaved>30</PercentageSaved>
+                        <Availability>Versandfertig in 1 - 2 Werktagen</Availability>
+                        <AvailabilityAttributes>
+                            <AvailabilityType>now</AvailabilityType>
+                            <MinimumHours>24</MinimumHours>
+                            <MaximumHours>48</MaximumHours>
+                        </AvailabilityAttributes>
+                        <IsEligibleForSuperSaverShipping>0</IsEligibleForSuperSaverShipping>
+                    </OfferListing>
+                </Offer>
+            </Offers>
+        </Item>
+    </Items>
+</ItemLookupResponse>

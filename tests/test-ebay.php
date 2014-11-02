@@ -40,7 +40,7 @@ class EbayTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(empty($xml));
 
         $ebay = new Ebay(json_decode(self::EBAY_AS_JSON, TRUE));
-        $this->assertEquals($ebay->authorFrom($xml)); // unsupported
+        $this->assertEquals($ebay->authorFrom($xml),''); // unsupported
     }
 
     function testParseWrongIsbn()

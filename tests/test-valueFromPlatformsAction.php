@@ -75,8 +75,8 @@ class ValueFromPlatformsActionTest extends PHPUnit_Framework_TestCase
    {
       "id":"1",
       "name":"amazon",
-      "host":"www.amazon.de",
-      "urlpath":"\/o\/ASIN\/${ISBN10}",
+      "host":"webservices.amazon.de",
+      "urlpath":"\/onca\/xml",
       "fixcosts":"1.50",
       "provision":"0.30",
       "porto_wcl1":"2.10",

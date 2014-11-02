@@ -1,0 +1,37 @@
+<ItemLookupResponse xmlns="http://webservices.amazon.com/AWSECommerceService/2011-08-01">
+    <OperationRequest>
+        <HTTPHeaders>
+            <Header Name="UserAgent" Value="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36"/>
+        </HTTPHeaders>
+        <RequestId>cfae0855-0c09-4248-aedd-d5ddfcc52f7a</RequestId>
+        <Arguments>
+            <Argument Name="Condition" Value="All"/>
+            <Argument Name="ItemId" Value="3570303284"/>
+            <Argument Name="Operation" Value="ItemLookup"/>
+            <Argument Name="Service" Value="AWSECommerceService"/>
+            <Argument Name="IdType" Value="ISBN"/>
+            <Argument Name="AWSAccessKeyId" Value="AKIAIXLSBMDYE34PWSWA"/>
+            <Argument Name="Timestamp" Value="2014-11-01T17:42:21.000Z"/>
+            <Argument Name="Signature" Value="Qyc5pGXumAQeooSs6N9Gq/DIH6t+2dcLWtbxmBmuN4g="/>
+            <Argument Name="ResponseGroup" Value="ItemAttributes,Offers"/>
+            <Argument Name="AssociateTag" Value="787279780545"/>
+            <Argument Name="SearchIndex" Value="Books"/>
+            <Argument Name="Version" Value="2011-08-01"/>
+        </Arguments>
+        <RequestProcessingTime>0.0278740000000000</RequestProcessingTime>
+    </OperationRequest>
+    <Items>
+        <Request>
+            <IsValid>True</IsValid>
+            <ItemLookupRequest>
+                <Condition>All</Condition>
+                <IdType>ISBN</IdType>
+                <ItemId>3570303284</ItemId>
+                <ResponseGroup>ItemAttributes</ResponseGroup>
+                <ResponseGroup>Offers</ResponseGroup>
+                <SearchIndex>Books</SearchIndex>
+                <VariationPage>All</VariationPage>
+            </ItemLookupRequest>
+        </Request>
+    </Items>
+</ItemLookupResponse>

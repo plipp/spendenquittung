@@ -10,6 +10,7 @@ require_once("costs.php");
 require_once(plugin_dir_path(__FILE__) . '../util/isbn.php');
 require_once(plugin_dir_path(__FILE__) . '../util/converters.php');
 require_once(plugin_dir_path(__FILE__) . '../util/css-selector.inc');
+require_once(plugin_dir_path(__FILE__) . '../platforms/amazon/AmazonProviderApi.php');
 
 class PlatformRegistry
 {
@@ -17,6 +18,7 @@ class PlatformRegistry
     const ZVAB = 'zvab';
     const EBAY = 'ebay';
     const BUCHFREUND = 'buchfreund';
+    const AMAZON = 'amazon';
 
     private $_platforms;
 
@@ -25,6 +27,7 @@ class PlatformRegistry
         foreach ($platforms as $platform) {
             switch ($platform['name']) {
                 case self::ZVAB: $this->_platforms[$platform['name']] = new ZVAB($platform); break;
+                case self::AMAZON: $this->_platforms[$platform['name']] = new Amazon($platform); break;
                 case self::BOOKLOOKER: $this->_platforms[$platform['name']] = new Booklooker($platform); break;
                 case self::EBAY: $this->_platforms[$platform['name']] = new Ebay($platform); break;
                 case self::BUCHFREUND: $this->_platforms[$platform['name']] = new Buchfreund($platform); break;
@@ -64,15 +67,22 @@ class Platform
 
     public function urlBy($isbn)
     {
+        $url=null;
+
+        $isbn = $this->clean($isbn);
+        if ($isbn!=null) {
+            $url = str_replace("\${ISBN10}", Isbn::to10($isbn), "http://" . $this->host . $this->urlpath);
+            $url = str_replace("\${ISBN13}", Isbn::to13($isbn), $url);
+        }
+        return $url;
+    }
+
+    protected function clean($isbn) {
         $isbn = Isbn::clean($isbn);
         if (!Isbn::validate($isbn)) {
             error_log("ISBN not valid:" . $isbn);
             return null;
-        }
-
-        $url = str_replace("\${ISBN10}", Isbn::to10($isbn), "http://" . $this->host . $this->urlpath);
-        $url = str_replace("\${ISBN13}", Isbn::to13($isbn), $url);
-        return $url;
+        } else return $isbn;
     }
 
     public function portoDeclBy($weightClass)
@@ -269,5 +279,66 @@ class Ebay extends Platform {
             return null;
         }
         return $findItemsByProductResponse->searchResult;
+    }
+}
+
+class Amazon extends Platform {
+
+    private $api;
+
+    public function __construct($params) {
+        parent::__construct($params);
+        $this->api = new AmazonProviderApi($this->host, $this->urlpath);
+    }
+
+    public function urlBy($isbn)
+    {
+        return $this->api->urlBy($this->clean($isbn));
+    }
+
+    public function totalPricesFrom($xml) {
+        $item = $this->itemFrom($xml);
+        if (empty($item) || empty($item->OfferSummary)) {
+            return array();
+        }
+
+        if (!empty($item->OfferSummary->LowestUsedPrice)) {
+            $price = $item->OfferSummary->LowestUsedPrice->Amount;
+        } else if (!empty($item->OfferSummary->LowestNewPrice)) {
+            $price = $item->OfferSummary->LowestNewPrice->Amount;
+        } else {
+            return array();
+        }
+
+        return array((float)$price/100);
+    }
+
+    public function titleFrom($xml) {
+        $item = $this->itemFrom($xml);
+        if (empty($item)) return null;
+        return (string)$item->ItemAttributes->Title;
+    }
+
+    public function authorFrom($xml) {
+        $item = $this->itemFrom($xml);
+        if (empty($item)) return null;
+        return (string)$item->ItemAttributes->Author;
+    }
+
+    private function itemFrom($xml) {
+        if (empty($xml)) {
+            error_log("No response xml from: " . $this->name);
+            return null;
+        }
+
+        $itemLookupResponse = new SimpleXMLElement($xml);
+        $items = $itemLookupResponse->Items;
+        if (!empty($items->Request->Errors) || empty($items->Item)) {
+            $msg = empty($items->Request->Errors) ? "": "(" . $items->Request->Errors->Error->Message . ")";
+            error_log("Book not found at: " . $this->name . $msg);
+            return null;
+        }
+
+        return $items->Item;
     }
 }
