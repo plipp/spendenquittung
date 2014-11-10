@@ -16,16 +16,16 @@ require_once ("pdf/pdfPrintAction.php");
 
 class Bootstrap {
 
-    public function createAuthorPluginMenu() {
-        add_menu_page('Spendenquittung', 'Spendenquittung', 'author', 'sq-overview', array($this, 'createAuthorPageOverview'));
-        # add_submenu_page('sq-overview', 'Marktplätze bearbeiten', 'Marktplätze berbeiten', 'author', 'sq-marketplaces', array($this, 'createAdminPageMarketplaces'));
-        add_submenu_page('sq-overview', 'Schwarze Liste bearbeiten', 'Schwarze Liste bearbeiten', 'author', 'sq-blacklist', array($this, 'createAuthorPageBlacklist'));
+    public function createAdminPluginMenu() {
+        add_menu_page('Spendenquittung', 'Spendenquittung', 'administrator', 'sq-overview', array($this, 'createAdminPageOverview'));
+//        add_submenu_page('sq-overview', 'Marktplätze berbeiten', 'Marktplätze bearbeiten', 'administrator', 'sq-marketplaces', array($this, 'createAdminPageMarketplaces'));
+        add_submenu_page('sq-overview', 'Schwarze Liste bearbeiten', 'Schwarze Liste bearbeiten', 'administrator', 'sq-blacklist', array($this, 'createAdminPageBlacklist'));
 
     }
 
-    public function createAuthorPageOverview()
+    public function createAdminPageOverview()
     {
-        include('templates/author_overview.tpl.php');
+        include('templates/admin_overview.tpl.php');
     }
 
     public function createAdminPageMarketplaces()
@@ -33,21 +33,21 @@ class Bootstrap {
         include('templates/admin_marketplaces.tpl.php');
     }
 
-    public function createAuthorPageBlacklist()
+    public function createAdminPageBlacklist()
     {
-        include('templates/author_blacklist.tpl.php');
+        include('templates/admin_blacklist.tpl.php');
     }
 
-    public function createAdminAndAuthorCss() {
-        if (is_admin() || is_author()) {
+    public function createAdminCss() {
+        if (is_admin()) {
             wp_enqueue_style('datatables-css', '//cdn.datatables.net/1.10.2/css/jquery.dataTables.css', array(), '1.10.2');
             wp_register_style('sq-admin-style', plugins_url('spendenQuittungAdmin.css', __FILE__));
             wp_enqueue_style('sq-admin-style');
         }
     }
 
-    public function addAuthorScripts() {
-        if (is_admin() || is_author()) {
+    public function addAdminScripts() {
+        if (is_admin()) {
             wp_enqueue_script("datatables", "//cdn.datatables.net/1.10.2/js/jquery.dataTables.js", array('jquery'), '1.10.2');
             wp_enqueue_script('sq-admin-blacklist-app-config', plugin_dir_url(__FILE__) . 'js/admin/app-blacklist-config.js');
             wp_enqueue_script('sq-admin-blacklist-app', plugin_dir_url(__FILE__) . 'js/admin/app-blacklist.js', array('jquery', 'sq-admin-blacklist-app-config'));
@@ -100,9 +100,9 @@ $pdfPrint = new PdfPrintAction();
 // Bootstrapping
 $sq_bootstrap = new Bootstrap();
 
-add_action('admin_menu', array($sq_bootstrap, 'createAuthorPluginMenu'));
-add_action('admin_print_styles', array($sq_bootstrap, 'createAdminAndAuthorCss'));
-add_action('admin_enqueue_scripts', array($sq_bootstrap, 'addAuthorScripts'));
+add_action('admin_menu', array($sq_bootstrap, 'createAdminPluginMenu'));
+add_action('admin_print_styles', array($sq_bootstrap, 'createAdminCss'));
+add_action('admin_enqueue_scripts', array($sq_bootstrap, 'addAdminScripts'));
 
 add_action('wp_print_styles', array($sq_bootstrap, 'createUserCss'));
 add_action('wp_enqueue_scripts',  array($sq_bootstrap,'addUserScripts'));
