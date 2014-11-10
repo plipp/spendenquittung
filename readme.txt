@@ -43,13 +43,9 @@ Initial Version
     - test against assam
 
 - admin pages:
+! - health-check-page (or better replace Assam)
   - lets edit prices
   - configure marketplaces
-
-
-- automated unit-testing
-  - PDF: Formular + Adressblatt
-    - Tests nur auf Content
 
 - see TODOs
 - remove: error_logs

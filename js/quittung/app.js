@@ -159,7 +159,8 @@ jQuery(function () {
     'use strict';
 
     if (app.init()) {
-        app.dummyBooks();
+        // app.dummyBooks();
+        if (window.console) {window.console.log("Initialization of quittungs-site finished");}
     } else {
         if (window.console) {window.console.log("Page is not the Spendenquittung (#sq-app)");}
     }
