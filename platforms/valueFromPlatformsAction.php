@@ -158,29 +158,38 @@ class ValueFromPlatformsAction
 
     function averageFrom($profitByPlatform)
     {
-        // percent_of_sales
-        $validProfitsByPlatform = array_filter($profitByPlatform, function ($profit) {
-            return Profits::is_valid($profit);
-        });
-        if (count($validProfitsByPlatform) == 0) return -1;
+        $platformsWithValidProfit = $this->platformsWithValidProfit($profitByPlatform);
+        $sumOfAllRelevantPercentages = $this->sumOfAllRelevantPercentages($platformsWithValidProfit);
 
-        error_log("remaining platforms:" . implode('-', array_keys($validProfitsByPlatform)));
-        $complete_percentage=array_sum(array_map(function($platform) {
-            $registry = $this->_platformRegistry;
-            return $registry->by($platform)->percent_of_sales;
-        },array_keys($validProfitsByPlatform)));
-
-        if ($complete_percentage==0) {
+        if ($sumOfAllRelevantPercentages==0 || count($platformsWithValidProfit) == 0) {
             return -1;
         }
 
         $average = 0.0;
-        foreach ($validProfitsByPlatform as $platform => $profit) {
-            error_log("averageFrom: profit (" .$platform . ") = " . $profit);
+        foreach ($platformsWithValidProfit as $platform => $profit) {
+            error_log("averageFrom: profit (" . $platform . ") = " . $profit);
             $platform = $this->_platformRegistry->by($platform);
-            $average += $profit * ($platform->percent_of_sales/$complete_percentage);
+            $average += $profit * ($platform->percent_of_sales / $sumOfAllRelevantPercentages);
         }
-
         return $average;
+    }
+
+    private function platformsWithValidProfit($profitByPlatform)
+    {
+        $platformsWithValidProfit = array_filter($profitByPlatform, function ($profit) {
+            return Profits::is_valid($profit);
+        });
+        error_log("remaining platforms:" . implode('-', array_keys($platformsWithValidProfit)));
+        return $platformsWithValidProfit;
+    }
+
+    private function sumOfAllRelevantPercentages($validProfitsByPlatform)
+    {
+        $complete_percentage = 0;
+        $registry = $this->_platformRegistry;
+        foreach (array_keys($validProfitsByPlatform) as $platform) {
+            $complete_percentage += $registry->by($platform)->percent_of_sales;
+        }
+        return $complete_percentage;
     }
 }
