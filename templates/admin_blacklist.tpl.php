@@ -8,7 +8,7 @@
                     <form id="add-book">
                         <label>Gültige ISBN:
                             <input type="text" id="ISBN" required placeholder="978-3570303283"
-                                   pattern="(\d{3}-)*\d{9}(\d|X)">
+                                   pattern="(\d{3}-?)*\d{9}(\d|X)">
                         </label>
                         <label>Kommentar:
                             <input type="text" id="comment" size="80">
