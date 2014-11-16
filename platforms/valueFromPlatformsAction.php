@@ -13,6 +13,7 @@ class Profits
 
         if (!empty($prices)) {
             $profit = min($prices);
+            error_log("Profits: " . $platform->name . ": " . implode('-',$prices) . ", profit=" . $profit);
 
             $this->_values['profit'] = $profit;
             $this->_values['profitsByWeightClasses'] = empty($prices) ? array() : $platform->profitByWeightClasses($profit);
@@ -133,7 +134,7 @@ class ValueFromPlatformsAction
         foreach ($platforms as $platform) {
             if ($platform->is_active && ($platform->percent_of_sales>0 || $this->_isInternalRequest)) {
                 $search_url = $platform->urlBy($isbn);
-//                error_log($search_url);
+                error_log("SEARCH-URL:" . $search_url);
                 $parallel_curl->startRequest($search_url, array($this, 'on_request_done'), $platform->name);
             }
         }

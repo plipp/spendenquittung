@@ -20,7 +20,7 @@
                     <thead>
                     <tr>
                         <th>Platform</th>
-                        <th>Preis/€</th>
+                        <th>Preis incl. Porto/€</th>
                         <th>Gewinn 1 /€</th>
                         <th>Gewinn 2 /€</th>
                         <th>Gewinn 3 /€</th>
@@ -31,10 +31,9 @@
                         <tr>
                             <th colspan="2" style="text-align:right">Berechneter Spendenquittungspreis:</th>
                             <th style="text-align: right"></th>
+                            <th colspan="2" style="text-align:right">Formel: 1/(&sum;(anteil(p)) * &sum;(anteil(p)*preis(p))</th>
                             <th></th>
-                            <th></th>
-                            <th></th>
-                    </tr>
+                        </tr>
                     </tfoot>
                 </table>
             </div>

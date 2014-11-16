@@ -26,12 +26,24 @@ class PlatformRegistry
     {
         foreach ($platforms as $platform) {
             switch ($platform['name']) {
-                case self::ZVAB: $this->_platforms[$platform['name']] = new ZVAB($platform); break;
-                case self::AMAZON: $this->_platforms[$platform['name']] = new Amazon($platform); break;
-                case self::BOOKLOOKER: $this->_platforms[$platform['name']] = new Booklooker($platform); break;
-                case self::EBAY: $this->_platforms[$platform['name']] = new Ebay($platform); break;
-                case self::BUCHFREUND: $this->_platforms[$platform['name']] = new Buchfreund($platform); break;
-                default: $this->_platforms[$platform['name']] = new Platform($platform); break;
+                case self::ZVAB:
+                    $this->_platforms[$platform['name']] = new ZVAB($platform);
+                    break;
+                case self::AMAZON:
+                    $this->_platforms[$platform['name']] = new Amazon($platform);
+                    break;
+                case self::BOOKLOOKER:
+                    $this->_platforms[$platform['name']] = new Booklooker($platform);
+                    break;
+                case self::EBAY:
+                    $this->_platforms[$platform['name']] = new Ebay($platform);
+                    break;
+                case self::BUCHFREUND:
+                    $this->_platforms[$platform['name']] = new Buchfreund($platform);
+                    break;
+                default:
+                    $this->_platforms[$platform['name']] = new Platform($platform);
+                    break;
             }
         }
     }
@@ -67,17 +79,18 @@ class Platform
 
     public function urlBy($isbn)
     {
-        $url=null;
+        $url = null;
 
         $isbn = $this->clean($isbn);
-        if ($isbn!=null) {
+        if ($isbn != null) {
             $url = str_replace("\${ISBN10}", Isbn::to10($isbn), "http://" . $this->host . $this->urlpath);
             $url = str_replace("\${ISBN13}", Isbn::to13($isbn), $url);
         }
         return $url;
     }
 
-    protected function clean($isbn) {
+    protected function clean($isbn)
+    {
         $isbn = Isbn::clean($isbn);
         if (!Isbn::validate($isbn)) {
             error_log("ISBN not valid:" . $isbn);
@@ -99,15 +112,24 @@ class Platform
         return 0;
     }
 
-    public function totalPricesFrom($content) {
+    /**
+     * extracts the lowest total prices (== price + porto) from the $content
+     *
+     * @param $content either the content of the HTML-response-page or from an REST-API
+     * @return array th extract lowest total prices
+     */
+    public function totalPricesFrom($content)
+    {
         return array();
     }
 
-    public function titleFrom($content) {
+    public function titleFrom($content)
+    {
         return null;
     }
 
-    public function authorFrom($content) {
+    public function authorFrom($content)
+    {
         throw new RuntimeException("$this->name : authorFrom()-method not supported");
     }
 
@@ -130,12 +152,16 @@ class Platform
     }
 }
 
-class ZVAB extends Platform {
-    public function __construct($params) {
+class ZVAB extends Platform
+{
+    public function __construct($params)
+    {
         parent::__construct($params);
     }
 
-    public function totalPricesFrom($content) {
+    public function totalPricesFrom($content)
+    {
+//        error_log("---CONTENT---" . $content ."---CONTENT---");
         $no_result = 'Es konnten momentan leider';
         $price_regexp = '|<span class="total">Gesamt:&nbsp;EUR&nbsp;(\d+,\d+)</span>|';
 
@@ -150,20 +176,24 @@ class ZVAB extends Platform {
 
         preg_match_all($price_regexp, $content, $prices);
 
-        if (empty($prices) || count($prices)!=2){
+        if (empty($prices) || count($prices) != 2) {
             error_log("No prices found at:" . $this->name . "(parsing error?)");
             return array();
         }
-        return array_map(array("Converters","toFloat"), $prices[1]);
+        error_log("ZVAB prices:" . implode('-', $prices[1]));
+        return array_map(array("Converters", "toFloat"), $prices[1]);
     }
 }
 
-class Buchfreund extends Platform {
-    public function __construct($params) {
+class Buchfreund extends Platform
+{
+    public function __construct($params)
+    {
         parent::__construct($params);
     }
 
-    public function totalPricesFrom($content) {
+    public function totalPricesFrom($content)
+    {
         $no_result = 'Partnerplattform www.buchhai.de';
 
         if (empty($content)) {
@@ -177,32 +207,36 @@ class Buchfreund extends Platform {
 
         $elements = select_elements('div.resultPrice td.priceBorder', $content);
 
-        if (empty($elements) || count($elements)<2){
+        if (empty($elements) || count($elements) < 2) {
             error_log("No prices found at:" . $this->name . "(parsing error?)");
             return array();
         }
 
         // filter out labels
         $totalPrices = array();
-        foreach ($elements as $key => $value) if($key & 1) $totalPrices[]=$value;
+        foreach ($elements as $key => $value) if ($key & 1) $totalPrices[] = $value;
 
         $prices = array_map(array("Buchfreund", "toFloat"), $totalPrices);
-        error_log("Buchfreund Preise:" . implode('-',$prices));
+        error_log("Buchfreund Preise:" . implode('-', $prices));
         return $prices;
 
     }
 
-    private static function toFloat ($element) {
-        return Converters::toFloat(trim(str_replace('EUR','',$element['text'])));
+    private static function toFloat($element)
+    {
+        return Converters::toFloat(trim(str_replace('EUR', '', $element['text'])));
     }
 }
 
-class Booklooker extends Platform {
-    public function __construct($params) {
+class Booklooker extends Platform
+{
+    public function __construct($params)
+    {
         parent::__construct($params);
     }
 
-    public function totalPricesFrom($xml) {
+    public function totalPricesFrom($xml)
+    {
         $booklist = $this->booklistFrom($xml);
         if (!$booklist) {
             return array();
@@ -213,26 +247,29 @@ class Booklooker extends Platform {
         return array($price);
     }
 
-    public function titleFrom($xml) {
+    public function titleFrom($xml)
+    {
         $booklist = $this->booklistFrom($xml);
         if (!$booklist) return null;
         return $booklist->Book->Title;
     }
 
-    public function authorFrom($xml) {
+    public function authorFrom($xml)
+    {
         $booklist = $this->booklistFrom($xml);
         if (!$booklist) return null;
         return $booklist->Book->Author;
     }
 
-    private function booklistFrom($xml) {
+    private function booklistFrom($xml)
+    {
         if (empty($xml)) {
             error_log("No response xml from: " . $this->name);
             return null;
         }
 
         $booklist = new SimpleXMLElement($xml);
-        if ($booklist['RecordCount']=='0') {
+        if ($booklist['RecordCount'] == '0') {
             error_log("Book not found at: " . $this->name);
             return null;
         } else return $booklist;
@@ -240,12 +277,15 @@ class Booklooker extends Platform {
 }
 
 
-class Ebay extends Platform {
-    public function __construct($params) {
+class Ebay extends Platform
+{
+    public function __construct($params)
+    {
         parent::__construct($params);
     }
 
-    public function totalPricesFrom($xml) {
+    public function totalPricesFrom($xml)
+    {
         $booklist = $this->booklistFrom($xml);
         if (!$booklist) return array();
 
@@ -255,14 +295,16 @@ class Ebay extends Platform {
         return array($price);
     }
 
-    public function titleFrom($xml) {
+    public function titleFrom($xml)
+    {
         $booklist = $this->booklistFrom($xml);
         if (!$booklist) return null;
 
         return $booklist->item->title;
     }
 
-    private function booklistFrom($xml) {
+    private function booklistFrom($xml)
+    {
         if (empty($xml)) {
             error_log("No response xml from: " . $this->name);
             return null;
@@ -282,11 +324,13 @@ class Ebay extends Platform {
     }
 }
 
-class Amazon extends Platform {
+class Amazon extends Platform
+{
 
     private $api;
 
-    public function __construct($params) {
+    public function __construct($params)
+    {
         parent::__construct($params);
         $this->api = new AmazonProviderApi($this->host, $this->urlpath);
     }
@@ -296,7 +340,8 @@ class Amazon extends Platform {
         return $this->api->urlBy($this->clean($isbn));
     }
 
-    public function totalPricesFrom($xml) {
+    public function totalPricesFrom($xml)
+    {
         $item = $this->itemFrom($xml);
         if (empty($item) || empty($item->OfferSummary)) {
             return array();
@@ -310,22 +355,25 @@ class Amazon extends Platform {
             return array();
         }
 
-        return array((float)$price/100);
+        return array((float)$price / 100 + $this->portoDeclBy(1));
     }
 
-    public function titleFrom($xml) {
+    public function titleFrom($xml)
+    {
         $item = $this->itemFrom($xml);
         if (empty($item)) return null;
         return (string)$item->ItemAttributes->Title;
     }
 
-    public function authorFrom($xml) {
+    public function authorFrom($xml)
+    {
         $item = $this->itemFrom($xml);
         if (empty($item)) return null;
         return (string)$item->ItemAttributes->Author;
     }
 
-    private function itemFrom($xml) {
+    private function itemFrom($xml)
+    {
         if (empty($xml)) {
             error_log("No response xml from: " . $this->name);
             return null;
@@ -334,7 +382,7 @@ class Amazon extends Platform {
         $itemLookupResponse = new SimpleXMLElement($xml);
         $items = $itemLookupResponse->Items;
         if (!empty($items->Request->Errors) || empty($items->Item)) {
-            $msg = empty($items->Request->Errors) ? "": "(" . $items->Request->Errors->Error->Message . ")";
+            $msg = empty($items->Request->Errors) ? "" : "(" . $items->Request->Errors->Error->Message . ")";
             error_log("Book not found at: " . $this->name . $msg);
             return null;
         }

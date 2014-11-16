@@ -18,7 +18,7 @@ class AmazonTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(empty($xml));
 
         $amazon = new Amazon(json_decode(self::AMAZON_AS_JSON, TRUE));
-        $this->assertEquals($amazon->totalPricesFrom($xml),array(0.11));
+        $this->assertEquals($amazon->totalPricesFrom($xml),array(3.11));
     }
 
     function testParsePricesOfOnlyNewBooks()
@@ -27,7 +27,7 @@ class AmazonTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(empty($xml));
 
         $amazon = new Amazon(json_decode(self::AMAZON_AS_JSON, TRUE));
-        $this->assertEquals($amazon->totalPricesFrom($xml),array(6.95));
+        $this->assertEquals($amazon->totalPricesFrom($xml),array(9.95));
     }
 
     function testParseTitle()
