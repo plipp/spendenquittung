@@ -20,6 +20,7 @@ class Bootstrap {
         add_menu_page('Spendenquittung', 'Spendenquittung', 'administrator', 'sq-overview', array($this, 'createAdminPageOverview'));
 //        add_submenu_page('sq-overview', 'Marktplätze berbeiten', 'Marktplätze bearbeiten', 'administrator', 'sq-marketplaces', array($this, 'createAdminPageMarketplaces'));
         add_submenu_page('sq-overview', 'Schwarze Liste bearbeiten', 'Schwarze Liste bearbeiten', 'administrator', 'sq-blacklist', array($this, 'createAdminPageBlacklist'));
+        add_submenu_page('sq-overview', 'Assam II (Berechnungen nachvollziehen)', 'Assam II', 'administrator', 'sq-assam2', array($this, 'createAdminPageAssam'));
 
     }
 
@@ -38,6 +39,11 @@ class Bootstrap {
         include('templates/admin_blacklist.tpl.php');
     }
 
+    public function createAdminPageAssam()
+    {
+        include('templates/admin_assam.tpl.php');
+    }
+
     public function createAdminCss() {
         if (is_admin()) {
             wp_enqueue_style('datatables-css', '//cdn.datatables.net/1.10.2/css/jquery.dataTables.css', array(), '1.10.2');
@@ -51,6 +57,8 @@ class Bootstrap {
             wp_enqueue_script("datatables", "//cdn.datatables.net/1.10.2/js/jquery.dataTables.js", array('jquery'), '1.10.2');
             wp_enqueue_script('sq-admin-blacklist-app-config', plugin_dir_url(__FILE__) . 'js/admin/app-blacklist-config.js');
             wp_enqueue_script('sq-admin-blacklist-app', plugin_dir_url(__FILE__) . 'js/admin/app-blacklist.js', array('jquery', 'sq-admin-blacklist-app-config'));
+            wp_enqueue_script('sq-admin-assam-app-config', plugin_dir_url(__FILE__) . 'js/admin/app-assam-config.js');
+            wp_enqueue_script('sq-admin-assam-app', plugin_dir_url(__FILE__) . 'js/admin/app-assam.js', array('jquery', 'sq-admin-assam-app-config'));
             wp_localize_script('sq-admin-blacklist-app-config', 'ajaxConfig', array('ajaxUrl' => admin_url('admin-ajax.php')));
         }
     }

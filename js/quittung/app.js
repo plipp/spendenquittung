@@ -75,7 +75,7 @@ var app = (function ($, appConfig) {
         },
         cacheElements: function () {
             this.$app = $('#sq-app');
-            this.$addBookBtn = this.$app.find('#add-isbn');
+            this.$setBookBtn = this.$app.find('#add-isbn');
             this.$userData = this.$app.find('#user-data');
             this.$isbn = this.$app.find('#ISBN');
             this.$bookTableBody = this.$app.find('#book-table tbody');
@@ -83,7 +83,7 @@ var app = (function ($, appConfig) {
             this.$hiddenSum = this.$app.find('#sum');
         },
         bindEvents: function () {
-            this.$addBookBtn.on('submit', this.onAddBook.bind(this));
+            this.$setBookBtn.on('submit', this.onSetBook.bind(this));
             this.$userData.on('submit', this.beforePrintPdf.bind(this));
             this.$bookTableBody.on('click', 'button.delete-row', this.onRemoveBook.bind(this));
         },
@@ -91,7 +91,7 @@ var app = (function ($, appConfig) {
             alert("Titel und Preis des Buches konnten nicht ermittelt werden. " +
                 "Bitte checken Sie noch einmal die ISBN '" + isbn + "' bzw. Ihre Internet-Verbindung.");
         },
-        afterBookAdded: function (response) {
+        afterBookSet: function (response) {
             var $isbn = this.$isbn;
             if (response.success && response.data) {
                 var lTable = this.table;
@@ -104,19 +104,19 @@ var app = (function ($, appConfig) {
                 this.bookDataNotAvailable($isbn.val());
             }
         },
-        addBook: function (isbn) {
+        setBook: function (isbn) {
             document.body.style.cursor = 'wait';
             $.ajax({
                 type: "POST",
                 url: config.urlForBookDataFromPlatforms(),
                 data: { ISBN: isbn }
-            }).done(this.afterBookAdded.bind(this)).always(function () {
+            }).done(this.afterBookSet.bind(this)).always(function () {
                 document.body.style.cursor = 'default';
             });
         },
-        onAddBook: function (event) {
+        onSetBook: function (event) {
             var isbn = this.$isbn.val().trim();
-            this.addBook(isbn);
+            this.setBook(isbn);
             event.preventDefault();
         },
         onRemoveBook: function (event) {
@@ -144,9 +144,9 @@ var app = (function ($, appConfig) {
             // ... regular submit ...
         },
         dummyBooks: function() {
-            this.addBook("0385351399");
-            this.addBook("0307385906");
-            this.addBook("978-1557787903");
+            this.setBook("0385351399");
+            this.setBook("0307385906");
+            this.setBook("978-1557787903");
         }
     };
     return {

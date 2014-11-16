@@ -44,8 +44,13 @@ Initial Version
 
 - admin pages:
 ! - health-check-page (or better replace Assam)
+    =>
+      - show full title for blacklisted book
+      - show price
   - lets edit prices
   - configure marketplaces
 
 - see TODOs
 - remove: error_logs
+
+- minify

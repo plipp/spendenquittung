@@ -41,18 +41,28 @@ class Profits
 
 class ValueFromPlatformsAction
 {
+    const INTERNAL_REQUEST_HEADER = 'x-internal-request';
+
+    const STATUS_OK = 'OK';
+    const STATUS_BLACKLISTED = 'BL';
+
     const TITLE_RESULT = 'title';
     const PROFIT_RESULT = 'profits';
+    const PROFITS_BY_WEIGHT_RESULT = 'profitsByWeightClasses';
 
     private $_platformRegistry;
     private $_results;
-    private $_blacklistedBookIsbns;
+    private $_blacklistedBooksByIsbn;
+
+    private $_isInternalRequest;
 
     public function ValueFromPlatformsAction($platformRegistry, $blacklistedBooks, $doRegister=true)
     {
         $this->_platformRegistry = $platformRegistry;
-        $this->_blacklistedBookIsbns = array_map(function ($book) {return $book['isbn'];},$blacklistedBooks);
-        // error_log("ISBN of blacklisted books: ".implode('+',$this->_blacklistedBookIsbns));
+
+        $blacklistedBookIsbns = array_map(function ($book) {return $book['isbn'];},$blacklistedBooks);
+        $this->_blacklistedBooksByIsbn = array_combine($blacklistedBookIsbns, $blacklistedBooks);
+        // error_log("ISBN of blacklisted books: ".implode('+',$this->_blacklistedBooksByIsbn));
 
         if ($doRegister) {
             add_action('wp_ajax_request_value_from_platforms', array($this, 'request_value_from_platforms'));
@@ -62,6 +72,8 @@ class ValueFromPlatformsAction
 
     public function request_value_from_platforms()
     {
+        $this->_isInternalRequest = self::check_if_internal_request($_SERVER);
+
         $isbn = Isbn::clean($_POST['ISBN']);
         if (!Isbn::validate($isbn)) {
             wp_send_json_error("Invalid ISBN $isbn");
@@ -69,12 +81,8 @@ class ValueFromPlatformsAction
         }
 
         $isbn13 = Isbn::to13($isbn);
-        if (in_array($isbn13, $this->_blacklistedBookIsbns)) {
-            $response = json_encode(array(
-                    "isbn" => $isbn,
-                    "title" => '?',
-                    "profit" => "0.00")
-            );
+        if (array_key_exists($isbn13, $this->_blacklistedBooksByIsbn)) {
+            $response = $this->json_encoded_response($isbn, self::STATUS_BLACKLISTED, $this->_blacklistedBooksByIsbn[$isbn13]['title']);
         } else {
             $response = $this->_parallel_requests($isbn);
         }
@@ -99,6 +107,7 @@ class ValueFromPlatformsAction
         $profits = new Profits($platform, $content);
 
         $this->_results[self::PROFIT_RESULT][$platform_name] = $profits->profit;
+        $this->_results[self::PROFITS_BY_WEIGHT_RESULT][$platform_name] = $profits->profitsByWeightClasses;
         $this->_results[self::TITLE_RESULT][$platform_name] = $platform->titleFrom($content);
     }
 
@@ -122,9 +131,9 @@ class ValueFromPlatformsAction
         $parallel_curl = new ParallelCurl($max_requests, $curl_options);
 
         foreach ($platforms as $platform) {
-            if ($platform->is_active && $platform->percent_of_sales>0) {
+            if ($platform->is_active && ($platform->percent_of_sales>0 || $this->_isInternalRequest)) {
                 $search_url = $platform->urlBy($isbn);
-                error_log($search_url);
+//                error_log($search_url);
                 $parallel_curl->startRequest($search_url, array($this, 'on_request_done'), $platform->name);
             }
         }
@@ -135,15 +144,26 @@ class ValueFromPlatformsAction
         $title = $this->bestTitleFrom($this->_results[self::TITLE_RESULT]);
         $profit = $this->averageFrom($this->_results[self::PROFIT_RESULT]);
 
-        $encoded_value = ($title == null || !Profits::is_valid($profit)) ? null :
-            json_encode(array(
-                    "isbn" => $isbn,
-                    "title" => strval($title),
-                    "profit" => Converters::toCurrencyString($profit))
-            );
-
-        // error_log("Booksearch Result:" . $encoded_value);
+        $encoded_value = null;
+        if ($title != null && Profits::is_valid($profit)) {
+            $profits = $this->_isInternalRequest ? $this->_results[self::PROFIT_RESULT]:array();
+            $profitsByWeightClasses = $this->_isInternalRequest ? $this->_results[self::PROFITS_BY_WEIGHT_RESULT]:array();
+            $encoded_value = $this->json_encoded_response($isbn, self::STATUS_OK, strval($title),
+                Converters::toCurrencyString($profit), $profits, $profitsByWeightClasses);
+        }
+        error_log("Booksearch Result:" . $encoded_value);
         return $encoded_value;
+    }
+
+    private function json_encoded_response($isbn, $status=self::STATUS_OK, $title='?', $profit="0.00", $profits=array(), $profitsByWeightClasses=array())
+    {
+        return json_encode(array(
+            "isbn" => $isbn,
+            "status" => $status,
+            "title" => $title,
+            "profit" => $profit,
+            "profits" => $profits,
+            "profitsByWeightClasses" => $profitsByWeightClasses));
     }
 
     static function bestTitleFrom($titleResults)
@@ -167,7 +187,7 @@ class ValueFromPlatformsAction
 
         $average = 0.0;
         foreach ($platformsWithValidProfit as $platform => $profit) {
-            error_log("averageFrom: profit (" . $platform . ") = " . $profit);
+//            error_log("averageFrom: profit (" . $platform . ") = " . $profit);
             $platform = $this->_platformRegistry->by($platform);
             $average += $profit * ($platform->percent_of_sales / $sumOfAllRelevantPercentages);
         }
@@ -191,5 +211,12 @@ class ValueFromPlatformsAction
             $complete_percentage += $registry->by($platform)->percent_of_sales;
         }
         return $complete_percentage;
+    }
+
+    private static function check_if_internal_request($http_headers)
+    {
+        $header_key='HTTP_' . str_replace('-','_', strtoupper(self::INTERNAL_REQUEST_HEADER));
+//        error_log("HEADER_KEY=" . $header_key . ", server-headers:" . implode('-', $http_headers));
+        return array_key_exists($header_key, $http_headers);
     }
 }

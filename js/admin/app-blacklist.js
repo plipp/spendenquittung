@@ -52,13 +52,13 @@ var appBlacklist = (function ($, appConfig) {
         },
         cacheElements: function () {
             this.$app = $('#sq-blacklist-app');
-            this.$addBookBtn = this.$app.find('#add-book');
+            this.$setBookBtn = this.$app.find('#add-book');
             this.$isbn = this.$app.find('#ISBN');
             this.$comment = this.$app.find('#comment');
             this.$bookTableBody = this.$app.find('#book-table tbody');
         },
         bindEvents: function () {
-            this.$addBookBtn.on('submit', this.onAddBook.bind(this));
+            this.$setBookBtn.on('submit', this.onSetBook.bind(this));
             this.$bookTableBody.on('click', 'button.delete-row', this.onRemoveBook.bind(this));
         },
         afterBooksFetched: function (response) {
@@ -87,7 +87,7 @@ var appBlacklist = (function ($, appConfig) {
                 document.body.style.cursor = 'default';
             });
         },
-        afterBookAdded: function (response) {
+        afterBookSet: function (response) {
             var $isbn = this.$isbn;
             if (response.success) {
                 if (response.data) {
@@ -102,21 +102,21 @@ var appBlacklist = (function ($, appConfig) {
                 alert ("Das Buch mit der ISBN '" + $isbn.val() + "' konnte nicht hinzugefügt werden. Ist es schon in der Liste?");
             }
         },
-        addBook: function (isbn, comment) {
+        setBook: function (isbn, comment) {
             document.body.style.cursor = 'wait';
             $.ajax({
                 type: "POST",
                 url: config.urlForAddingBlacklistedBook(),
                 data: { ISBN: isbn, COMMENT: comment }
-            }).done(this.afterBookAdded.bind(this)).
+            }).done(this.afterBookSet.bind(this)).
                 always(function () {
                     document.body.style.cursor = 'default';
                 });
         },
-        onAddBook: function (event) {
+        onSetBook: function (event) {
             var isbn = this.$isbn.val().trim(),
                 comment = this.$comment.val().trim();
-            this.addBook(isbn, comment);
+            this.setBook(isbn, comment);
             event.preventDefault();
         },
         onRemoveBook: function (event) {
