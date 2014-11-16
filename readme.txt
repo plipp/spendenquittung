@@ -40,17 +40,15 @@ Initial Version
 == TODOs ==
 - APIs
   - Price-Calculation: ValueFromPlatformsAction::averageFrom
-    - test against assam
-
-- admin pages:
-! - health-check-page (or better replace Assam)
-    =>
-      - show full title for blacklisted book
-      - show price
-  - lets edit prices
-  - configure marketplaces
+    - test against assam  ==> ZVAB must check both ISBN10 + 13
 
 - see TODOs
 - remove: error_logs
 
 - minify
+
+== SNI ==
+
+- admin pages:
+  - lets edit prices
+  - configure marketplaces
