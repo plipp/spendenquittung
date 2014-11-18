@@ -20,7 +20,7 @@ class Bootstrap {
         add_menu_page('Spendenquittung', 'Spendenquittung', 'administrator', 'sq-overview', array($this, 'createAdminPageOverview'));
 //        add_submenu_page('sq-overview', 'Marktplätze berbeiten', 'Marktplätze bearbeiten', 'administrator', 'sq-marketplaces', array($this, 'createAdminPageMarketplaces'));
         add_submenu_page('sq-overview', 'Schwarze Liste bearbeiten', 'Schwarze Liste bearbeiten', 'administrator', 'sq-blacklist', array($this, 'createAdminPageBlacklist'));
-        add_submenu_page('sq-overview', 'Assam II (Berechnungen nachvollziehen)', 'Assam II', 'administrator', 'sq-assam2', array($this, 'createAdminPageAssam'));
+        add_submenu_page('sq-overview', 'Buchwertberechnung - Assam II', 'Buchwertberechnung - Assam II', 'administrator', 'sq-assam2', array($this, 'createAdminPageAssam'));
 
     }
 
@@ -96,8 +96,8 @@ $sqdb = new SpendenQuittungsDB();
 register_activation_hook(__FILE__, array($sqdb, 'install'));
 
 // TODO remove as soon as development is ready
-// register_deactivation_hook(__FILE__, array('SpendenQuittungsDB', 'uninstall'));
-register_uninstall_hook(__FILE__, array('SpendenQuittungsDB', 'uninstall'));
+register_deactivation_hook(__FILE__, array('SpendenQuittungsDB', 'uninstall'));
+// register_uninstall_hook(__FILE__, array('SpendenQuittungsDB', 'uninstall'));
 
 $platformRegistry = new PlatformRegistry($sqdb->getAllPlatforms());
 $valueFromPlatformsAction = new ValueFromPlatformsAction($platformRegistry, $sqdb->getBlacklistedBooks());

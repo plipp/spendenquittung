@@ -37,7 +37,8 @@ var app = (function ($, appConfig) {
                     {className: "dt-body-right"},
                     {className: "dt-body-right"},
                     {className: "dt-body-right"},
-                    {className: "dt-body-right"}
+                    {className: "dt-body-center"},
+                    {className: "dt-body-center"}
                 ],
                 "language": {
                     "sEmptyTable": "Noch kein Buch ausgewählt oder keine Plattform, die das Buch anbietet, gefunden",
@@ -72,8 +73,9 @@ var app = (function ($, appConfig) {
             this.$setBookBtn.on('submit', this.onSetBook.bind(this));
         },
         afterBookSet: function (response) {
-            function addTableRow(lTable, platform, comment, profit, profitsByWeightClasses) {
+            function addTableRow(lTable, platform, httpStatus, comment, profit, profitsByWeightClasses) {
                 comment = comment || "";
+                httpStatus = httpStatus || 200;
                 profit = profit ? util.toString(profit) : "";
                 var profitsByWeightClasses1 = profitsByWeightClasses ? util.toString(profitsByWeightClasses[1]) : '-';
                 var profitsByWeightClasses2 = profitsByWeightClasses ? util.toString(profitsByWeightClasses[2]) : '-';
@@ -84,7 +86,8 @@ var app = (function ($, appConfig) {
                     profitsByWeightClasses1,
                     profitsByWeightClasses2,
                     profitsByWeightClasses3,
-                    comment
+                    comment,
+                    (httpStatus >= 200 && httpStatus <=300) ? 'OK':httpStatus
                 ]).node();
             }
 
@@ -116,9 +119,9 @@ var app = (function ($, appConfig) {
                     $.each(bookData.profitsByWeightClasses, function (platform, profitsByWeightClasses) {
                         var profit = bookData.profits[platform];
                         if (profit < 0) {
-                            addTableRow(lTable, platform, "keine Daten");
+                            addTableRow(lTable, platform, bookData.httpStatus[platform], "keine Daten");
                         } else {
-                            addTableRow(lTable, platform, "", profit, profitsByWeightClasses);
+                            addTableRow(lTable, platform, bookData.httpStatus[platform], "", profit, profitsByWeightClasses);
                         }
                     });
                 }

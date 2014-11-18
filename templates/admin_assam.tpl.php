@@ -3,7 +3,7 @@
         <div id="sq-books">
             <div>
                 <div class="sq-with-tb-padding">
-                    <h1>Assam II</h1>
+                    <h1>Buchwertberechnung - Assam II</h1>
 
                     <form id="add-isbn">
                         <label>Gültige ISBN:
@@ -24,13 +24,15 @@
                         <th>Gewinn 1 /€</th>
                         <th>Gewinn 2 /€</th>
                         <th>Gewinn 3 /€</th>
-                        <th>Status</th>
+                        <th>Kommentar</th>
+                        <th><a href="http://de.wikipedia.org/wiki/HTTP-Statuscode">Verbindungsstatus</a></th>
                     </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th colspan="2" style="text-align:right">Berechneter Spendenquittungspreis:</th>
                             <th style="text-align: right"></th>
+                            <th></th>
                             <th colspan="2" style="text-align:right">Formel: 1/(&sum;(anteil(p)) * &sum;(anteil(p)*preis(p))</th>
                             <th></th>
                         </tr>

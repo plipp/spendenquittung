@@ -50,6 +50,7 @@ class ValueFromPlatformsAction
     const TITLE_RESULT = 'title';
     const PROFIT_RESULT = 'profits';
     const PROFITS_BY_WEIGHT_RESULT = 'profitsByWeightClasses';
+    const HTTP_STATUS_CODE = 'httpStatus';
 
     private $_platformRegistry;
     private $_results;
@@ -99,17 +100,21 @@ class ValueFromPlatformsAction
     public function on_request_done($content, $url, $ch, $platform_name)
     {
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $this->_results[self::HTTP_STATUS_CODE][$platform_name] = $httpcode;
+
         if ($httpcode !== 200) {
             error_log("Fetch error $httpcode for '$url'");
-            return;
+            $this->_results[self::PROFIT_RESULT][$platform_name] = -1;
+            $this->_results[self::PROFITS_BY_WEIGHT_RESULT][$platform_name] = array();
+            $this->_results[self::TITLE_RESULT][$platform_name] = "";
+        } else {
+            $platform = $this->_platformRegistry->by($platform_name);
+            $profits = new Profits($platform, $content);
+
+            $this->_results[self::PROFIT_RESULT][$platform_name] = $profits->profit;
+            $this->_results[self::PROFITS_BY_WEIGHT_RESULT][$platform_name] = $profits->profitsByWeightClasses;
+            $this->_results[self::TITLE_RESULT][$platform_name] = $platform->titleFrom($content);
         }
-
-        $platform = $this->_platformRegistry->by($platform_name);
-        $profits = new Profits($platform, $content);
-
-        $this->_results[self::PROFIT_RESULT][$platform_name] = $profits->profit;
-        $this->_results[self::PROFITS_BY_WEIGHT_RESULT][$platform_name] = $profits->profitsByWeightClasses;
-        $this->_results[self::TITLE_RESULT][$platform_name] = $platform->titleFrom($content);
     }
 
 
@@ -149,14 +154,18 @@ class ValueFromPlatformsAction
         if ($title != null && Profits::is_valid($profit)) {
             $profits = $this->_isInternalRequest ? $this->_results[self::PROFIT_RESULT]:array();
             $profitsByWeightClasses = $this->_isInternalRequest ? $this->_results[self::PROFITS_BY_WEIGHT_RESULT]:array();
+            $httpStatus = $this->_isInternalRequest ? $this->_results[self::HTTP_STATUS_CODE]:array();
+
             $encoded_value = $this->json_encoded_response($isbn, self::STATUS_OK, strval($title),
-                Converters::toCurrencyString($profit), $profits, $profitsByWeightClasses);
+                Converters::toCurrencyString($profit), $profits, $profitsByWeightClasses, $httpStatus);
         }
         error_log("Booksearch Result:" . $encoded_value);
         return $encoded_value;
     }
 
-    private function json_encoded_response($isbn, $status=self::STATUS_OK, $title='?', $profit="0.00", $profits=array(), $profitsByWeightClasses=array())
+    private function json_encoded_response( $isbn, $status=self::STATUS_OK, $title='?',
+                                            $profit="0.00", $profits=array(), $profitsByWeightClasses=array(),
+                                            $httpStatus=array())
     {
         return json_encode(array(
             "isbn" => $isbn,
@@ -164,7 +173,8 @@ class ValueFromPlatformsAction
             "title" => $title,
             "profit" => $profit,
             "profits" => $profits,
-            "profitsByWeightClasses" => $profitsByWeightClasses));
+            "profitsByWeightClasses" => $profitsByWeightClasses,
+            "httpStatus" => $httpStatus));
     }
 
     static function bestTitleFrom($titleResults)

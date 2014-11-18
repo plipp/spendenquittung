@@ -2,4 +2,5 @@
 
 <ul>
     <li><a href="admin.php?page=sq-blacklist">Schwarze Buchliste ändern</a></li>
+    <li><a href="admin.php?page=sq-assam2">Buchwertberechnung - Assam II</a></li>
 </ul>
