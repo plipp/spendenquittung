@@ -4,13 +4,9 @@ var appMarketplaceConfig = (function (ajaxConfig) {
 
     return {
         ajaxUrl: ajaxConfig.ajaxUrl,
-        actionForValuesFromPlatforms: "request_value_from_platforms",
-        actionForPdfPrint: "as_pdf",
-        urlForBookDataFromPlatforms: function () {
-            return this.ajaxUrl + "?action=" + this.actionForValuesFromPlatforms;
-        },
-        urlForPdfPrint: function() {
-            return this.ajaxUrl  + "?action=" + this.actionForPdfPrint;
+        actionForPlatforms: "request_platforms",
+        urlForPlatforms: function () {
+            return this.ajaxUrl + "?action=" + this.actionForPlatforms;
         }
     };
 })(ajaxConfig); // ajaxConfig from: wp_localize_script( 'sq-app-config', 'ajaxConfig', array( 'ajaxUrl' => admin_url( 'admin-ajax.php' ) ) );

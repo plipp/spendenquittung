@@ -11,6 +11,7 @@
 require_once ("db/spendenQuittungsDB.php");
 require_once ("platforms/valueFromPlatformsAction.php");
 require_once ("admin/blacklistedBooksAction.php");
+require_once ("admin/platformsAction.php");
 require_once ("platforms/platforms.php");
 require_once ("pdf/pdfPrintAction.php");
 
@@ -18,9 +19,9 @@ class Bootstrap {
 
     public function createAdminPluginMenu() {
         add_menu_page('Spendenquittung', 'Spendenquittung', 'administrator', 'sq-overview', array($this, 'createAdminPageOverview'));
-//        add_submenu_page('sq-overview', 'Marktplätze berbeiten', 'Marktplätze bearbeiten', 'administrator', 'sq-marketplaces', array($this, 'createAdminPageMarketplaces'));
         add_submenu_page('sq-overview', 'Schwarze Liste bearbeiten', 'Schwarze Liste bearbeiten', 'administrator', 'sq-blacklist', array($this, 'createAdminPageBlacklist'));
         add_submenu_page('sq-overview', 'Buchwertberechnung - Assam II', 'Buchwertberechnung - Assam II', 'administrator', 'sq-assam2', array($this, 'createAdminPageAssam'));
+        add_submenu_page('sq-overview', 'Liste der Plattformen', 'Liste der Plattformen', 'administrator', 'sq-marketplaces', array($this, 'createAdminPageMarketplaces'));
 
     }
 
@@ -55,11 +56,15 @@ class Bootstrap {
     public function addAdminScripts() {
         if (is_admin()) {
             wp_enqueue_script("datatables", "//cdn.datatables.net/1.10.2/js/jquery.dataTables.js", array('jquery'), '1.10.2');
+            wp_enqueue_script('sq-admin-marketplaces-app-config', plugin_dir_url(__FILE__) . 'js/admin/app-marketplace-config.js');
+            wp_enqueue_script('sq-admin-marketplaces-app', plugin_dir_url(__FILE__) . 'js/admin/app-marketplace.js', array('jquery', 'sq-admin-marketplaces-app-config'));
             wp_enqueue_script('sq-admin-blacklist-app-config', plugin_dir_url(__FILE__) . 'js/admin/app-blacklist-config.js');
             wp_enqueue_script('sq-admin-blacklist-app', plugin_dir_url(__FILE__) . 'js/admin/app-blacklist.js', array('jquery', 'sq-admin-blacklist-app-config'));
             wp_enqueue_script('sq-admin-assam-app-config', plugin_dir_url(__FILE__) . 'js/admin/app-assam-config.js');
             wp_enqueue_script('sq-admin-assam-app', plugin_dir_url(__FILE__) . 'js/admin/app-assam.js', array('jquery', 'sq-admin-assam-app-config'));
+
             wp_localize_script('sq-admin-blacklist-app-config', 'ajaxConfig', array('ajaxUrl' => admin_url('admin-ajax.php')));
+            wp_localize_script('sq-admin-marketplaces-app-config', 'ajaxConfig', array('ajaxUrl' => admin_url('admin-ajax.php')));
         }
     }
 
@@ -96,12 +101,13 @@ $sqdb = new SpendenQuittungsDB();
 register_activation_hook(__FILE__, array($sqdb, 'install'));
 
 // TODO remove as soon as development is ready
-register_deactivation_hook(__FILE__, array('SpendenQuittungsDB', 'uninstall'));
-// register_uninstall_hook(__FILE__, array('SpendenQuittungsDB', 'uninstall'));
+//register_deactivation_hook(__FILE__, array('SpendenQuittungsDB', 'uninstall'));
+register_uninstall_hook(__FILE__, array('SpendenQuittungsDB', 'uninstall'));
 
 $platformRegistry = new PlatformRegistry($sqdb->getAllPlatforms());
 $valueFromPlatformsAction = new ValueFromPlatformsAction($platformRegistry, $sqdb->getBlacklistedBooks());
 $blacklistAction = new BlacklistedBooksAction($sqdb, $platformRegistry->by(PlatformRegistry::BOOKLOOKER));
+$platformsAction = new PlatformsAction($sqdb);
 
 $pdfPrint = new PdfPrintAction();
 

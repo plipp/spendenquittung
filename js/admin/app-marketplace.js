@@ -1,9 +1,9 @@
-/* global base64:true, appConfig:true, window: true */
+/* global base64:true, appMarketplaceConfig:true, window: true */
 // Structure: see https://github.com/tastejs/todomvc/blob/gh-pages/architecture-examples/jquery/js/app.js
-var appMarketplace = (function ($, appConfig) {
+var appMarketplace = (function ($, appMarketplaceConfig) {
     'use strict';
 
-    var config = appConfig;
+    var config = appMarketplaceConfig;
 
     var App = {
         init: function () {
@@ -17,6 +17,11 @@ var appMarketplace = (function ($, appConfig) {
                 "columns": [
                     { className: "dt-body-left" },
                     { className: "dt-body-left" },
+                    { className: "dt-body-right" },
+                    { className: "dt-body-right" },
+                    { className: "dt-body-right" },
+                    { className: "dt-body-right" },
+                    { className: "dt-body-right" },
                     { className: "dt-body-right" },
                     { className: "dt-body-center" }
                 ],
@@ -45,64 +50,60 @@ var appMarketplace = (function ($, appConfig) {
                 }
             });
             this.cacheElements();
-            this.bindEvents();
 
             return true;
         },
         cacheElements: function () {
             this.$app = $('#sq-marketplace-app');
-            this.$addMarketplaceBtn = this.$app.find('#add-Marketplace');
-            this.$marketplaceName = this.$app.find('#marketplace-name');
-            this.$marketplaceTableBody = this.$app.find('#marketplace-table tbody');
         },
-        bindEvents: function () {
-            this.$addMarketplaceBtn.on('submit', this.onAddMarketplace.bind(this));
-            this.$marketplaceTableBody.on('click', 'button.delete-row', this.onRemoveMarketplace.bind(this));
-        },
-        afterMarketplaceAdded: function (response) {
-            var $marketplaceName = this.$marketplaceName;
-            if (response.success && response.data) {
-                var lTable = this.table;
-                var marketplaceData = JSON.parse(response.data);
-                lTable.row.add([
-                    marketplaceData.marketplace, marketplaceData.title, marketplaceData.profit, '<button class="delete-row">X</button>'
-                ]).draw();
-                $marketplaceName.val("");
+        afterMarketplacesFetched: function (response) {
+            if (response.success) {
+                if (response.data) {
+                    var lTable = this.table;
+                    var marketplaceDatas = response.data;
+                    $.each(marketplaceDatas, function (index, marketplaceData) {
+                        lTable.row.add([
+                            marketplaceData.name,
+                            marketplaceData.host,
+                            marketplaceData.fixcosts,
+                            marketplaceData.provision,
+                            marketplaceData.porto_wcl1,
+                            marketplaceData.porto_wcl2,
+                            marketplaceData.porto_wcl3,
+                            marketplaceData.percent_of_sales,
+                            marketplaceData.is_active>0 ? 'Ja':'Nein'
+                        ]);
+                    });
+                    lTable.draw();
+                }
             } else {
-                // TODO
+                alert("Die Plattformen konnten nicht ermittelt werden. " +
+                "Bitte checken Sie Ihre Internet-Verbindung.");
             }
         },
-        addMarketplace: function (marketplace) {
+        fetchMarketplaces: function () {
             document.body.style.cursor = 'wait';
             $.ajax({
-                type: "POST",
-                url: config.urlForMarketplaceDataFromPlatforms(),
-                data: { marketplace: marketplace }
-            }).done(this.afterMarketplaceAdded.bind(this)).always(function () {
+                type: "GET",
+                url: config.urlForPlatforms()
+            }).done(this.afterMarketplacesFetched.bind(this)).always(function () {
                 document.body.style.cursor = 'default';
             });
-        },
-        onAddMarketplace: function (event) {
-            var marketplace = this.$marketplaceName.val().trim();
-            this.addMarketplace(marketplace);
-            event.preventDefault();
-        },
-        onRemoveMarketplace: function (event) {
-            this.table.row($(event.target).parents('tr'))
-                .remove()
-                .draw();
-            event.preventDefault();
         }
     };
     return {
-        init: function() {return App.init();}
+        init: function() {return App.init();},
+        fetchMarketplaces: function() {return App.fetchMarketplaces();}
+
     };
 }(jQuery, appMarketplaceConfig));
 
 jQuery(function () {
     'use strict';
 
-    if (!appMarketplace.init()) {
+    if (appMarketplace.init()) {
+        appMarketplace.fetchMarketplaces();
+    } else {
         if (window.console) {window.console.log("Page is not the Marketplace (#sq-marketplace-app)");}
     }
 

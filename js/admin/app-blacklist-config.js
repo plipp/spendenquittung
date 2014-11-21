@@ -4,11 +4,11 @@ var appBlacklistConfig = (function (ajaxConfig) {
 
     return {
         ajaxUrl: ajaxConfig.ajaxUrl,
-        actionForValuesFromPlatforms: "request_blacklisted_books",
+        actionForBlacklistedBooks: "request_blacklisted_books",
         actionForDeletionOfBlacklistedBook: "delete_blacklisted_book",
         actionForAddingBlacklistedBook: "add_blacklisted_book",
         urlForBlacklistedBooks: function () {
-            return this.ajaxUrl + "?action=" + this.actionForValuesFromPlatforms;
+            return this.ajaxUrl + "?action=" + this.actionForBlacklistedBooks;
         },
         urlForDeletionOfBlacklistBook: function () {
             return this.ajaxUrl + "?action=" + this.actionForDeletionOfBlacklistedBook;
