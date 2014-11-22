@@ -219,11 +219,13 @@ class SpendenQuittungsDB
 //        delete_option(self::SQ_EBAY_API_KEY_OPTION);
 //        delete_option(self::SQ_AMAZON_API_SECRET_KEY_OPTION);
     }
-
-    public function getAllPlatforms() {
+    public function getAllPlatforms($projected_fields=array()) {
         global $wpdb;
-        return $wpdb->get_results('SELECT * FROM ' . self::marketplaceTableName(), ARRAY_A);
+
+        $projection = empty($projected_fields) ? "*" : implode(", ", $projected_fields);
+        return $wpdb->get_results('SELECT ' . $projection . ' FROM ' . self::marketplaceTableName(), ARRAY_A);
     }
+
 
     public function getBlacklistedBooks() {
         global $wpdb;

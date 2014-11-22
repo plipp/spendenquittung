@@ -20,6 +20,7 @@
                     <thead>
                     <tr>
                         <th>Platform</th>
+                        <th>Verkaufsanteile in %</th>
                         <th>Preis incl. Porto/€</th>
                         <th>Gewinn 1 /€</th>
                         <th>Gewinn 2 /€</th>
@@ -30,14 +31,18 @@
                     </thead>
                     <tfoot>
                         <tr>
-                            <th colspan="2" style="text-align:right">Berechneter Spendenquittungspreis:</th>
+                            <th colspan="2" style="text-align:left">Berechneter Spendenquittungspreis:</th>
                             <th style="text-align: right"></th>
                             <th></th>
-                            <th colspan="2" style="text-align:right">Formel: 1/(&sum;(anteil(p)) * &sum;(anteil(p)*preis(p))</th>
+                            <th></th>
+                            <th colspan="2" style="text-align:right">Formel: 1/(&sum;(verkaufsanteil(p)) * &sum;(verkaufsanteil(p)*preis(p))</th>
                             <th></th>
                         </tr>
                     </tfoot>
                 </table>
+                <div>
+                    *Weiter Parameter der <a href="admin.php?page=sq-marketplaces">einzelnen Plattformen</a>
+                </div>
             </div>
         </div>
     </div>

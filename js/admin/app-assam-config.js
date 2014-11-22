@@ -7,6 +7,10 @@ var appAssamConfig = (function (ajaxConfig) {
         actionForValuesFromPlatforms: "request_value_from_platforms",
         urlForBookDataFromPlatforms: function () {
             return this.ajaxUrl + "?action=" + this.actionForValuesFromPlatforms;
+        }                                                      ,
+        actionForPlatforms: "request_platforms",
+        urlForPlatforms: function () {
+            return this.ajaxUrl + "?action=" + this.actionForPlatforms;
         }
     };
 })(ajaxConfig);

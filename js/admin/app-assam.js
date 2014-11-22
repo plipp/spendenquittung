@@ -37,6 +37,7 @@ var app = (function ($, appConfig) {
                     {className: "dt-body-right"},
                     {className: "dt-body-right"},
                     {className: "dt-body-right"},
+                    {className: "dt-body-right"},
                     {className: "dt-body-center"},
                     {className: "dt-body-center"}
                 ],
@@ -57,6 +58,8 @@ var app = (function ($, appConfig) {
                     }
                 }
             });
+            this.fetchMarketplaces();
+
             this.cacheElements();
             this.bindEvents();
 
@@ -73,15 +76,18 @@ var app = (function ($, appConfig) {
             this.$setBookBtn.on('submit', this.onSetBook.bind(this));
         },
         afterBookSet: function (response) {
-            function addTableRow(lTable, platform, httpStatus, comment, profit, profitsByWeightClasses) {
-                comment = comment || "";
+            function addTableRow(lTable, platform, httpStatus, comment, percentOfSales, profit, profitsByWeightClasses) {
+                comment = comment || "-";
+                percentOfSales = percentOfSales || "-";
                 httpStatus = httpStatus || 200;
-                profit = profit ? util.toString(profit) : "";
+                profit = profit ? util.toString(profit) : "-";
+
                 var profitsByWeightClasses1 = profitsByWeightClasses ? util.toString(profitsByWeightClasses[1]) : '-';
                 var profitsByWeightClasses2 = profitsByWeightClasses ? util.toString(profitsByWeightClasses[2]) : '-';
                 var profitsByWeightClasses3 = profitsByWeightClasses ? util.toString(profitsByWeightClasses[3]) : '-';
                 return lTable.row.add([
                     platform,
+                    percentOfSales,
                     profit,
                     profitsByWeightClasses1,
                     profitsByWeightClasses2,
@@ -93,6 +99,10 @@ var app = (function ($, appConfig) {
 
             function highlightInRed($row) {
                 $($row).css({'color': 'red', 'font-weight': 'bold'});
+            }
+
+            function lowlight($row) {
+                $($row).css({'color': 'grey'});
             }
 
             function setTitle(title, isbn) {
@@ -107,21 +117,24 @@ var app = (function ($, appConfig) {
 
             lTable.clear();
             var $isbn = this.$isbn;
-
             var $title = this.$title;
+
+            var percentOfSalesByMarketplace = this.percentOfSalesByMarketplace || {}
 
             if (response.success && response.data) {
                 var bookData = JSON.parse(response.data);
 
                 if (bookData.status === 'BL') {
-                    highlightInRed(addTableRow(lTable, "Buch ist auf der Schwarzen Liste", 'nehmen wir nicht'));
+                    highlightInRed(addTableRow(lTable, "Buch ist auf der Schwarzen Liste", '-' ,'nehmen wir nicht'));
                 } else {
                     $.each(bookData.profitsByWeightClasses, function (platform, profitsByWeightClasses) {
                         var profit = bookData.profits[platform];
+                        var percentOfSales = (platform in percentOfSalesByMarketplace) ? percentOfSalesByMarketplace[platform]:"?";
+
                         if (profit < 0) {
-                            addTableRow(lTable, platform, bookData.httpStatus[platform], "keine Daten");
+                            lowlight(addTableRow(lTable, platform, bookData.httpStatus[platform], "keine Daten", percentOfSales));
                         } else {
-                            addTableRow(lTable, platform, bookData.httpStatus[platform], "", profit, profitsByWeightClasses);
+                            addTableRow(lTable, platform, bookData.httpStatus[platform], "", percentOfSales, profit, profitsByWeightClasses);
                         }
                     });
                 }
@@ -131,7 +144,7 @@ var app = (function ($, appConfig) {
 
                 $isbn.val("");
             } else {
-                highlightInRed(addTableRow(lTable, "Platformen nicht erreichbar", 'keine Daten'));
+                highlightInRed(addTableRow(lTable, "Platformen nicht erreichbar", '?', 'keine Daten'));
             }
             lTable.draw();
         },
@@ -150,6 +163,29 @@ var app = (function ($, appConfig) {
             var isbn = this.$isbn.val().trim();
             this.setBook(isbn);
             event.preventDefault();
+        },
+        afterMarketplacesFetched: function (response) {
+            var percentOfSalesByMarketplace=this.percentOfSalesByMarketplace;
+
+            if (response.success && response.data) {
+                var marketplaceDatas = response.data;
+                $.each(marketplaceDatas, function (index, marketplaceData) {
+                    percentOfSalesByMarketplace[marketplaceData.name] = marketplaceData.percent_of_sales
+                });
+            } else {
+                window.console && window.console.log ("Die Plattformdaten konnten nicht ermittelt werden!");
+            }
+        },
+        fetchMarketplaces: function () {
+            this.percentOfSalesByMarketplace = {};
+
+            document.body.style.cursor = 'wait';
+            $.ajax({
+                type: "GET",
+                url: config.urlForPlatforms()
+            }).done(this.afterMarketplacesFetched.bind(this)).always(function () {
+                document.body.style.cursor = 'default';
+            });
         }
     };
     return {

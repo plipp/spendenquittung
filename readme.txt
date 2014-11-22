@@ -38,17 +38,21 @@ Use the shortcode [sq] to integrate the Spendenquittungs from into your pages.
 Initial Version
 
 == TODOs ==
-- APIs
-  - Price-Calculation: ValueFromPlatformsAction::averageFrom
-    - test against assam  ==> ZVAB must check both ISBN10 + 13
+- style assam.tpl.php
 
+- admin pages:
+  - Link to options-page/phptable (or email)
+
+- Update Documentation
+
+- APIs
+  -ZVAB must check both ISBN10 + 13
+
+--
 - see TODOs
 - remove: error_logs
 
 - minify
 
 == SNI ==
-
-- admin pages:
-  - lets edit prices
-  - configure marketplaces
+- replace Assam completely
