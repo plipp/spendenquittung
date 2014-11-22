@@ -18,8 +18,8 @@
 
 .sq h1 {
     font-size: 20px;
-    padding: 0px 20px 20px;
-    margin: 0px;
+    padding: 0 20px 20px;
+    margin: 0;
     text-align: center;
 }
 
@@ -57,7 +57,7 @@
 }
 
 .sq-container {
-    margin: 0px auto 20px auto;
+    margin: 0 auto 20px auto;
     padding: 20px;
     border-radius: 5px;
     clear: both;

@@ -19,14 +19,14 @@
                 <table id="book-table" class="display" cellspacing="0" width="100%">
                     <thead>
                     <tr>
-                        <th>Platform</th>
-                        <th>Verkaufsanteile in %</th>
+                        <th style="text-align:left">Platform</th>
+                        <th>Verkaufsanteile in % *</th>
                         <th>Preis incl. Porto/€</th>
                         <th>Gewinn 1 /€</th>
                         <th>Gewinn 2 /€</th>
                         <th>Gewinn 3 /€</th>
                         <th>Kommentar</th>
-                        <th><a href="http://de.wikipedia.org/wiki/HTTP-Statuscode">Verbindungsstatus</a></th>
+                        <th>Status**</th>
                     </tr>
                     </thead>
                     <tfoot>
@@ -35,13 +35,14 @@
                             <th style="text-align: right"></th>
                             <th></th>
                             <th></th>
-                            <th colspan="2" style="text-align:right">Formel: 1/(&sum;(verkaufsanteil(p)) * &sum;(verkaufsanteil(p)*preis(p))</th>
-                            <th></th>
+                            <th colspan="3" style="text-align:right">Formel: 1/(&sum;(verkaufsanteil(p)) * &sum;(verkaufsanteil(p)*preis(p))</th>
                         </tr>
                     </tfoot>
                 </table>
-                <div>
-                    *Weiter Parameter der <a href="admin.php?page=sq-marketplaces">einzelnen Plattformen</a>
+                <div class="sq-with-table-padding">
+                    *Weitere Parameter finden sich auf der <a href="admin.php?page=sq-marketplaces">Liste der Plattformen</a><br>
+                    **Eine Zahl bedeutet, dass ein Fehler aufgetreten ist. Zur Analyse kann
+                      <a href="http://de.wikipedia.org/wiki/HTTP-Statuscode">die Liste der Status-Codes</a> herangezogen werden.
                 </div>
             </div>
         </div>

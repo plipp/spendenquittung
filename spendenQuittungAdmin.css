@@ -71,3 +71,7 @@
 .sq table.dataTable tfoot th {
     padding-right: 10px;
 }
+
+.sq-with-table-padding {
+    padding: 50px 0px 0px 17px;
+}

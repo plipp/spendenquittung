@@ -38,12 +38,6 @@ Use the shortcode [sq] to integrate the Spendenquittungs from into your pages.
 Initial Version
 
 == TODOs ==
-- style assam.tpl.php
-
-- admin pages:
-  - Link to options-page/phptable (or email)
-
-- Update Documentation
 
 - APIs
   -ZVAB must check both ISBN10 + 13
