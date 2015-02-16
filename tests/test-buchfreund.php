@@ -39,7 +39,7 @@ class BuchfreundTest extends PHPUnit_Framework_TestCase
 
     const BUCHFREUND_AS_JSON = '{"name":"buchfreund",
         "host":"www.buchfreund.de",
-        "urlpath":"\/results.php?q=${ISBN13}&onlyIsbn=1&sO=5",
+        "urlpath":"\/results.php?used=1&detail=1&isbn=${ISBN13}&sO=5",
         "fixcosts":0,
         "provision":0.1,
         "porto_wcl1":3,

@@ -35,7 +35,7 @@ class PlatformsTest extends PHPUnit_Framework_TestCase
 
         $amazon = $platforms->by("amazon");
         $this->assertNotNull($amazon);
-        $this->assertEquals('{"id":"1","name":"amazon","host":"webservices.amazon.de","urlpath":"\/onca\/xml","fixcosts":"1.50","provision":"0.30","porto_wcl1":"2.10","porto_wcl2":"4.40","porto_wcl3":"6.50","percent_of_sales":"50.00","is_active":"1"}', $amazon->__toString());
+        $this->assertEquals('{"id":"1","name":"amazon","host":"webservices.amazon.de","urlpath":"\/onca\/xml","fixcosts":"1.50","provision":"0.30","porto_wcl1":"2.10","porto_wcl2":"4.40","porto_wcl3":"6.50","percent_of_sales":"50.00","is_active":"1","protocol":"http"}', $amazon->__toString());
     }
 
     function testUrlByIsbn()
@@ -113,7 +113,7 @@ class PlatformsTest extends PHPUnit_Framework_TestCase
       "id":"3",
       "name":"buchfreund",
       "host":"www.buchfreund.de",
-      "urlpath":"\/results.php?q=${ISBN13}&sO=7",
+      "urlpath":"\/results.php?used=1&detail=1&isbn=${ISBN13}&sO=5",
       "fixcosts":"0.00",
       "provision":"0.00",
       "porto_wcl1":"3.00",

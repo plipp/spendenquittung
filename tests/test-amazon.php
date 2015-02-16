@@ -7,6 +7,13 @@ if (!function_exists('plugin_dir_path')) {
     }
 }
 
+if (!function_exists('get_option')) {
+    function get_option($key, $default="default")
+    {
+        return "somevalue";
+    }
+}
+
 require_once("platforms/platforms.php");
 
 class AmazonTest extends PHPUnit_Framework_TestCase

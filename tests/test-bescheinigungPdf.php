@@ -15,6 +15,7 @@ class BescheinigungPdfTest extends PHPUnit_Framework_TestCase
 
     function setUp() {
         echo "setUp\n";
+        date_default_timezone_set( 'UTC' );
     }
 
     function tearDown() {

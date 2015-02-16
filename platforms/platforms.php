@@ -25,6 +25,8 @@ class PlatformRegistry
     public function __construct($platforms)
     {
         foreach ($platforms as $platform) {
+            $platform['protocol'] = 'http';
+
             switch ($platform['name']) {
                 case self::ZVAB:
                     $this->_platforms[$platform['name']] = new ZVAB($platform);
@@ -83,7 +85,7 @@ class Platform
 
         $isbn = $this->clean($isbn);
         if ($isbn != null) {
-            $url = str_replace("\${ISBN10}", Isbn::to10($isbn), "http://" . $this->host . $this->urlpath);
+            $url = str_replace("\${ISBN10}", Isbn::to10($isbn), $this->protocol . "://" . $this->host . $this->urlpath);
             $url = str_replace("\${ISBN13}", Isbn::to13($isbn), $url);
         }
         return $url;
@@ -189,6 +191,7 @@ class Buchfreund extends Platform
 {
     public function __construct($params)
     {
+        $params['protocol'] = 'https';
         parent::__construct($params);
     }
 

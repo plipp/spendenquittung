@@ -102,7 +102,7 @@ class ValueFromPlatformsActionTest extends PHPUnit_Framework_TestCase
       "id":"3",
       "name":"buchfreund",
       "host":"www.buchfreund.de",
-      "urlpath":"\/results.php?q=${ISBN13}&sO=7",
+      "urlpath":"\/results.php?used=1&detail=1&isbn=${ISBN13}&sO=5",
       "fixcosts":"0.00",
       "provision":"0.00",
       "porto_wcl1":"3.00",
