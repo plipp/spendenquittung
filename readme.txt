@@ -38,6 +38,8 @@ There exist various unit tests which require phpunit >=4.4.4. and can be run via
 $ cd $WP/vagrantpress-master/wordpress/wp-content/plugins/spendenquittung
 $ phpunit -c phpUnit.xml
 
+Run $WP/vagrantpress-master/wordpress/wp-content/plugins/spendenquittung/tests/test-completePdf.php to test PDF generation.
+
 == Changelog ==
 
 = 0.0.1 =
