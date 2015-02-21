@@ -7,6 +7,8 @@ if (!function_exists('plugin_dir_path')) {
     }
 }
 
+define( 'SPENDENQUITTUNG_PLUGIN_DIR', '.' );
+
 require_once("pdf/deckblattPdf.php");
 require_once("pdf/bescheinigungPdf.php");
 require_once("pdf/bookTablePdf.php");
@@ -17,6 +19,7 @@ class CompletePdfTest extends PHPUnit_Framework_TestCase
 
     function setUp() {
         echo "setUp\n";
+        date_default_timezone_set( 'UTC' );
     }
 
     function tearDown() {

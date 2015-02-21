@@ -22,7 +22,7 @@ class BescheinigungPDF
 
     function printBescheinigung()
     {
-        $this->_pdf->Image("logo.jpg",134);
+        $this->_pdf->Image(SPENDENQUITTUNG_PLUGIN_DIR . "/logo.jpg",134);
 
         $this->_pdf->Ln(5);
         $this->_pdf->topicBox('Aussteller (Bezeichnung und Anschrift der steuerbegünstigten Einrichtung)', "\nBerliner Büchertisch e.V.\nMehringdamm 51, 10961 Berlin\n ");

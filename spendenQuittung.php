@@ -94,6 +94,8 @@ class Bootstrap {
     }
 }
 
+define( 'SPENDENQUITTUNG_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+
 // Initialize hooks, registries and actions
 global $wpdb;
 $sqdb = new SpendenQuittungsDB();

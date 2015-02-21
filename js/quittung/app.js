@@ -76,6 +76,7 @@ var app = (function ($, appConfig) {
         cacheElements: function () {
             this.$app = $('#sq-app');
             this.$setBookBtn = this.$app.find('#add-isbn');
+            this.$printPdfBtn = this.$app.find('#print-button');
             this.$userData = this.$app.find('#user-data');
             this.$isbn = this.$app.find('#ISBN');
             this.$bookTableBody = this.$app.find('#book-table tbody');
@@ -100,6 +101,8 @@ var app = (function ($, appConfig) {
                     bookData.isbn, bookData.title, bookData.profit, '<button class="delete-row">X</button>'
                 ]).draw();
                 $isbn.val("");
+
+                this.$printPdfBtn.prop('disabled', false);
             } else {
                 this.bookDataNotAvailable($isbn.val());
             }
@@ -123,6 +126,11 @@ var app = (function ($, appConfig) {
             this.table.row($(event.target).parents('tr'))
                 .remove()
                 .draw();
+
+            if (this.table.rows().data().length==0) {
+              this.$printPdfBtn.prop('disabled', true);
+            }
+
             event.preventDefault();
         },
         beforePrintPdf: function () {
