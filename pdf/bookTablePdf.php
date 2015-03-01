@@ -33,7 +33,7 @@ class BookTablePDF
         // Data
         foreach($this->_books as $book)
         {
-            $profit = (float)$book['profit'];
+            $profit = (float)str_replace(',', '.', $book['profit']);
 
             if ($profit>0) {
                 $this->_pdf->Cell(self::$COLUMN_WIDTH['isbn'], self::COLUMN_HEIGHT, $book['isbn'], 'LR');

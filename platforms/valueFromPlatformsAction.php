@@ -139,7 +139,7 @@ class ValueFromPlatformsAction
         foreach ($platforms as $platform) {
             if ($platform->is_active && ($platform->percent_of_sales>0 || $this->_isInternalRequest)) {
                 $search_url = $platform->urlBy($isbn);
-                error_log("SEARCH-URL:" . $search_url);
+//                error_log("SEARCH-URL:" . $search_url);
                 $parallel_curl->startRequest($search_url, array($this, 'on_request_done'), $platform->name);
             }
         }
@@ -148,23 +148,32 @@ class ValueFromPlatformsAction
         $parallel_curl->finishAllRequests();
 
         $title = $this->bestTitleFrom($this->_results[self::TITLE_RESULT]);
-        $profit = $this->averageFrom($this->_results[self::PROFIT_RESULT]);
+
+        $profitByPlatform = $this->_results[self::PROFIT_RESULT];
+
+        $platformsWithValidProfit = $this->platformsWithValidProfit($profitByPlatform);
+        $nettoProfit = $this->averageFrom($profitByPlatform, $platformsWithValidProfit);
 
         $encoded_value = null;
-        if ($title != null && Profits::is_valid($profit)) {
-            $profits = $this->_isInternalRequest ? $this->_results[self::PROFIT_RESULT]:array();
+        if ($title != null && Profits::is_valid($nettoProfit)) {
+            $nettoProfits = $this->_isInternalRequest ? $this->_results[self::PROFIT_RESULT]:array();
             $profitsByWeightClasses = $this->_isInternalRequest ? $this->_results[self::PROFITS_BY_WEIGHT_RESULT]:array();
+
             $httpStatus = $this->_isInternalRequest ? $this->_results[self::HTTP_STATUS_CODE]:array();
+            $averageProfitsByWeightClasses = $this->averageProfits($this->toProfitsByClass($this->_results[self::PROFITS_BY_WEIGHT_RESULT]), $platformsWithValidProfit);
 
             $encoded_value = $this->json_encoded_response($isbn, self::STATUS_OK, strval($title),
-                Converters::toCurrencyString($profit), $profits, $profitsByWeightClasses, $httpStatus);
+                Converters::toCurrencyString($averageProfitsByWeightClasses['1']),
+                Converters::toCurrencyString($nettoProfit),
+                $averageProfitsByWeightClasses, $nettoProfits, $profitsByWeightClasses, $httpStatus);
         }
         error_log("Booksearch Result:" . $encoded_value);
         return $encoded_value;
     }
 
     private function json_encoded_response( $isbn, $status=self::STATUS_OK, $title='?',
-                                            $profit="0.00", $profits=array(), $profitsByWeightClasses=array(),
+                                            $profit="0.00", $nettoProfit="0.00", $averageProfitsByWeightClasses=array(),
+                                            $nettoProfits=array(), $profitsByWeightClasses=array(),
                                             $httpStatus=array())
     {
         return json_encode(array(
@@ -172,9 +181,54 @@ class ValueFromPlatformsAction
             "status" => $status,
             "title" => $title,
             "profit" => $profit,
-            "profits" => $profits,
+            "nettoProfit" => $nettoProfit,
+            "averageProfitsByWeightClasses" => $averageProfitsByWeightClasses,
+            "nettoProfits" => $nettoProfits,
             "profitsByWeightClasses" => $profitsByWeightClasses,
             "httpStatus" => $httpStatus));
+    }
+
+    /**
+     * transforms
+     * <pre>
+     * $platformWithProfitsPerClass:
+     * {
+     *   "booklooker":{ "1":0.307288, "2":-0.292712, "3":-3.872712 },
+     *   "amazon"	 :{ "1":0.08743, "2":-0.51257, "3":-4.09257 },
+     *   "ebay"      :{ "1":0.98, "2":0.38, "3":-3.2 },
+     *   "zvab"      :{ "1":0.8638, "2":0.2638, "3":-3.3162 },
+     *   "buchfreund":{ "1":1.9333, "2":1.3333, "3":-2.2467 }
+     * }
+     * </pre>
+     * to
+     * <pre>
+     * {
+     *       "1":{"booklooker":0.307288,"amazon":...,"ebay":...,"zvab":...,"buchfreund":...},
+     *       "2":{"booklooker":-0.292712,"amazon":...,"ebay":...,"zvab":...,"buchfreund":...},
+     *       "3":{"booklooker":-3.872712,"amazon":...,"ebay":...,"zvab":...,"buchfreund":...}
+     * }
+     * </pre>
+     *
+     * @param $platformWithProfitsPerClass
+     * @return profitsByClass
+     */
+    function toProfitsByClass($platformWithProfitsPerClass) {
+        // initialize
+        $profitsByClass = array();
+        foreach (Weight::classes() as $weightClass) {
+            $profitsByClass[$weightClass] = array();
+        }
+
+        // fill
+        foreach ($platformWithProfitsPerClass as $platform => $profitByWeightClass) {
+            foreach (Weight::classes() as $weightClass) {
+                $profitsByClass[$weightClass][$platform] = $profitByWeightClass[$weightClass];
+            }
+        }
+
+//        error_log("profitsByClass=>" . json_encode($profitsByClass));
+
+        return $profitsByClass;
     }
 
     static function bestTitleFrom($titleResults)
@@ -187,38 +241,76 @@ class ValueFromPlatformsAction
         return null;
     }
 
-    function averageFrom($profitByPlatform)
+    /**
+     * calculates from:
+     * <pre>
+     * $profitByPlatform
+     * {"booklooker":0.307288,"amazon":0.08743,"ebay":0.98,"zvab":0.8638,"buchfreund":1.9333}
+     * </pre>
+     * the average, weighted by the <code>$platformData->percent_of_sales</code>
+     *
+     * @param $profitByPlatform
+     * @param $platformsWithValidProfit, e.g. <code>array('ebay','amazon')</code>
+     *
+     * @return float: the average profit over all plattforms
+     */
+    function averageFrom($profitByPlatform, $platformsWithValidProfit)
     {
-        $platformsWithValidProfit = $this->platformsWithValidProfit($profitByPlatform);
+        if (count($platformsWithValidProfit) == 0) {
+            return -1;
+        }
+
         $sumOfAllRelevantPercentages = $this->sumOfAllRelevantPercentages($platformsWithValidProfit);
 
-        if ($sumOfAllRelevantPercentages==0 || count($platformsWithValidProfit) == 0) {
+        if ($sumOfAllRelevantPercentages==0) {
             return -1;
         }
 
         $average = 0.0;
-        foreach ($platformsWithValidProfit as $platform => $profit) {
-//            error_log("averageFrom: profit (" . $platform . ") = " . $profit);
-            $platform = $this->_platformRegistry->by($platform);
-            $average += $profit * ($platform->percent_of_sales / $sumOfAllRelevantPercentages);
+        foreach ($platformsWithValidProfit as $platform) {
+            $platformData = $this->_platformRegistry->by($platform);
+            $average += ($profitByPlatform[$platform] * ($platformData->percent_of_sales / $sumOfAllRelevantPercentages));
         }
         return $average;
     }
 
-    private function platformsWithValidProfit($profitByPlatform)
+    /**
+     * calculates from:
+     * <pre>
+     * $profitsByClass
+     * {
+     *       "1":{"booklooker":0.307288,"amazon":...,"ebay":...,"zvab":...,"buchfreund":...},
+     *       "2":{"booklooker":-0.292712,"amazon":...,"ebay":...,"zvab":...,"buchfreund":...},
+     *       "3":{"booklooker":-3.872712,"amazon":...,"ebay":...,"zvab":...,"buchfreund":...}
+     * }
+     * </pre>
+     * the average per weightClass, weighted by the <code>$platformData->percent_of_sales</code>
+     *
+     * @param $profitsByClass
+     * @param $platformsWithValidProfit
+     */
+    function averageProfits ($profitsByClass, $platformsWithValidProfit) {
+        $averageProfitsByClass = array();
+        foreach (Weight::classes() as $weightClass) {
+            $averageProfitsByClass[$weightClass] = $this->averageFrom($profitsByClass[$weightClass], $platformsWithValidProfit);
+        }
+        return $averageProfitsByClass;
+    }
+
+    function platformsWithValidProfit($profitByPlatform)
     {
         $platformsWithValidProfit = array_filter($profitByPlatform, function ($profit) {
             return Profits::is_valid($profit);
         });
-        error_log("remaining platforms:" . implode('-', array_keys($platformsWithValidProfit)));
-        return $platformsWithValidProfit;
+//        error_log("remaining platforms:" . implode('-', array_keys($platformsWithValidProfit)));
+        return array_keys($platformsWithValidProfit);
     }
 
-    private function sumOfAllRelevantPercentages($validProfitsByPlatform)
+    private function sumOfAllRelevantPercentages($platformsWithValidProfits)
     {
         $complete_percentage = 0;
         $registry = $this->_platformRegistry;
-        foreach (array_keys($validProfitsByPlatform) as $platform) {
+        foreach ($platformsWithValidProfits as $platform) {
             $complete_percentage += $registry->by($platform)->percent_of_sales;
         }
         return $complete_percentage;

@@ -128,7 +128,7 @@ var app = (function ($, appConfig) {
                     highlightInRed(addTableRow(lTable, "Buch ist auf der Schwarzen Liste", '-' ,'nehmen wir nicht'));
                 } else {
                     $.each(bookData.profitsByWeightClasses, function (platform, profitsByWeightClasses) {
-                        var profit = bookData.profits[platform];
+                        var profit = bookData.nettoProfits[platform];
                         var percentOfSales = (platform in percentOfSalesByMarketplace) ? percentOfSalesByMarketplace[platform]:"?";
 
                         if (profit < 0) {
@@ -140,7 +140,10 @@ var app = (function ($, appConfig) {
                 }
                 setTitle(bookData.title, bookData.isbn);
 
-                $(lTable.column(2).footer()).html(util.toString(bookData.profit));
+                $(lTable.column(2).footer()).html(util.toString(bookData.nettoProfit));
+                $(lTable.column(3).footer()).html(util.toString(bookData.averageProfitsByWeightClasses['1']));
+                $(lTable.column(4).footer()).html(util.toString(bookData.averageProfitsByWeightClasses['2']));
+                $(lTable.column(5).footer()).html(util.toString(bookData.averageProfitsByWeightClasses['3']));
 
                 $isbn.val("");
             } else {

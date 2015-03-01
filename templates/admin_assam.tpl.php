@@ -33,9 +33,10 @@
                         <tr>
                             <th colspan="2" style="text-align:left">Berechneter Spendenquittungspreis:</th>
                             <th style="text-align: right"></th>
-                            <th></th>
-                            <th></th>
-                            <th colspan="3" style="text-align:right">Formel: 1/(&sum;(verkaufsanteil(p)) * &sum;(verkaufsanteil(p)*preis(p))</th>
+                            <th style="text-align: right"></th>
+                            <th style="text-align: right"></th>
+                            <th style="text-align: right"></th>
+                            <th colspan="2" style="text-align:right">Formel: 1/(&sum;(verkaufsanteil(p)) * &sum;(verkaufsanteil(p)*preis(p))</th>
                         </tr>
                     </tfoot>
                 </table>
