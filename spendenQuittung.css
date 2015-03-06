@@ -44,16 +44,23 @@
 
 .sq #user-data input {
     padding: 4px;
-    width: 30em;
+    width: 28em;
 }
 
-.sq p > label:first-child {
+.sq-adr-label {
     display: inline-block;
     font-weight: 700;
     margin-bottom: 5px;
-    padding-right: 35px;
+    padding-right: 15px;
     text-align: right;
-    width: 135px;
+    width: 90px;
+}
+
+.sq-nl-link {
+    display: inline-block;
+    margin-left: 10px;
+    padding: 2px;
+    font-weight: bold;
 }
 
 .sq-container {
