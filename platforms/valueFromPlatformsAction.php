@@ -221,8 +221,10 @@ class ValueFromPlatformsAction
 
         // fill
         foreach ($platformWithProfitsPerClass as $platform => $profitByWeightClass) {
-            foreach (Weight::classes() as $weightClass) {
-                $profitsByClass[$weightClass][$platform] = $profitByWeightClass[$weightClass];
+            if (! empty($profitByWeightClass)) {
+                foreach (Weight::classes() as $weightClass) {
+                    $profitsByClass[$weightClass][$platform] = $profitByWeightClass[$weightClass];
+                }
             }
         }
 
