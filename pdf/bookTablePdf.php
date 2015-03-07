@@ -33,14 +33,14 @@ class BookTablePDF
         // Data
         foreach($this->_books as $book)
         {
-//            $profit = (float)str_replace(',', '.', $book['profit']);
-//
-//            if ($profit>0) {
+            $profit = (float)str_replace(',', '.', $book['profit']);
+
+            if ($profit>0) {
                 $this->_pdf->Cell(self::$COLUMN_WIDTH['isbn'], self::COLUMN_HEIGHT, $book['isbn'], 'LR');
                 $this->_pdf->Cell(self::$COLUMN_WIDTH['title'], self::COLUMN_HEIGHT, self::shortened($book['title'], self::MAX_TITLE_LENGTH), 'LR');
                 $this->_pdf->Cell(self::$COLUMN_WIDTH['profit'], self::COLUMN_HEIGHT, $book['profit'], 'LR', 0, 'R');
                 $this->_pdf->Ln();
-//            }
+            }
         }
 
         // Closing line
@@ -50,9 +50,9 @@ class BookTablePDF
     private static function shortened ($strValue, $maxLength) {
         $len = strlen($strValue);
         if ($len>$maxLength) {
-            $shortenedString = utf8_decode(substr($strValue,0,($maxLength-4)) . ' ...');
+            $shortenedString = substr($strValue,0,($maxLength-4)) . ' ...';
         } else {
-            $shortenedString = utf8_decode($strValue);
+            $shortenedString = $strValue;
         }
         return $shortenedString;
     }
