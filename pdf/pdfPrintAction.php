@@ -28,7 +28,7 @@ class PdfPrintAction
         $bescheinigungPdf = new BescheinigungPDF($addressData, $this->amount($_POST), $pdf);
         $bescheinigungPdf->printBescheinigung();
 
-        $booksAsString = base64_decode($_POST['books']);
+        $booksAsString = utf8_encode(base64_decode($_POST['books']));
         error_log("POST(books)=" . $booksAsString);
 
         $pdfTable = new BookTablePDF(json_decode($booksAsString, true), $pdf);

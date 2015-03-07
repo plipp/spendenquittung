@@ -37,7 +37,7 @@ class BookTablePDF
 
             if ($profit>0) {
                 $this->_pdf->Cell(self::$COLUMN_WIDTH['isbn'], self::COLUMN_HEIGHT, $book['isbn'], 'LR');
-                $this->_pdf->Cell(self::$COLUMN_WIDTH['title'], self::COLUMN_HEIGHT, self::shortened($book['title'], self::MAX_TITLE_LENGTH), 'LR');
+                $this->_pdf->Cell(self::$COLUMN_WIDTH['title'], self::COLUMN_HEIGHT, utf8_decode(self::shortened($book['title'], self::MAX_TITLE_LENGTH)), 'LR');
                 $this->_pdf->Cell(self::$COLUMN_WIDTH['profit'], self::COLUMN_HEIGHT, $book['profit'], 'LR', 0, 'R');
                 $this->_pdf->Ln();
             }
