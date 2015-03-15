@@ -23,7 +23,7 @@ Upload the Spendenquittung plugin to your blog, activate it, then go to the http
 page and enter
   - the next sqdb_db_version version,
   - your API keys/secrets for the Ebay-, Amazon and the Booklooker APIs (sq_ebay_api_key, sq_booklooker_api_key, sq_amazon*) and
-  - deactivate (TODO: uninstall) + activate the Plugin again.
+  - deactivate + activate the Plugin again.
 
 ... You're done!
 
@@ -45,17 +45,3 @@ Run $WP/vagrantpress-master/wordpress/wp-content/plugins/spendenquittung/tests/t
 = 0.0.1 =
 
 Initial Version
-
-== TODOs ==
-
-- APIs
-  -ZVAB must check both ISBN10 + 13
-
---
-- see TODOs
-- remove: error_logs
-
-- minify
-
-== SNI ==
-- replace Assam completely
