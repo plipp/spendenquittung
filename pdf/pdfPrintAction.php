@@ -25,13 +25,14 @@ class PdfPrintAction
         $deckblattPdf = new DeckblattPDF($addressData, $pdf);
         $deckblattPdf->printDeckblatt();
 
-        $bescheinigungPdf = new BescheinigungPDF($addressData, $this->amount($_POST), $pdf);
+        $amount = $this->amount($_POST);
+        $bescheinigungPdf = new BescheinigungPDF($addressData, $amount, $pdf);
         $bescheinigungPdf->printBescheinigung();
 
         $booksAsString = utf8_encode(base64_decode($_POST['books']));
         error_log("POST(books)=" . $booksAsString);
 
-        $pdfTable = new BookTablePDF(json_decode($booksAsString, true), $pdf);
+        $pdfTable = new BookTablePDF(json_decode($booksAsString, true), $amount, $pdf);
         $pdfTable->printTable();
         $pdf->Output();
 

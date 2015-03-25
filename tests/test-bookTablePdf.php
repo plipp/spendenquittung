@@ -25,7 +25,7 @@ class BookTablePdfTest extends PHPUnit_Framework_TestCase
 
     function testPdfForManyBooksWithLongTitles()
     {
-        $bookTablePdf = new BookTablePDF($this->booksForTesting(100) ,$this->_basePdf);
+        $bookTablePdf = new BookTablePDF($this->booksForTesting(100) , "1001,44", $this->_basePdf);
         $bookTablePdf->printTable();
 
 //        $this->_basePdf->Output('/tmp/test-many-books-as-pdf.pdf');
@@ -38,7 +38,7 @@ class BookTablePdfTest extends PHPUnit_Framework_TestCase
 
     function testPdfForFewBooksWithShortTitles()
     {
-        $bookTablePdf = new BookTablePDF($this->booksForTesting(10,20),$this->_basePdf);
+        $bookTablePdf = new BookTablePDF($this->booksForTesting(10,20), "1001,44", $this->_basePdf);
         $bookTablePdf->printTable();
 
 //        $this->_basePdf->Output('/tmp/test-few-books-as-pdf.pdf');
@@ -51,10 +51,10 @@ class BookTablePdfTest extends PHPUnit_Framework_TestCase
 
     function testPdfFor0Books()
     {
-        $bookTablePdf = new BookTablePDF(array(), $this->_basePdf);
+        $bookTablePdf = new BookTablePDF(array(), "0,0", $this->_basePdf);
         $bookTablePdf->printTable();
 
-//        $this->_basePdf->Output('/tmp/test-no-books-as-pdf.pdf');
+        $this->_basePdf->Output('/tmp/test-no-books-as-pdf.pdf');
         $actualPdf = $this->_basePdf->Output('', 'S');
         $this->assertFalse(empty($actualPdf));
 
@@ -66,7 +66,7 @@ class BookTablePdfTest extends PHPUnit_Framework_TestCase
     {
         $outFile = tempnam(sys_get_temp_dir(), 'tBt');
 
-        $bookTablePdf = new BookTablePDF(array(), $this->_basePdf);
+        $bookTablePdf = new BookTablePDF(array(), "1001,44", $this->_basePdf);
         $bookTablePdf->printTable();
 
         $this->_basePdf->Output($outFile);

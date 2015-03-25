@@ -39,7 +39,7 @@ class CompletePdfTest extends PHPUnit_Framework_TestCase
         $bescheinigungPdf = new BescheinigungPDF($this->addressData(), "13,48", $pdf);
         $bescheinigungPdf->printBescheinigung();
 
-        $bookTablePdf = new BookTablePDF($this->booksForTesting(100,200),$pdf);
+        $bookTablePdf = new BookTablePDF($this->booksForTesting(100,200), "1001,44", $pdf);
         $bookTablePdf->printTable();
 
         $pdf->Output($outFile);

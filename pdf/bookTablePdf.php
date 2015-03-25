@@ -13,11 +13,13 @@ class BookTablePDF
 
     private $_books;
     private $_pdf;
+    private $_amount;
 
-    public function __construct($books, $pdf)
+    public function __construct($books, $amount, $pdf)
     {
         $this->_books = $books;
         $this->_pdf = $pdf;
+        $this->_amount = $amount;
 
         $pdf->setPageHeader("Spendenliste");
         $this->_pdf->AddPage();
@@ -36,15 +38,15 @@ class BookTablePDF
             $profit = (float)str_replace(',', '.', $book['profit']);
 
             if ($profit>0) {
-                $this->_pdf->Cell(self::$COLUMN_WIDTH['isbn'], self::COLUMN_HEIGHT, $book['isbn'], 'LR');
-                $this->_pdf->Cell(self::$COLUMN_WIDTH['title'], self::COLUMN_HEIGHT, utf8_decode(self::shortened($book['title'], self::MAX_TITLE_LENGTH)), 'LR');
-                $this->_pdf->Cell(self::$COLUMN_WIDTH['profit'], self::COLUMN_HEIGHT, $book['profit'], 'LR', 0, 'R');
-                $this->_pdf->Ln();
+                $this->printColumn($book['isbn'], utf8_decode(self::shortened($book['title'], self::MAX_TITLE_LENGTH)), $book['profit']);
             }
         }
 
-        // Closing line
-        $this->_pdf->Cell(array_sum(self::$COLUMN_WIDTH),0,'','T');
+        // Closing line with complete sum
+        $needsColumnForSum = (float)str_replace(',', '.', $this->_amount) > 0;
+        if ($needsColumnForSum) {
+            $this->printColumn("Summe","",$this->_amount,'LTB','TBR','TBR');
+        }
     }
 
     private static function shortened ($strValue, $maxLength) {
@@ -55,5 +57,13 @@ class BookTablePDF
             $shortenedString = $strValue;
         }
         return $shortenedString;
+    }
+
+    private function printColumn($col1value, $col2value,$col3value, $col1format= 'LR', $col2format='LR',$col3format = 'LR')
+    {
+        $this->_pdf->Cell(self::$COLUMN_WIDTH['isbn'], self::COLUMN_HEIGHT, $col1value, $col1format);
+        $this->_pdf->Cell(self::$COLUMN_WIDTH['title'], self::COLUMN_HEIGHT, $col2value, $col2format);
+        $this->_pdf->Cell(self::$COLUMN_WIDTH['profit'], self::COLUMN_HEIGHT, $col3value, $col3format, 0, 'R');
+        $this->_pdf->Ln();
     }
 }
