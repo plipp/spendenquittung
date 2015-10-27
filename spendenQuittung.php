@@ -47,7 +47,7 @@ class Bootstrap {
 
     public function createAdminCss() {
         if (is_admin()) {
-            wp_enqueue_style('datatables-css', '//cdn.datatables.net/1.10.2/css/jquery.dataTables.css', array(), '1.10.2');
+            wp_enqueue_style('datatables-css', '//cdn.datatables.net/1.10.9/css/jquery.dataTables.css', array(), '1.10.9');
             wp_register_style('sq-admin-style', plugins_url('spendenQuittungAdmin.css', __FILE__));
             wp_enqueue_style('sq-admin-style');
         }
@@ -55,7 +55,7 @@ class Bootstrap {
 
     public function addAdminScripts() {
         if (is_admin()) {
-            wp_enqueue_script("datatables", "//cdn.datatables.net/1.10.2/js/jquery.dataTables.js", array('jquery'), '1.10.2');
+            wp_enqueue_script("datatables", "//cdn.datatables.net/1.10.9/js/jquery.dataTables.js", array('jquery'), '1.10.9');
             wp_enqueue_script('sq-admin-marketplaces-app-config', plugin_dir_url(__FILE__) . 'js/admin/app-marketplace-config.js');
             wp_enqueue_script('sq-admin-marketplaces-app', plugin_dir_url(__FILE__) . 'js/admin/app-marketplace.js', array('jquery', 'sq-admin-marketplaces-app-config'));
             wp_enqueue_script('sq-admin-blacklist-app-config', plugin_dir_url(__FILE__) . 'js/admin/app-blacklist-config.js');
@@ -70,7 +70,7 @@ class Bootstrap {
 
     public function createUserCss() {
         if (!is_admin()) {
-            wp_enqueue_style('datatables-css', '//cdn.datatables.net/1.10.2/css/jquery.dataTables.css', array(), '1.10.2');
+            wp_enqueue_style('datatables-css', '//cdn.datatables.net/1.10.9/css/jquery.dataTables.css', array(), '1.10.9');
             wp_register_style('sq-style', plugins_url('spendenQuittung.css', __FILE__));
             wp_enqueue_style('sq-style');
         }
@@ -78,7 +78,7 @@ class Bootstrap {
 
     function addUserScripts () {
         if (!is_admin()) {
-            wp_enqueue_script("datatables", "//cdn.datatables.net/1.10.2/js/jquery.dataTables.js", array('jquery'), '1.10.2');
+            wp_enqueue_script("datatables", "//cdn.datatables.net/1.10.9/js/jquery.dataTables.js", array('jquery'), '1.10.9');
             wp_enqueue_script('sq-app-config', plugin_dir_url(__FILE__) . 'js/quittung/app-config.js');
             wp_enqueue_script('sq-app', plugin_dir_url(__FILE__) . 'js/quittung/app.js', array('jquery', 'sq-app-config'));
             wp_enqueue_script('base64', plugin_dir_url(__FILE__) . 'js/util/base64.js');
