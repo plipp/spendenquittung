@@ -165,7 +165,7 @@ class ZVAB extends Platform
     {
 //        error_log("---CONTENT---" . $content ."---CONTENT---");
         $no_result = 'Es konnten momentan leider';
-        $price_regexp = '|<span class="total">Gesamt:&nbsp;EUR&nbsp;(\d+,\d+)</span>|';
+        $price_regexp = '|<b>Preis:</b> <span class="price muted-text">EUR (\d+,\d+)</span>|';
 
         if (empty($content)) {
             error_log("No response content from:" . $this->name);

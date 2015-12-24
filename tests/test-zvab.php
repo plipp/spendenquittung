@@ -18,7 +18,7 @@ class ZVABTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(empty($html));
 
         $zvab = new ZVAB(json_decode(self::ZVAB_AS_JSON, TRUE));
-        $this->assertEquals($zvab->totalPricesFrom($html),array(20.22,20.22,20.35,20.35,8.53,24.85,54.00));
+        $this->assertEquals($zvab->totalPricesFrom($html),array(1.24,2.7));
     }
 
     function testParseEmptyContent()

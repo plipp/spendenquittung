@@ -137,7 +137,7 @@ class SpendenQuittungsDB
         $data = array(
             'name' => 'zvab',
             'host' => 'www.zvab.com',
-            'urlpath' => '/advancedSearch.do?isbn=${ISBN13}&displayCurrency=EUR&itemsPerPage=10&sortBy=6',
+            'urlpath' => '/servlet/SearchResults?bi=0&ds=10&isbn=${ISBN13}&recentlyadded=all&sortby=2',
             'fixcosts' => 0,
             'provision' => 0.15,
             'porto_wcl1' => 3.0,

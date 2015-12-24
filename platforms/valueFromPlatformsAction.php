@@ -162,13 +162,23 @@ class ValueFromPlatformsAction
             $httpStatus = $this->_isInternalRequest ? $this->_results[self::HTTP_STATUS_CODE]:array();
             $averageProfitsByWeightClasses = $this->averageProfits($this->toProfitsByClass($this->_results[self::PROFITS_BY_WEIGHT_RESULT]), $platformsWithValidProfit);
 
+            $actualBookValue = $this->cut($averageProfitsByWeightClasses['1']);
             $encoded_value = $this->json_encoded_response($isbn, self::STATUS_OK, strval($title),
-                Converters::toCurrencyString($averageProfitsByWeightClasses['1']),
+                Converters::toCurrencyString($actualBookValue),
                 Converters::toCurrencyString($nettoProfit),
                 $averageProfitsByWeightClasses, $nettoProfits, $profitsByWeightClasses, $httpStatus);
         }
         error_log("Booksearch Result:" . $encoded_value);
         return $encoded_value;
+    }
+
+    /**
+     * cuts the value of a book down to max(20, 0.33 * nettoProfit)
+     * @param $nettoProfit the average netto profit, returned by all available platforms
+     */
+    private function cut ($nettoProfit) {
+        $actualBookValue = 0.33 * $nettoProfit;
+        return ($actualBookValue>20.0) ? 20.0 : $actualBookValue;
     }
 
     private function json_encoded_response( $isbn, $status=self::STATUS_OK, $title='?',

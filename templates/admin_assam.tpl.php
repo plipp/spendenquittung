@@ -33,7 +33,7 @@
                         <tr>
                             <th colspan="2" style="text-align:left">Berechneter Spendenquittungspreis:</th>
                             <th style="text-align: right"></th>
-                            <th style="text-align: right"></th>
+                            <th style="text-align: right; color: red">***</th>
                             <th style="text-align: right"></th>
                             <th style="text-align: right"></th>
                             <th colspan="2" style="text-align:right">Formel: 1/(&sum;(verkaufsanteil(p)) * &sum;(verkaufsanteil(p)*preis(p))</th>
@@ -43,7 +43,8 @@
                 <div class="sq-with-table-padding">
                     *Weitere Parameter finden sich auf der <a href="admin.php?page=sq-marketplaces">Liste der Plattformen</a><br>
                     **Eine Zahl bedeutet, dass ein Fehler aufgetreten ist. Zur Analyse kann
-                      <a href="http://de.wikipedia.org/wiki/HTTP-Statuscode">die Liste der Status-Codes</a> herangezogen werden.
+                      <a href="http://de.wikipedia.org/wiki/HTTP-Statuscode">die Liste der Status-Codes</a> herangezogen werden.<br>
+                    ***anrechenbarer Buchwert=max(20.00€, 0.33*Gewinn 1)
                 </div>
             </div>
         </div>

@@ -141,7 +141,8 @@ var app = (function ($, appConfig) {
                 setTitle(bookData.title, bookData.isbn);
 
                 $(lTable.column(2).footer()).html(util.toString(bookData.nettoProfit));
-                $(lTable.column(3).footer()).html(util.toString(bookData.averageProfitsByWeightClasses['1']));
+                $(lTable.column(3).footer()).html(util.toString(bookData.averageProfitsByWeightClasses['1']) + '/' +
+                  util.toString(bookData.profit) +'***');
                 $(lTable.column(4).footer()).html(util.toString(bookData.averageProfitsByWeightClasses['2']));
                 $(lTable.column(5).footer()).html(util.toString(bookData.averageProfitsByWeightClasses['3']));
 
