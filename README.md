@@ -5,6 +5,12 @@ issue their donators with a donation receipt.
 
 The plugin documentation, following the wordpress guidelines, can be found in the [wordpress plugin readme](readme.txt)
 
+WP-Development-Options
+----------------------
+- [Vagrantpress](https://github.com/chad-thompson/vagrantpress)
+- Docker: s. docker-compose.yml
+
+
 Known Issues
 ------------
 - APIs
