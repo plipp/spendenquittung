@@ -1,8 +1,23 @@
 # https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-and-phpmyadmin-with-docker-compose-on-ubuntu-14-04
 #
+# PRE-INSTALL:
+# - install docker + docker-compose
+# - change the password 'changeme' in this file.
+#
+# RUN:
 # run: docker-compose up -d
 #
-# => WP-sources under ./src
+# => You can find the WP-sources under your local ./src
+#
+# POST-INSTALL:
+# 0. Optional: fix phpMyAdmin as described in:
+#    http://stackoverflow.com/questions/11506224/connection-for-controluser-as-defined-in-your-configuration-failed-phpmyadmin-xa
+#    OR
+#    login with MySQL-Credentials: root/chamgeme + ignore ERROR < Connection for controluser as defined in your configuration failed.>
+#
+# 1. checkout your Plugins under Development under $WP/wp-content/plugins
+#
+# 2. install locally (for your IDE) php + composer + phpunit
 wordpress:
   image: wordpress
   links:

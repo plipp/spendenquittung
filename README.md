@@ -8,7 +8,33 @@ The plugin documentation, following the wordpress guidelines, can be found in th
 WP-Development-Options
 ----------------------
 - [Vagrantpress](https://github.com/chad-thompson/vagrantpress)
-- Docker: s. docker-compose.yml
+- Docker: s. [docker-compose.yml](./docker-compose.yml)
+
+### Local PHP-Installations (e.g. for your IDE)
+
+```bash
+  
+    $  dnf install php
+    $  dnf install php-composer-installers
+```
+
+Notes:
+
+- `/usr/bin/composer == composer.phar`
+- with Docker or Vagrant the complete LAMP-Stack is not required!
+
+### Testing
+
+There exist various unit tests, which can be run via
+ 
+```bash
+   
+    $ cd $wordpress/wp-content/plugins/spendenquittung
+    $ composer update
+    $ vendor/bin/phpunit -c phpUnit.xml
+```
+
+Run `./tests/test-completePdf.php` to test PDF generation.
 
 
 Known Issues

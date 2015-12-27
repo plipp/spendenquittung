@@ -1,0 +1,14 @@
+{
+    "name": "patricia/spendenquittung",
+    "description": "WP plugin for buechertisch.org",
+    "require-dev": {
+        "phpunit/phpunit": "^5.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "plipp",
+            "email": "p.lipp@web.de"
+        }
+    ]
+}

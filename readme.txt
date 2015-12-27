@@ -31,15 +31,6 @@ page and enter
 
 Use the shortcode [sq] to integrate the Spendenquittungs form into your pages.
 
-== Testing ==
-
-There exist various unit tests which require phpunit >=4.4.4. and can be run via
-
-$ cd $wordpress/wp-content/plugins/spendenquittung
-$ phpunit -c phpUnit.xml
-
-Run $wordpress/wp-content/plugins/spendenquittung/tests/test-completePdf.php to test PDF generation.
-
 == Changelog ==
 
 = 0.0.2 =
